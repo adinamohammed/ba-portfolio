@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareFlow OPD Workflow Prototype — BA Portfolio Demo</title>
+<style>
+  :root {
+    --bg: #F0F7F8;
+    --card: #FFFFFF;
+    --teal: #0D5C63;
+    --teal-mid: #1A7A83;
+    --teal-light: #E0F2F4;
+    --teal-xlight: #F0F9FA;
+    --amber: #E8A838;
+    --amber-light: #FEF3DC;
+    --green: #2D6A4F;
+    --green-light: #D8F0E6;
+    --orange: #C9742B;
+    --orange-light: #FDEFD9;
+    --red: #C0392B;
+    --red-light: #FAE4E2;
+    --text: #1A1A2E;
+    --muted: #718096;
+    --border: #D1E4E6;
+    --sidebar-w: 220px;
+    --header-h: 60px;
+    --shadow: 0 2px 12px rgba(13,92,99,0.09);
+    --shadow-lg: 0 4px 24px rgba(13,92,99,0.13);
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', 'Palatino Linotype', serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; font-size: 14px; }
+
+  /* ── HEADER ─────────────────────────────────── */
+  #header {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
+    background: var(--teal); color: #fff;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px 0 calc(var(--sidebar-w) + 20px);
+    z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+  #header .h-left { display: flex; align-items: center; gap: 12px; }
+  #header .h-logo { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; color: #fff; }
+  #header .h-logo span { color: #7ECFD4; }
+  #header .h-tag {
+    background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 20px; padding: 2px 10px; font-size: 11px; color: #C8ECED;
+    font-family: 'Courier New', monospace; letter-spacing: 0.5px;
+  }
+  #header .h-right { display: flex; align-items: center; gap: 10px; }
+  #header .h-role { font-size: 12px; color: #A0D8DB; }
+  #header .h-badge {
+    background: var(--amber); color: #1A1A2E; border-radius: 4px;
+    padding: 3px 8px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ── SIDEBAR ─────────────────────────────────── */
+  #sidebar {
+    position: fixed; top: var(--header-h); left: 0; bottom: 0;
+    width: var(--sidebar-w); background: #0A4A50;
+    display: flex; flex-direction: column; overflow-y: auto; z-index: 90;
+  }
+  .sb-section { padding: 16px 14px 8px; font-size: 10px; color: #5AABB0; letter-spacing: 1px; text-transform: uppercase; font-family: 'Courier New', monospace; }
+  .sb-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; cursor: pointer; color: #9ECFD3;
+    font-size: 13px; transition: all 0.18s; border-left: 3px solid transparent;
+    user-select: none;
+  }
+  .sb-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
+  .sb-item.active { background: rgba(255,255,255,0.12); color: #fff; border-left-color: #7ECFD4; }
+  .sb-item .sb-icon { width: 18px; text-align: center; font-size: 15px; }
+  .sb-item .sb-badge { margin-left: auto; background: var(--amber); color: #1A1A2E; border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: 700; }
+  .sb-footer { margin-top: auto; padding: 14px; font-size: 10px; color: #4A8A90; line-height: 1.5; border-top: 1px solid rgba(255,255,255,0.07); }
+
+  /* ── MAIN ─────────────────────────────────── */
+  #main { margin-top: var(--header-h); margin-left: var(--sidebar-w); min-height: calc(100vh - var(--header-h)); padding: 20px; }
+
+  /* ── DEMO BANNER ─────────────────────────────────── */
+  .demo-banner {
+    background: #FEF8E6; border: 1px solid #F0D080; border-radius: var(--radius-sm);
+    padding: 8px 14px; margin-bottom: 18px;
+    display: flex; align-items: flex-start; gap: 8px; font-size: 11.5px; color: #7A5C10; line-height: 1.5;
+  }
+  .demo-banner .db-icon { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+
+  /* ── PAGE HEADER ─────────────────────────────────── */
+  .page-header { margin-bottom: 18px; }
+  .page-header h1 { font-size: 20px; color: var(--teal); font-weight: 700; margin-bottom: 3px; }
+  .page-header p { color: var(--muted); font-size: 13px; }
+  .page-header .ph-meta { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+  .ph-chip { background: var(--teal-light); color: var(--teal); border-radius: 20px; padding: 2px 10px; font-size: 11px; font-weight: 600; font-family: 'Courier New', monospace; }
+
+  /* ── GRID LAYOUTS ─────────────────────────────────── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .grid-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+
+  /* ── CARD ─────────────────────────────────── */
+  .card { background: var(--card); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .card-title { font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .card-title .ct-icon { font-size: 16px; }
+
+  /* ── KPI CARD ─────────────────────────────────── */
+  .kpi-card {
+    background: var(--card); border-radius: var(--radius); padding: 16px 18px;
+    box-shadow: var(--shadow); border: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .kpi-card .kc-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-family: 'Courier New', monospace; }
+  .kpi-card .kc-val { font-size: 26px; font-weight: 700; color: var(--teal); line-height: 1.1; }
+  .kpi-card .kc-sub { font-size: 11px; color: var(--muted); }
+  .kpi-card.warn .kc-val { color: var(--orange); }
+  .kpi-card.alert .kc-val { color: var(--red); }
+  .kpi-card.ok .kc-val { color: var(--green); }
+  .kpi-card.amber .kc-val { color: var(--amber); }
+
+  /* ── FORM ELEMENTS ─────────────────────────────────── */
+  .form-group { margin-bottom: 13px; }
+  .form-group label { display: block; font-size: 12px; color: var(--teal); font-weight: 600; margin-bottom: 4px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 8px 11px; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); font-size: 13px; color: var(--text);
+    background: #FAFEFE; font-family: inherit; transition: border-color 0.18s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--teal-mid); background: #fff; }
+  .form-group textarea { resize: vertical; min-height: 70px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .field-note { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .field-note.future { color: #9370DB; font-style: italic; }
+
+  /* ── BUTTONS ─────────────────────────────────── */
+  .btn { display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.18s; font-family: inherit; }
+  .btn-primary { background: var(--teal); color: #fff; }
+  .btn-primary:hover { background: var(--teal-mid); }
+  .btn-secondary { background: var(--teal-light); color: var(--teal); }
+  .btn-secondary:hover { background: #C5E8EA; }
+  .btn-ghost { background: transparent; color: var(--muted); border: 1.5px solid var(--border); }
+  .btn-ghost:hover { background: var(--bg); color: var(--text); }
+  .btn-amber { background: var(--amber); color: #1A1A2E; }
+  .btn-amber:hover { background: #D0932A; }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-green:hover { background: #245A40; }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+
+  /* ── CHIP / STATUS ─────────────────────────────────── */
+  .chip { display: inline-block; border-radius: 20px; padding: 2px 10px; font-size: 11px; font-weight: 600; white-space: nowrap; font-family: 'Courier New', monospace; }
+  .chip-teal { background: var(--teal-light); color: var(--teal); }
+  .chip-green { background: var(--green-light); color: var(--green); }
+  .chip-amber { background: var(--amber-light); color: #8A5A00; }
+  .chip-orange { background: var(--orange-light); color: var(--orange); }
+  .chip-red { background: var(--red-light); color: var(--red); }
+  .chip-grey { background: #EEF0F2; color: #5A6070; }
+  .chip-blue { background: #E0EAF8; color: #2D5BA0; }
+
+  /* ── TABLE ─────────────────────────────────── */
+  .tbl-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  thead tr { background: #EBF5F6; }
+  thead th { padding: 10px 13px; text-align: left; color: var(--teal); font-size: 11.5px; font-weight: 700; white-space: nowrap; border-bottom: 1px solid var(--border); letter-spacing: 0.2px; }
+  tbody tr { border-bottom: 1px solid #EEF3F4; transition: background 0.12s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--teal-xlight); }
+  tbody td { padding: 9px 13px; color: var(--text); vertical-align: middle; }
+  .td-muted { color: var(--muted); font-size: 12px; }
+
+  /* ── SECTION DIVIDER ─────────────────────────────────── */
+  .section-gap { margin-top: 20px; }
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* ── ALERT / INLINE MESSAGE ─────────────────────────────────── */
+  .inline-msg { border-radius: var(--radius-sm); padding: 10px 14px; font-size: 13px; margin-top: 10px; display: none; animation: fadeIn 0.3s; }
+  .inline-msg.show { display: flex; align-items: flex-start; gap: 8px; }
+  .msg-success { background: var(--green-light); color: var(--green); border: 1px solid #A8D8C0; }
+  .msg-info { background: var(--teal-light); color: var(--teal); border: 1px solid #A0CDCF; }
+  .msg-warn { background: var(--amber-light); color: #7A5000; border: 1px solid #F0C870; }
+  .msg-error { background: var(--red-light); color: var(--red); border: 1px solid #E0A0A0; }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(-4px); } to { opacity:1; transform: none; } }
+
+  /* ── PATIENT HEADER BAND ─────────────────────────────────── */
+  .pt-header {
+    background: linear-gradient(135deg, var(--teal) 0%, var(--teal-mid) 100%);
+    color: #fff; border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px;
+    display: grid; grid-template-columns: 1fr auto; gap: 14px; box-shadow: var(--shadow-lg);
+  }
+  .pt-header .pt-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .pt-header .pt-sub { font-size: 12.5px; color: #A0D8DB; }
+  .pt-header .pt-meta { display: flex; gap: 18px; margin-top: 10px; flex-wrap: wrap; }
+  .pt-header .pt-field { font-size: 12px; }
+  .pt-header .pt-field span { display: block; font-size: 11px; color: #7ECFD4; margin-bottom: 1px; }
+  .pt-header .pt-right { text-align: right; }
+  .pt-header .pt-token { font-size: 28px; font-weight: 700; font-family: 'Courier New', monospace; color: #7ECFD4; }
+  .pt-header .pt-allergy { background: rgba(192,57,43,0.3); border: 1px solid rgba(192,57,43,0.5); border-radius: 4px; padding: 3px 10px; font-size: 11px; color: #FFAAAA; margin-top: 6px; }
+
+  /* ── BAR CHART SIMPLE ─────────────────────────────────── */
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .bar-label { width: 130px; font-size: 12.5px; color: var(--text); flex-shrink: 0; }
+  .bar-track { flex: 1; background: var(--teal-light); border-radius: 4px; height: 16px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--teal); border-radius: 4px; transition: width 0.6s ease; }
+  .bar-val { width: 60px; font-size: 12px; color: var(--muted); text-align: right; }
+
+  /* ── REPORT INSIGHT CARD ─────────────────────────────────── */
+  .insight-card {
+    background: var(--card); border-radius: var(--radius); padding: 16px;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+    transition: transform 0.18s;
+  }
+  .insight-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .insight-card .ic-title { font-size: 13px; font-weight: 700; color: var(--teal); margin-bottom: 6px; }
+  .insight-card .ic-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .insight-card .ic-tag { margin-top: 10px; }
+
+  /* ── DEMO GUIDE ─────────────────────────────────── */
+  .guide-block { background: var(--card); border-radius: var(--radius); padding: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 16px; }
+  .guide-block h3 { font-size: 14px; color: var(--teal); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .guide-block ul { list-style: none; }
+  .guide-block ul li { padding: 4px 0; font-size: 13px; color: var(--text); display: flex; gap: 8px; }
+  .guide-block ul li::before { content: "▸"; color: var(--teal-mid); flex-shrink: 0; }
+  .guide-block ol { padding-left: 20px; }
+  .guide-block ol li { padding: 4px 0; font-size: 13px; color: var(--text); }
+  .guide-snapshot { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .gs-row { display: flex; gap: 6px; font-size: 12.5px; }
+  .gs-row strong { color: var(--teal); min-width: 100px; }
+
+  /* ── HISTORY ITEM ─────────────────────────────────── */
+  .hist-item { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid #EEF3F4; }
+  .hist-item:last-child { border-bottom: none; }
+  .hist-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--teal); margin-top: 4px; flex-shrink: 0; }
+  .hist-content .hc-date { font-size: 11.5px; color: var(--muted); font-family: 'Courier New', monospace; }
+  .hist-content .hc-desc { font-size: 13px; color: var(--text); }
+
+  /* ── FUTURE SCOPE BOX ─────────────────────────────────── */
+  .future-scope { background: #F5F0FF; border: 1px dashed #9370DB; border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 14px; }
+  .future-scope .fs-title { font-size: 12px; color: #6030A0; font-weight: 700; margin-bottom: 4px; }
+  .future-scope p { font-size: 12px; color: #7050A0; line-height: 1.5; }
+
+  /* ── WAITING WARN ─────────────────────────────────── */
+  .warn-row { background: #FFF8E8 !important; }
+  .warn-row td { color: var(--orange) !important; }
+
+  /* ── HIDDEN ─────────────────────────────────── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── ROUTE PANEL ─────────────────────────────────── */
+  .route-panel { background: var(--teal-xlight); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 14px; }
+
+  /* ── SEPARATOR TEXT ─────────────────────────────────── */
+  .sep-text { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.7px; margin: 16px 0 8px; font-family: 'Courier New', monospace; display: flex; align-items: center; gap: 8px; }
+  .sep-text::before, .sep-text::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── SCROLL ─────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #A0C8CC; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div id="header">
+  <div class="h-left">
+    <div class="h-logo">Care<span>Flow</span></div>
+    <div class="h-tag">OPD Workflow Prototype</div>
+  </div>
+  <div class="h-right">
+    <span class="h-role" id="headerRole">OPD Coordinator</span>
+    <span class="h-badge">⚗ PORTFOLIO DEMO</span>
+  </div>
+</div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<div id="sidebar">
+  <div class="sb-section">OPD Modules</div>
+  <div class="sb-item active" onclick="showPage('registration', this, 'OPD Registration Staff')">
+    <span class="sb-icon">📋</span> OP Registration
+  </div>
+  <div class="sb-item" onclick="showPage('queue', this, 'OPD Coordinator')">
+    <span class="sb-icon">🔢</span> Token Queue
+    <span class="sb-badge">26</span>
+  </div>
+  <div class="sb-item" onclick="showPage('doctor', this, 'Doctor')">
+    <span class="sb-icon">🩺</span> Doctor Workspace
+  </div>
+  <div class="sb-item" onclick="showPage('labpharm', this, 'Lab & Pharmacy Staff')">
+    <span class="sb-icon">🧪</span> Lab &amp; Pharmacy
+    <span class="sb-badge">9</span>
+  </div>
+  <div class="sb-item" onclick="showPage('admin', this, 'Admin / Operations Manager')">
+    <span class="sb-icon">📊</span> Admin Dashboard
+  </div>
+  <div class="sb-section">Help</div>
+  <div class="sb-item" onclick="showPage('guide', this, 'Recruiter / Interviewer')">
+    <span class="sb-icon">📖</span> Demo Guide
+  </div>
+  <div class="sb-footer">
+    CareFlow OPD Prototype<br>BA Portfolio — Adina Mohammed<br>All data fictional.
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div id="main">
+
+  <!-- ════════════════════════════════════════════
+       PAGE 1 — OP REGISTRATION
+  ════════════════════════════════════════════ -->
+  <div class="page active" id="page-registration">
+    <div class="demo-banner">
+      <span class="db-icon">ℹ️</span>
+      <span>This is a fictional BA portfolio prototype to demonstrate OPD workflow, data capture, business rules, and reporting logic. Not a production HMIS/EMR. Does not contain real patient data.</span>
+    </div>
+    <div class="page-header">
+      <h1>📋 OP Registration</h1>
+      <p>Register / search OPD patients, capture visit details, select department/session, and generate a token.</p>
+      <div class="ph-meta">
+        <span class="ph-chip">Primary User: Front Desk / OPD Staff</span>
+        <span class="ph-chip">Role: Registration</span>
+      </div>
+    </div>
+
+    <div class="grid-2" style="align-items:start;">
+
+      <!-- LEFT: Search + Form -->
+      <div>
+        <!-- Patient Search -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-title"><span class="ct-icon">🔍</span> Patient Search</div>
+          <div class="form-row">
+            <div class="form-group" style="margin:0;">
+              <label>Mobile Number / Patient ID</label>
+              <input type="text" id="searchInput" placeholder="e.g. 9876543210 or PT-10041">
+            </div>
+            <div style="display:flex;align-items:flex-end;">
+              <button class="btn btn-secondary" onclick="doSearch()">Search</button>
+            </div>
+          </div>
+          <div id="searchResult" class="inline-msg msg-info" style="margin-top:10px;"></div>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">📝</span> Visit Registration Form</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Patient Name *</label>
+              <input type="text" id="ptName" placeholder="Full name">
+            </div>
+            <div class="form-group">
+              <label>Age *</label>
+              <input type="number" id="ptAge" placeholder="Age in years" min="1" max="120">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Gender *</label>
+              <select id="ptGender">
+                <option value="">Select gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Mobile Number *</label>
+              <input type="tel" id="ptMobile" placeholder="10-digit mobile">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Visit Type *</label>
+              <select id="visitType">
+                <option value="">Select type</option>
+                <option>New Visit</option>
+                <option>Follow-up</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Department *</label>
+              <select id="dept">
+                <option value="">Select department</option>
+                <option value="GM">General Medicine</option>
+                <option value="CD">Cardiology</option>
+                <option value="OR">Orthopaedics</option>
+                <option value="GY">Gynaecology</option>
+                <option value="PD">Pediatrics</option>
+                <option value="DR">Dermatology</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Session *</label>
+              <select id="session">
+                <option value="">Select session</option>
+                <option>Morning</option>
+                <option>Evening</option>
+                <option>Casualty</option>
+                <option>Specialty</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Doctor *</label>
+              <select id="doctorSelect">
+                <option value="">Select doctor</option>
+                <option value="Dr. Kavitha Menon">Dr. Kavitha Menon — General Medicine</option>
+                <option value="Dr. Sameer Rao">Dr. Sameer Rao — Cardiology</option>
+                <option value="Dr. Nisha Thomas">Dr. Nisha Thomas — Orthopaedics</option>
+                <option value="Dr. Farah Khan">Dr. Farah Khan — Pediatrics</option>
+              </select>
+              <div class="field-note">Doctor selection depends on department, session, and availability.</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Referral Source</label>
+              <select id="referral">
+                <option value="">Select source</option>
+                <option>Walk-in</option>
+                <option>Doctor Referral</option>
+                <option>Follow-up</option>
+                <option>Camp</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Consultation Fee Status</label>
+              <select id="feeStatus">
+                <option>Paid</option>
+                <option>Pending</option>
+                <option>Waived</option>
+              </select>
+              <div class="field-note">Added demo field: basic OPD consultation fee status only. Full billing, insurance, and payment gateway integration are outside MVP.</div>
+            </div>
+          </div>
+
+          <div class="future-scope">
+            <div class="fs-title">🔮 Future Scope — Not Active in MVP</div>
+            <p>Digital Health ID / PHR Link: <em>Digital health ID / PHR integration is outside MVP scope and shown only as a future integration point. Not active in this prototype.</em></p>
+          </div>
+
+          <div id="regMsg" class="inline-msg" style="margin-top:12px;"></div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="registerVisit()">✓ Register Visit</button>
+            <button class="btn btn-secondary" onclick="printToken()">🖨 Print Token</button>
+            <button class="btn btn-ghost" onclick="clearRegForm()">✕ Clear Form</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Token Output + Rules -->
+      <div>
+        <div class="card" id="tokenOutput" style="margin-bottom:16px; display:none;">
+          <div class="card-title"><span class="ct-icon">🎫</span> Generated Token</div>
+          <div id="tokenCard" style="display:none;">
+            <div style="background:var(--teal);color:#fff;border-radius:var(--radius-sm);padding:18px 20px;margin-bottom:14px;">
+              <div style="font-size:11px;color:#7ECFD4;margin-bottom:4px;font-family:monospace;">TOKEN NUMBER</div>
+              <div style="font-size:36px;font-weight:700;font-family:'Courier New',monospace;" id="tokenNum">—</div>
+              <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div><div style="font-size:10px;color:#7ECFD4;">VISIT ID</div><div style="font-size:12px;font-family:monospace;" id="tokenVisitId">—</div></div>
+                <div><div style="font-size:10px;color:#7ECFD4;">DEPARTMENT</div><div style="font-size:12px;" id="tokenDept">—</div></div>
+                <div><div style="font-size:10px;color:#7ECFD4;">SESSION</div><div style="font-size:12px;" id="tokenSession">—</div></div>
+                <div><div style="font-size:10px;color:#7ECFD4;">PATIENT</div><div style="font-size:12px;" id="tokenPatient">—</div></div>
+                <div><div style="font-size:10px;color:#7ECFD4;">DOCTOR</div><div style="font-size:12px;" id="tokenDoctor">—</div></div>
+              </div>
+            </div>
+            <div id="printMsg" class="inline-msg msg-success"></div>
+          </div>
+          <div id="noTokenMsg" style="color:var(--muted);font-size:13px;padding:10px 0;">
+            Token will appear here after successful registration.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">📐</span> Business Rules</div>
+          <div style="font-size:12.5px;color:var(--text);line-height:1.8;">
+            <div style="margin-bottom:6px;">▸ Patient search must happen before creating a new record.</div>
+            <div style="margin-bottom:6px;">▸ Follow-up visits must be linked to an existing Patient ID.</div>
+            <div style="margin-bottom:6px;">▸ Token is department and session specific.</div>
+            <div style="margin-bottom:6px;">▸ Mandatory fields: Name, Age, Gender, Mobile, Department, Session, and Doctor.</div>
+            <div style="margin-bottom:6px;">▸ Duplicate mobile triggers existing patient suggestion.</div>
+            <div style="margin-bottom:6px;">▸ Consultation Fee Status is tracked at MVP level; full billing is outside scope.</div>
+            <div style="margin-bottom:6px;">▸ Token printing/reprinting is manual in MVP.</div>
+            <div>▸ Digital Health ID / PHR: Future scope only.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       PAGE 2 — TOKEN QUEUE
+  ════════════════════════════════════════════ -->
+  <div class="page" id="page-queue">
+    <div class="demo-banner">
+      <span class="db-icon">ℹ️</span>
+      <span>Fictional prototype. All token numbers, patient names, and wait times are sample data for demonstration purposes only.</span>
+    </div>
+    <div class="page-header">
+      <h1>🔢 Token Queue &amp; Routing</h1>
+      <p>Live OPD token queue status, department routing, and coordination view.</p>
+      <div class="ph-meta">
+        <span class="ph-chip">Primary User: OPD Coordinator / Nurse Station</span>
+        <span class="ph-chip">Date: 20 May 2026</span>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="grid-auto" style="margin-bottom:16px;">
+      <div class="kpi-card"><div class="kc-label">Total OPD Visits Today</div><div class="kc-val">147</div><div class="kc-sub">As of 12:30 PM</div></div>
+      <div class="kpi-card ok"><div class="kc-label">Completed Consultations</div><div class="kc-val">103</div><div class="kc-sub">70% completion rate</div></div>
+      <div class="kpi-card warn"><div class="kc-label">Active Tokens</div><div class="kc-val">26</div><div class="kc-sub">In queue now</div></div>
+      <div class="kpi-card amber"><div class="kc-label">Avg Wait Time</div><div class="kc-val">34m</div><div class="kc-sub">Target: under 45 min</div></div>
+      <div class="kpi-card alert"><div class="kc-label">Longest Waiting</div><div class="kc-val">68m</div><div class="kc-sub">Token CD-007 — flag</div></div>
+      <div class="kpi-card"><div class="kc-label">No Shows</div><div class="kc-val">6</div><div class="kc-sub">Marked absent</div></div>
+    </div>
+
+    <div class="grid-2" style="align-items:start;margin-bottom:16px;">
+      <!-- Dept Queue Table -->
+      <div class="card">
+        <div class="card-title"><span class="ct-icon">🏥</span> Department Queue Summary</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>Department</th><th>Active</th><th>Next Token</th><th>Avg Wait</th><th>Doctor</th><th>Status</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>General Medicine</td><td>7</td><td><span style="font-family:monospace;">GM-024</span></td><td>28 min</td><td><span class="chip chip-green">✓ Yes</span></td><td><span class="chip chip-teal">Normal</span></td></tr>
+              <tr class="warn-row"><td>Cardiology</td><td>11</td><td><span style="font-family:monospace;">CD-012</span></td><td>46 min</td><td><span class="chip chip-green">✓ Yes</span></td><td><span class="chip chip-amber">Busy</span></td></tr>
+              <tr class="warn-row"><td>Orthopaedics</td><td>8</td><td><span style="font-family:monospace;">OR-018</span></td><td>39 min</td><td><span class="chip chip-green">✓ Yes</span></td><td><span class="chip chip-amber">Busy</span></td></tr>
+              <tr><td>Gynaecology</td><td>4</td><td><span style="font-family:monospace;">GY-009</span></td><td>22 min</td><td><span class="chip chip-green">✓ Yes</span></td><td><span class="chip chip-teal">Normal</span></td></tr>
+              <tr><td>Pediatrics</td><td>3</td><td><span style="font-family:monospace;">PD-006</span></td><td>18 min</td><td><span class="chip chip-red">✗ No</span></td><td><span class="chip chip-orange">Waiting Dr.</span></td></tr>
+              <tr><td>Dermatology</td><td>2</td><td><span style="font-family:monospace;">DR-003</span></td><td>14 min</td><td><span class="chip chip-green">✓ Yes</span></td><td><span class="chip chip-teal">Normal</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Routing Panel -->
+      <div>
+        <div class="card" style="margin-bottom:14px;">
+          <div class="card-title"><span class="ct-icon">↔️</span> Routing Action Panel</div>
+          <div class="form-group">
+            <label>Select Token</label>
+            <select id="routeToken">
+              <option value="">— Select token —</option>
+              <option value="GM-024">GM-024 — Meena Ravi</option>
+              <option value="CD-012">CD-012 — Arjun Kumar</option>
+              <option value="OR-018">OR-018 — Lakshmi Devi</option>
+              <option value="PD-006">PD-006 — Nila Joseph</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Update Status</label>
+            <select id="routeStatus">
+              <option value="">— Select status —</option>
+              <option>Waiting</option>
+              <option>In Consultation</option>
+              <option>Lab Ordered</option>
+              <option>Pharmacy Pending</option>
+              <option>Completed</option>
+              <option>No Show</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Route to Department</label>
+            <select id="routeDept">
+              <option value="">— No change —</option>
+              <option>General Medicine</option>
+              <option>Cardiology</option>
+              <option>Orthopaedics</option>
+              <option>Pediatrics</option>
+              <option>Lab</option>
+              <option>Pharmacy</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="updateRouting()">↺ Update Routing</button>
+          <div id="routeMsg" class="inline-msg" style="margin-top:10px;"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">📐</span> Business Rules</div>
+          <div style="font-size:12.5px;color:var(--text);line-height:1.8;">
+            <div>▸ Tokens routed by department and session.</div>
+            <div>▸ Active queue shows only today's open visits.</div>
+            <div>▸ Waiting &gt; 45 min flagged in amber.</div>
+            <div>▸ Doctor unavailable = "Waiting Doctor" status.</div>
+            <div>▸ Token status drives reporting visibility.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Token Board -->
+    <div class="card">
+      <div class="card-title"><span class="ct-icon">📟</span> Active Token Board</div>
+      <div class="tbl-wrap">
+        <table id="tokenBoard">
+          <thead><tr>
+            <th>Token</th><th>Patient</th><th>Department</th><th>Visit Type</th><th>Status</th><th>Wait Time</th>
+          </tr></thead>
+          <tbody id="tokenBoardBody">
+            <tr data-token="GM-024"><td><strong style="font-family:monospace;">GM-024</strong></td><td>Meena Ravi</td><td>General Medicine</td><td><span class="chip chip-teal">Follow-up</span></td><td><span class="chip chip-grey" id="stat-GM-024">Waiting</span></td><td>18 min</td></tr>
+            <tr data-token="CD-012"><td><strong style="font-family:monospace;">CD-012</strong></td><td>Arjun Kumar</td><td>Cardiology</td><td><span class="chip chip-blue">New Visit</span></td><td><span class="chip chip-teal" id="stat-CD-012">In Consultation</span></td><td>32 min</td></tr>
+            <tr class="warn-row" data-token="OR-018"><td><strong style="font-family:monospace;">OR-018</strong></td><td>Lakshmi Devi</td><td>Orthopaedics</td><td><span class="chip chip-teal">Follow-up</span></td><td><span class="chip chip-amber" id="stat-OR-018">Lab Ordered</span></td><td>⚠ 44 min</td></tr>
+            <tr data-token="PD-006"><td><strong style="font-family:monospace;">PD-006</strong></td><td>Nila Joseph</td><td>Pediatrics</td><td><span class="chip chip-blue">New Visit</span></td><td><span class="chip chip-orange" id="stat-PD-006">Waiting</span></td><td>12 min</td></tr>
+            <tr><td><strong style="font-family:monospace;">GY-011</strong></td><td>Priya Sharma</td><td>Gynaecology</td><td><span class="chip chip-blue">New Visit</span></td><td><span class="chip chip-grey">Waiting</span></td><td>8 min</td></tr>
+            <tr><td><strong style="font-family:monospace;">DR-003</strong></td><td>Ravi Narayanan</td><td>Dermatology</td><td><span class="chip chip-teal">Follow-up</span></td><td><span class="chip chip-teal">In Consultation</span></td><td>21 min</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       PAGE 3 — DOCTOR WORKSPACE
+  ════════════════════════════════════════════ -->
+  <div class="page" id="page-doctor">
+    <div class="demo-banner">
+      <span class="db-icon">ℹ️</span>
+      <span>Fictional BA portfolio prototype. Patient data is entirely fictional. This is not a clinical EMR and does not store real medical information.</span>
+    </div>
+    <div class="page-header">
+      <h1>🩺 Doctor Consultation Workspace</h1>
+      <p>Review patient history, record consultation notes, place lab orders, and create e-prescriptions.</p>
+      <div class="ph-meta"><span class="ph-chip">Primary User: Doctor</span></div>
+    </div>
+
+    <!-- Doctor Patient Queue / Search -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title"><span class="ct-icon">🔎</span> Doctor Patient Queue / Search</div>
+      <div class="form-row-3">
+        <div class="form-group">
+          <label>Search Patient</label>
+          <input type="text" id="doctorSearchInput" placeholder="Search by Patient ID, Token, Name, or Mobile">
+        </div>
+        <div class="form-group">
+          <label>Status Filter</label>
+          <select id="doctorStatusFilter" onchange="filterDoctorQueue()">
+            <option value="all">All Assigned Patients</option>
+            <option>Waiting</option>
+            <option>In Consultation</option>
+            <option>Lab Ordered</option>
+            <option>Completed</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:8px;">
+          <button class="btn btn-secondary" onclick="doctorSearchPatient()">Search</button>
+          <button class="btn btn-ghost" onclick="resetDoctorSearch()">Reset</button>
+        </div>
+      </div>
+      <div class="tbl-wrap" style="margin-top:10px;">
+        <table id="doctorQueueTable">
+          <thead><tr><th>Token</th><th>Patient</th><th>Patient ID</th><th>Visit Type</th><th>Wait Time</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr data-status="Waiting" data-search="GM-024 Meena Ravi PT-10041 9876543210">
+              <td style="font-family:monospace;">GM-024</td><td>Meena Ravi</td><td>PT-10041</td><td>Follow-up</td><td>18 min</td><td><span class="chip chip-grey">Waiting</span></td><td><button class="btn btn-sm btn-primary" onclick="openDoctorPatient('Meena Ravi','PT-10041','V-20260520-024','GM-024','42 / Female','General Medicine','Follow-up','2026-05-05','Penicillin')">Open</button></td>
+            </tr>
+            <tr data-status="Waiting" data-search="GM-025 Suresh Kumar PT-10042 9840011122">
+              <td style="font-family:monospace;">GM-025</td><td>Suresh Kumar</td><td>PT-10042</td><td>New Visit</td><td>22 min</td><td><span class="chip chip-grey">Waiting</span></td><td><button class="btn btn-sm btn-secondary" onclick="openDoctorPatient('Suresh Kumar','PT-10042','V-20260520-025','GM-025','55 / Male','General Medicine','New Visit','—','None recorded')">Open</button></td>
+            </tr>
+            <tr data-status="Lab Ordered" data-search="GM-026 Farida Begum PT-10043 9840011133">
+              <td style="font-family:monospace;">GM-026</td><td>Farida Begum</td><td>PT-10043</td><td>Follow-up</td><td>31 min</td><td><span class="chip chip-amber">Lab Ordered</span></td><td><button class="btn btn-sm btn-secondary" onclick="openDoctorPatient('Farida Begum','PT-10043','V-20260520-026','GM-026','38 / Female','General Medicine','Follow-up','2026-05-12','None recorded')">Open</button></td>
+            </tr>
+            <tr data-status="Completed" data-search="GM-021 Ravi Narayanan PT-10039 9840011144">
+              <td style="font-family:monospace;">GM-021</td><td>Ravi Narayanan</td><td>PT-10039</td><td>New Visit</td><td>Completed</td><td><span class="chip chip-green">Completed</span></td><td><button class="btn btn-sm btn-ghost" onclick="openDoctorPatient('Ravi Narayanan','PT-10039','V-20260520-021','GM-021','47 / Male','General Medicine','New Visit','—','None recorded')">View</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="doctorQueueMsg" class="inline-msg" style="margin-top:10px;"></div>
+      <div class="field-note" style="margin-top:8px;">Business logic: Doctor first sees assigned OPD patients or searches a patient, then opens the consultation workspace. Past visit records are read-only.</div>
+    </div>
+
+    <!-- Patient Header -->
+    <div class="pt-header">
+      <div>
+        <div class="pt-name" id="docPatientName">Meena Ravi</div>
+        <div class="pt-sub" id="docPatientSub">PT-10041 &nbsp;|&nbsp; V-20260520-024</div>
+        <div class="pt-meta">
+          <div class="pt-field"><span>AGE / GENDER</span><span id="docAgeGender" style="display:inline;color:#fff;">42 / Female</span></div>
+          <div class="pt-field"><span>DEPARTMENT</span><span id="docDept" style="display:inline;color:#fff;">General Medicine</span></div>
+          <div class="pt-field"><span>VISIT TYPE</span><span id="docVisitType" style="display:inline;color:#fff;">Follow-up</span></div>
+          <div class="pt-field"><span>LAST VISIT</span><span id="docLastVisit" style="display:inline;color:#fff;">2026-05-05</span></div>
+        </div>
+      </div>
+      <div class="pt-right">
+        <div style="font-size:10px;color:#7ECFD4;margin-bottom:2px;">TOKEN</div>
+        <div class="pt-token" id="docToken">GM-024</div>
+        <div class="pt-allergy" id="docAllergy">⚠ Allergy: Penicillin</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="align-items:start;">
+      <!-- LEFT: Consultation Notes -->
+      <div>
+        <div class="card" style="margin-bottom:14px;">
+          <div class="card-title"><span class="ct-icon">📋</span> Consultation Notes</div>
+          <div class="form-group">
+            <label>Chief Complaint</label>
+            <input type="text" id="complaint" placeholder="e.g. Persistent fatigue and dizziness for 2 weeks">
+          </div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label>BP</label>
+              <input type="text" id="vitalBp" placeholder="130/84">
+            </div>
+            <div class="form-group">
+              <label>Pulse</label>
+              <input type="text" id="vitalPulse" placeholder="78 bpm">
+            </div>
+            <div class="form-group">
+              <label>Temperature</label>
+              <input type="text" id="vitalTemp" placeholder="98.4°F">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>SpO₂</label>
+              <input type="text" id="vitalSpo2" placeholder="97%">
+            </div>
+            <div class="form-group">
+              <label>Weight</label>
+              <input type="text" id="vitalWeight" placeholder="68 kg">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Assessment / Diagnosis</label>
+            <textarea id="diagnosis" placeholder="Clinical assessment and working diagnosis..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Treatment Plan</label>
+            <textarea id="treatment" placeholder="Treatment approach, medications, lifestyle advice..."></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Follow-up Date</label>
+              <input type="date" id="followupDate" value="2026-06-03">
+            </div>
+            <div class="form-group">
+              <label>Follow-up Advice</label>
+              <input type="text" id="followup" placeholder="e.g. Review with lab reports">
+            </div>
+          </div>
+          <div id="saveMsg" class="inline-msg"></div>
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="saveConsultation()">💾 Save Consultation</button>
+          </div>
+        </div>
+
+        <!-- Visit History -->
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">🕐</span> Visit History</div>
+          <div class="hist-item">
+            <div class="hist-dot"></div>
+            <div class="hist-content">
+              <div class="hc-date">2026-05-05</div>
+              <div class="hc-desc">General Medicine — Follow-up — External report uploaded</div>
+            </div>
+          </div>
+          <div class="hist-item">
+            <div class="hist-dot" style="background:#A0C8CC;"></div>
+            <div class="hist-content">
+              <div class="hc-date">2026-04-21</div>
+              <div class="hc-desc">General Medicine — New Visit — In-house lab completed</div>
+            </div>
+          </div>
+          <div style="font-size:11.5px;color:var(--muted);margin-top:8px;">Doctor can view history but cannot edit past visit records.</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Lab Orders + Prescription -->
+      <div>
+        <!-- Lab Order Panel -->
+        <div class="card" style="margin-bottom:14px;">
+          <div class="card-title"><span class="ct-icon">🔬</span> Lab Order Panel</div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label>Test Name</label>
+              <select id="labTest">
+                <option value="">Select test</option>
+                <option>CBC</option>
+                <option>Lipid Profile</option>
+                <option>HbA1c</option>
+                <option>Thyroid Profile</option>
+                <option>X-Ray</option>
+                <option>ECG</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Lab Type</label>
+              <select id="labType">
+                <option>In-House</option>
+                <option>External</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Urgency</label>
+              <select id="labUrgency">
+                <option>Routine</option>
+                <option>Urgent</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="addLabOrder()">+ Add Lab Order</button>
+          <div id="labMsg" class="inline-msg" style="margin-top:8px;"></div>
+          <div id="labOrderList" style="margin-top:12px;">
+            <div class="tbl-wrap">
+              <table id="labTable">
+                <thead><tr><th>Test</th><th>Type</th><th>Urgency</th><th>Status</th></tr></thead>
+                <tbody id="labTbody"><tr id="labEmptyRow"><td colspan="4" class="td-muted" style="text-align:center;">No lab orders added for this visit yet.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="future-scope" style="margin-top:12px;">
+            <div class="fs-title">Business Rule</div>
+            <p>Urgent lab orders should not wait for payment before clinical action. Non-urgent in-house orders show Pending Payment. External orders need report upload tracking.</p>
+          </div>
+        </div>
+
+        <!-- Prescription Panel -->
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">💊</span> E-Prescription</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Medicine Name</label>
+              <input type="text" id="medName" placeholder="e.g. Metformin 500mg">
+            </div>
+            <div class="form-group">
+              <label>Dosage</label>
+              <input type="text" id="medDosage" placeholder="e.g. 500mg">
+            </div>
+          </div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label>Frequency</label>
+              <input type="text" id="medFreq" placeholder="e.g. Twice daily">
+            </div>
+            <div class="form-group">
+              <label>Duration</label>
+              <input type="text" id="medDuration" placeholder="e.g. 30 days">
+            </div>
+            <div class="form-group">
+              <label>Qty</label>
+              <input type="number" id="medQty" placeholder="30" min="1">
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="addMedicine()">+ Add Medicine</button>
+          <div id="rxMsg" class="inline-msg" style="margin-top:8px;"></div>
+          <div id="rxList" style="margin-top:12px;">
+            <div class="tbl-wrap">
+              <table id="rxTable">
+                <thead><tr><th>Medicine</th><th>Dosage</th><th>Frequency</th><th>Duration</th><th>Qty</th></tr></thead>
+                <tbody id="rxTbody"><tr id="rxEmptyRow"><td colspan="5" class="td-muted" style="text-align:center;">No medicines added for this prescription yet.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="finaliseMsg" class="inline-msg" style="margin-top:10px;"></div>
+          <div class="btn-row">
+            <button class="btn btn-green" onclick="finaliseRx()">✓ Finalise Prescription</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       PAGE 4 — LAB & PHARMACY
+  ════════════════════════════════════════════ -->
+  <div class="page" id="page-labpharm">
+    <div class="demo-banner">
+      <span class="db-icon">ℹ️</span>
+      <span>Fictional prototype. Lab orders, report data, and pharmacy records are sample data only. No real clinical or dispensing system is connected.</span>
+    </div>
+    <div class="page-header">
+      <h1>🧪 Lab &amp; Pharmacy Tracking</h1>
+      <p>Track lab orders, external report uploads, and pharmacy dispensing gaps.</p>
+      <div class="ph-meta"><span class="ph-chip">Primary User: Lab Staff / Pharmacy Staff / OPD Coordinator</span></div>
+    </div>
+
+    <!-- Exception Cards -->
+    <div class="grid-4" style="margin-bottom:16px;">
+      <div class="kpi-card warn"><div class="kc-label">Pending Lab Payments</div><div class="kc-val">5</div><div class="kc-sub">Awaiting payment clearance</div></div>
+      <div class="kpi-card alert"><div class="kc-label">External Reports Pending</div><div class="kc-val">3</div><div class="kc-sub">Awaiting report upload</div></div>
+      <div class="kpi-card alert"><div class="kc-label">Not Dispensed</div><div class="kc-val">4</div><div class="kc-sub">Medicines not dispensed</div></div>
+      <div class="kpi-card amber"><div class="kc-label">Partially Dispensed</div><div class="kc-val">2</div><div class="kc-sub">Partial stock issues</div></div>
+    </div>
+
+    <!-- Lab Order Tracker -->
+    <div class="card section-gap" style="margin-bottom:16px;">
+      <div class="card-title"><span class="ct-icon">🔬</span> Lab Order Tracker</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Lab Order ID</th><th>Visit ID</th><th>Patient</th><th>Test Name</th><th>Type</th><th>Urgency</th><th>Payment</th><th>Order Time</th><th>Lab Status</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="td-muted" style="font-family:monospace;">LO-60041</td><td class="td-muted" style="font-family:monospace;">V-20260520-024</td><td>Meena Ravi</td><td>CBC</td><td><span class="chip chip-teal">In-House</span></td><td><span class="chip chip-grey">Routine</span></td><td><span class="chip chip-orange">Pending</span></td><td class="td-muted">10:12 AM</td><td><span class="chip chip-amber">Waiting Payment</span></td></tr>
+            <tr><td class="td-muted" style="font-family:monospace;">LO-60042</td><td class="td-muted" style="font-family:monospace;">V-20260520-025</td><td>Arjun Kumar</td><td>ECG</td><td><span class="chip chip-teal">In-House</span></td><td><span class="chip chip-red">Urgent</span></td><td><span class="chip chip-teal">Not Required</span></td><td class="td-muted">10:18 AM</td><td><span class="chip chip-teal">In Progress</span></td></tr>
+            <tr><td class="td-muted" style="font-family:monospace;">LO-60043</td><td class="td-muted" style="font-family:monospace;">V-20260520-026</td><td>Priya Sharma</td><td>HbA1c</td><td><span class="chip chip-teal">In-House</span></td><td><span class="chip chip-grey">Routine</span></td><td><span class="chip chip-orange">Pending</span></td><td class="td-muted">10:45 AM</td><td><span class="chip chip-amber">Waiting Payment</span></td></tr>
+            <tr><td class="td-muted" style="font-family:monospace;">LO-60059</td><td class="td-muted" style="font-family:monospace;">V-20260520-028</td><td>Lakshmi Devi</td><td>MRI Lumbar Spine</td><td><span class="chip chip-blue">External</span></td><td><span class="chip chip-grey">Routine</span></td><td><span class="chip chip-blue">External</span></td><td class="td-muted">09:50 AM</td><td><span class="chip chip-amber">Awaiting Upload</span></td></tr>
+            <tr><td class="td-muted" style="font-family:monospace;">LO-60061</td><td class="td-muted" style="font-family:monospace;">V-20260520-030</td><td>Ravi Narayanan</td><td>Lipid Profile</td><td><span class="chip chip-teal">In-House</span></td><td><span class="chip chip-grey">Routine</span></td><td><span class="chip chip-green">Paid</span></td><td class="td-muted">11:02 AM</td><td><span class="chip chip-green">Completed</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- External Report Upload Tracker -->
+    <div class="card section-gap" style="margin-bottom:16px;">
+      <div class="card-title"><span class="ct-icon">📂</span> External Report Upload Tracker</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Lab Order ID</th><th>Patient</th><th>Test Name</th><th>Expected / Report Source</th><th>Report Status</th><th>Action</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td class="td-muted" style="font-family:monospace;">LO-60059</td><td>Lakshmi Devi</td><td>MRI Lumbar Spine</td><td>City Scan Centre <span class="td-muted">(doctor referral)</span></td>
+              <td><span class="chip chip-amber" id="rpStatus-60059">Pending Upload</span></td>
+              <td><button class="btn btn-secondary btn-sm" onclick="uploadReport('60059')">⬆ Upload Report</button></td>
+            </tr>
+            <tr>
+              <td class="td-muted" style="font-family:monospace;">LO-60051</td><td>Nila Joseph</td><td>X-Ray Chest</td><td>Patient-provided / Radiology Centre</td>
+              <td><span class="chip chip-amber" id="rpStatus-60051">Pending Upload</span></td>
+              <td><button class="btn btn-secondary btn-sm" onclick="uploadReport('60051')">⬆ Upload Report</button></td>
+            </tr>
+            <tr>
+              <td class="td-muted" style="font-family:monospace;">LO-60044</td><td>Karthik Raj</td><td>Thyroid Profile</td><td>Lab Express</td>
+              <td><span class="chip chip-green" id="rpStatus-60044">Uploaded</span></td>
+              <td><button class="btn btn-ghost btn-sm">✓ View Report</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="uploadMsg" class="inline-msg" style="margin-top:10px;"></div>
+      <div class="inline-msg msg-info show" style="margin-top:10px;">
+        <span>ℹ️</span><span><strong>External report source logic:</strong> the source may be selected when the doctor refers the patient to a partner lab, or entered later when the patient brings/uploads the report. This prototype tracks whether the external report is still pending upload.</span>
+      </div>
+    </div>
+
+    <!-- Pharmacy Dispensing Tracker -->
+    <div class="card section-gap">
+      <div class="card-title"><span class="ct-icon">💊</span> Pharmacy Dispensing Tracker</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Rx ID</th><th>Patient</th><th>Medicine</th><th>Prescribed</th><th>Dispensed</th><th>Status</th><th>Reason</th><th>Action</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td class="td-muted" style="font-family:monospace;">RX-70021</td><td>Meena Ravi</td><td>Metformin 500mg</td><td>30</td><td id="disp-70021">0</td>
+              <td><span class="chip chip-red" id="dispStatus-70021">Not Dispensed</span></td>
+              <td class="td-muted">Stock pending</td>
+              <td><button class="btn btn-amber btn-sm" onclick="markDispensed('70021',30)">Mark Dispensed</button></td>
+            </tr>
+            <tr>
+              <td class="td-muted" style="font-family:monospace;">RX-70022</td><td>Arjun Kumar</td><td>Atenolol 25mg</td><td>30</td><td id="disp-70022">15</td>
+              <td><span class="chip chip-amber" id="dispStatus-70022">Partially Dispensed</span></td>
+              <td class="td-muted">Limited stock</td>
+              <td><button class="btn btn-amber btn-sm" onclick="markDispensed('70022',30)">Mark Full</button></td>
+            </tr>
+            <tr>
+              <td class="td-muted" style="font-family:monospace;">RX-70023</td><td>Lakshmi Devi</td><td>Paracetamol 500mg</td><td>10</td><td id="disp-70023">10</td>
+              <td><span class="chip chip-green" id="dispStatus-70023">Dispensed</span></td>
+              <td class="td-muted">—</td>
+              <td><span style="font-size:12px;color:var(--muted);">✓ Complete</span></td>
+            </tr>
+            <tr>
+              <td class="td-muted" style="font-family:monospace;">RX-70024</td><td>Priya Sharma</td><td>Glimepiride 1mg</td><td>20</td><td id="disp-70024">0</td>
+              <td><span class="chip chip-red" id="dispStatus-70024">Not Dispensed</span></td>
+              <td class="td-muted">Prescription review</td>
+              <td><button class="btn btn-amber btn-sm" onclick="markDispensed('70024',20)">Mark Dispensed</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="dispMsg" class="inline-msg" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       PAGE 5 — ADMIN DASHBOARD
+  ════════════════════════════════════════════ -->
+  <div class="page" id="page-admin">
+    <div class="demo-banner">
+      <span class="db-icon">ℹ️</span>
+      <span>Fictional prototype. All metrics, counts, and reporting examples are illustrative only. This is not connected to any real database or HMIS system.</span>
+    </div>
+    <div class="page-header">
+      <h1>📊 Admin Dashboard</h1>
+      <p>OPD operational visibility for admin and operations management. Aggregate metrics only — no unrestricted clinical access.</p>
+      <div class="ph-meta"><span class="ph-chip">Primary User: Admin / Operations Manager</span><span class="ph-chip">Role: Read-Only Reporting</span></div>
+    </div>
+
+    <!-- KPI Row -->
+    <div class="grid-auto" style="margin-bottom:16px;" id="adminKpiGrid">
+      <div class="kpi-card ok"><div class="kc-label" id="kpiLabel1">OPD Visits Today</div><div class="kc-val" id="kpiVal1">147</div><div class="kc-sub" id="kpiSub1">New: 35 | Follow-up: 112</div></div>
+      <div class="kpi-card warn"><div class="kc-label" id="kpiLabel2">Active Queue</div><div class="kc-val" id="kpiVal2">26</div><div class="kc-sub" id="kpiSub2">Across all departments</div></div>
+      <div class="kpi-card amber"><div class="kc-label" id="kpiLabel3">Avg Wait Time</div><div class="kc-val" id="kpiVal3">34m</div><div class="kc-sub" id="kpiSub3">Target: &lt;45 min</div></div>
+      <div class="kpi-card alert"><div class="kc-label" id="kpiLabel4">Pending Lab Payments</div><div class="kc-val" id="kpiVal4">5</div><div class="kc-sub" id="kpiSub4">Orders pending clearance</div></div>
+      <div class="kpi-card alert"><div class="kc-label" id="kpiLabel5">Reports Pending</div><div class="kc-val" id="kpiVal5">3</div><div class="kc-sub" id="kpiSub5">External uploads missing</div></div>
+      <div class="kpi-card warn"><div class="kc-label" id="kpiLabel6">Pharmacy Gaps</div><div class="kc-val" id="kpiVal6">6</div><div class="kc-sub" id="kpiSub6">Not or partially dispensed</div></div>
+    </div>
+
+    <div class="grid-2" style="align-items:start;margin-bottom:16px;">
+      <!-- Dynamic Focus Chart -->
+      <div class="card">
+        <div class="card-title"><span class="ct-icon" id="chartIcon">🏥</span> <span id="chartTitle">Department Active Load</span></div>
+        <div class="bar-row"><div class="bar-label" id="barLabel1">Cardiology</div><div class="bar-track"><div class="bar-fill" id="barFill1" style="width:73%;"></div></div><div class="bar-val" id="barVal1">11 tokens</div></div>
+        <div class="bar-row"><div class="bar-label" id="barLabel2">Orthopaedics</div><div class="bar-track"><div class="bar-fill" id="barFill2" style="width:53%;background:var(--teal-mid);"></div></div><div class="bar-val" id="barVal2">8 tokens</div></div>
+        <div class="bar-row"><div class="bar-label" id="barLabel3">General Medicine</div><div class="bar-track"><div class="bar-fill" id="barFill3" style="width:47%;"></div></div><div class="bar-val" id="barVal3">7 tokens</div></div>
+        <div class="bar-row"><div class="bar-label" id="barLabel4">Gynaecology</div><div class="bar-track"><div class="bar-fill" id="barFill4" style="width:27%;background:#A0CDCF;"></div></div><div class="bar-val" id="barVal4">4 tokens</div></div>
+        <div class="bar-row"><div class="bar-label" id="barLabel5">Pediatrics</div><div class="bar-track"><div class="bar-fill" id="barFill5" style="width:20%;background:#C0DCDE;"></div></div><div class="bar-val" id="barVal5">3 tokens</div></div>
+        <div class="bar-row"><div class="bar-label" id="barLabel6">Dermatology</div><div class="bar-track"><div class="bar-fill" id="barFill6" style="width:13%;background:#D0E5E7;"></div></div><div class="bar-val" id="barVal6">2 tokens</div></div>
+        <div class="field-note" id="dashboardFocusNote" style="margin-top:12px;">Dashboard focus changes the sample KPI cards, chart values, and insight cards. In production, these values would come from live OPD, lab, pharmacy, and visit records.</div>
+      </div>
+
+      <!-- Export Panel -->
+      <div class="card">
+        <div class="card-title"><span class="ct-icon">📤</span> Report Export</div>
+        <div class="form-group">
+          <label>Dashboard Focus</label>
+          <select id="reportFocus" onchange="filterInsights()">
+            <option value="">— Select dashboard focus —</option>
+            <option value="visits">Visits</option>
+            <option value="queue">Queue</option>
+            <option value="lab">Lab</option>
+            <option value="pharmacy">Pharmacy</option>
+            <option value="patient">Patient History</option>
+          </select>
+          <div class="field-note">This filter changes prototype sample values and reporting insights. It is not connected to a real database.</div>
+        </div>
+        <div id="exportMsg" class="inline-msg" style="margin-bottom:10px;"></div>
+        <button class="btn btn-primary" onclick="exportReport()">⬇ Export Demo Report</button>
+        <div style="margin-top:14px;font-size:12px;color:var(--muted);line-height:1.6;">
+          In production: exports would be role-controlled, authorised, and audit-logged. Admin sees aggregate metrics only — not unrestricted clinical notes.
+        </div>
+      </div>
+    </div>
+
+    <!-- Reporting Insights Grid -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title"><span class="ct-icon">💡</span> Reporting Insights</div>
+      <div id="insightGrid" class="grid-3" style="gap:12px;margin-top:4px;">
+        <div class="insight-card" data-focus="visits">
+          <div class="ic-title">Daily OPD Count by Visit Type</div>
+          <div class="ic-desc">Breaks down total visits into New Visit and Follow-up counts. Tracks session-wise distribution (Morning, Evening, Casualty).</div>
+          <div class="ic-tag"><span class="chip chip-teal">Visits</span></div>
+        </div>
+        <div class="insight-card" data-focus="queue">
+          <div class="ic-title">Active Token Count by Department</div>
+          <div class="ic-desc">Shows which departments have the highest queue load. Supports staffing decisions and patient flow management.</div>
+          <div class="ic-tag"><span class="chip chip-blue">Queue</span></div>
+        </div>
+        <div class="insight-card" data-focus="lab">
+          <div class="ic-title">Pending Lab Payments</div>
+          <div class="ic-desc">Flags in-house lab orders where payment is not cleared. Excludes urgent orders from payment hold per business rule.</div>
+          <div class="ic-tag"><span class="chip chip-amber">Lab</span></div>
+        </div>
+        <div class="insight-card" data-focus="lab">
+          <div class="ic-title">External Reports Pending Upload</div>
+          <div class="ic-desc">Identifies external lab orders where report upload is missing. Enables coordinator follow-up to complete patient record.</div>
+          <div class="ic-tag"><span class="chip chip-amber">Lab</span></div>
+        </div>
+        <div class="insight-card" data-focus="pharmacy">
+          <div class="ic-title">Pharmacy Dispensing Gap</div>
+          <div class="ic-desc">Highlights medicines not dispensed or only partially dispensed. Captures partial dispense reason for stock audit.</div>
+          <div class="ic-tag"><span class="chip chip-orange">Pharmacy</span></div>
+        </div>
+        <div class="insight-card" data-focus="patient">
+          <div class="ic-title">Patient Visit History Lookup</div>
+          <div class="ic-desc">Retrieves visit records, consultation notes references, and lab report status for a given Patient ID. Access is role-controlled.</div>
+          <div class="ic-tag"><span class="chip chip-grey">Patient</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SQL Mapping Table -->
+    <div class="card">
+      <div class="card-title"><span class="ct-icon">🗄️</span> SQL Reporting Question Mapping</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Business Question</th><th>Data Needed</th><th>Supported By</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>How many OPD visits happened today?</td><td class="td-muted">Visits by VisitType, VisitDate</td><td><span class="chip chip-teal">Daily OPD Count query</span></td></tr>
+            <tr><td>Which department has the highest active queue?</td><td class="td-muted">Active visits by DepartmentCode, TokenStatus</td><td><span class="chip chip-teal">Active Token Count query</span></td></tr>
+            <tr><td>Which lab orders are pending payment?</td><td class="td-muted">LabOrders where PaymentStatus = Pending</td><td><span class="chip chip-amber">Pending Lab Payments query</span></td></tr>
+            <tr><td>Which external reports are missing?</td><td class="td-muted">External LabOrders without matching LabReports record</td><td><span class="chip chip-amber">External Reports Pending Upload</span></td></tr>
+            <tr><td>Which medicines were not dispensed?</td><td class="td-muted">PrescriptionLineItems vs DispenseLineItems comparison</td><td><span class="chip chip-orange">Pharmacy Dispensing Gap query</span></td></tr>
+            <tr><td>What is the patient's full visit history?</td><td class="td-muted">Visits + ConsultationNotes + LabReports by PatientID</td><td><span class="chip chip-grey">Patient Visit History query</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       PAGE 6 — DEMO GUIDE
+  ════════════════════════════════════════════ -->
+  <div class="page" id="page-guide">
+    <div class="demo-banner">
+      <span class="db-icon">ℹ️</span>
+      <span>This demo guide is intended for recruiters, hiring managers, and interviewers reviewing the CareFlow OPD Workflow Prototype as part of Adina Mohammed's Business Analyst portfolio.</span>
+    </div>
+    <div class="page-header">
+      <h1>📖 Demo Guide</h1>
+      <p>Prototype explanation for recruiters and interviewers.</p>
+    </div>
+
+    <div class="grid-2" style="align-items:start;margin-bottom:16px;">
+      <!-- Project Snapshot -->
+      <div class="guide-block">
+        <h3>📌 Project Snapshot</h3>
+        <div class="guide-snapshot">
+          <div class="gs-row"><strong>Project:</strong>CareFlow Smart OPD &amp; Digital Patient Records System</div>
+          <div class="gs-row"><strong>Prototype:</strong>CareFlow OPD Workflow Prototype</div>
+          <div class="gs-row"><strong>Type:</strong>Independent BA Portfolio Case Study</div>
+          <div class="gs-row"><strong>Domain:</strong>Healthcare / OPD Coordination</div>
+          <div class="gs-row"><strong>Prepared by:</strong>Adina Mohammed</div>
+          <div class="gs-row"><strong>Purpose:</strong>Visual BA communication artefact</div>
+        </div>
+      </div>
+
+      <!-- What this is / is not -->
+      <div>
+        <div class="guide-block" style="margin-bottom:0;border-left:4px solid var(--green);">
+          <h3>✅ What This Demo Is</h3>
+          <ul>
+            <li>Front-end OPD workflow prototype</li>
+            <li>BA communication and portfolio artefact</li>
+            <li>Visual representation of registration, routing, consultation, lab/pharmacy, and reporting</li>
+            <li>Fictional demonstration using only made-up patient data</li>
+            <li>Tool to explain workflows, fields, and business rules to interviewers</li>
+          </ul>
+        </div>
+        <div class="guide-block" style="margin-top:14px;border-left:4px solid var(--red);">
+          <h3>❌ What This Demo Is Not</h3>
+          <ul>
+            <li>Not a production HMIS/EMR</li>
+            <li>Not copied from any live hospital system</li>
+            <li>Not connected to ABHA/PHR, payment gateway, WhatsApp/SMS, lab machines, pharmacy inventory, or real database</li>
+            <li>Not using real patient data</li>
+            <li>Not covering IPD, ICU, OT, surgery, or inpatient billing</li>
+            <li>Not a full hospital ERP</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="align-items:start;margin-bottom:16px;">
+      <!-- Research and Observation Note -->
+      <div class="guide-block" style="margin-bottom:14px;border-left:4px solid var(--amber);">
+        <h3>🔍 Research & Observation Note</h3>
+        <ul>
+          <li>Prototype is informed by common publicly documented OPD/HMIS patterns and high-level OPD workflow observation; it is a fictional BA portfolio prototype, not a live HMIS clone.</li>
+          <li>No real hospital screenshots, patient records, doctor names, URLs, or proprietary screens are used.</li>
+          <li>The doctor queue/search section reflects a common pattern: doctors open a patient from an assigned queue before consultation.</li>
+        </ul>
+      </div>
+
+      <!-- Walkthrough -->
+      <div class="guide-block">
+        <h3>🚶 Suggested Walkthrough</h3>
+        <ol>
+          <li>Go to <strong>OP Registration</strong> → search mobile 9876543210 → see duplicate patient suggestion</li>
+          <li>Fill the registration form → click Register Visit → see generated token</li>
+          <li>Go to <strong>Token Queue</strong> → view department queue and active token board</li>
+          <li>Use Routing Action Panel → select token → update status</li>
+          <li>Go to <strong>Doctor Workspace</strong> → search/open patient from Doctor Patient Queue → review patient header and allergy flag</li>
+          <li>Add a lab order and a prescription item → Finalise Prescription</li>
+          <li>Go to <strong>Lab &amp; Pharmacy</strong> → upload an external report → mark a medicine dispensed</li>
+          <li>Go to <strong>Admin Dashboard</strong> → select report focus → export demo report</li>
+        </ol>
+      </div>
+
+      <!-- Screens + Skills -->
+      <div>
+        <div class="guide-block" style="margin-bottom:14px;">
+          <h3>🖥 Screens Covered</h3>
+          <ul>
+            <li>OP Registration — patient search, form, token generation</li>
+            <li>Token Queue — department queue, active board, routing</li>
+            <li>Doctor Consultation — patient queue/search, vitals, notes, lab orders, e-prescription, follow-up, history</li>
+            <li>Lab &amp; Pharmacy — order tracking, report upload, dispensing</li>
+            <li>Admin Dashboard — KPIs, department load, SQL reporting map</li>
+          </ul>
+        </div>
+        <div class="guide-block">
+          <h3>🎯 BA Skills Demonstrated</h3>
+          <ul>
+            <li>OPD process and stakeholder role understanding</li>
+            <li>Field-level data capture and validation rules</li>
+            <li>Business rule translation into UI behaviour</li>
+            <li>MVP boundary and scope control</li>
+            <li>UAT scenario thinking across all modules</li>
+            <li>SQL-based reporting logic design</li>
+            <li>Privacy and role-based access awareness</li>
+            <li>Stakeholder communication through visual artefact</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Artefact Connection + Interview Points -->
+    <div class="grid-2">
+      <div class="guide-block">
+        <h3>🔗 How It Connects to BA Artefacts</h3>
+        <ul>
+          <li><strong>Process flows</strong> — explain the patient journey across screens</li>
+          <li><strong>Data dictionary</strong> — each field has a label, type, and validation rule</li>
+          <li><strong>Business rules</strong> — shown on every screen as a dedicated panel</li>
+          <li><strong>UAT scenarios</strong> — each interactive action maps to a testable scenario</li>
+          <li><strong>SQL reporting notes</strong> — Admin Dashboard SQL mapping table</li>
+          <li><strong>Stakeholder analysis</strong> — each screen shows primary user role</li>
+        </ul>
+      </div>
+      <div class="guide-block" style="border-left:4px solid var(--teal);">
+        <h3>💬 Interview Talking Points</h3>
+        <ul>
+          <li>I created this prototype to make BA requirements visual and easy to discuss</li>
+          <li>I kept scope deliberately limited to OPD — not full hospital ERP</li>
+          <li>I excluded AI diagnosis and prescription for safety and scope control</li>
+          <li>I treated ABHA/PHR integration as future scope, not MVP</li>
+          <li>I used SQL mapping to show how operational questions can be answered from data</li>
+          <li>I designed each screen around a specific stakeholder role and their core tasks</li>
+          <li>In a real project, I would validate all screens with registration staff, doctors, lab, pharmacy, and admin</li>
+          <li>The business rules shown represent what I would document in a BRD/FRD</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
+function showPage(id, el, role) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('headerRole').textContent = role;
+  window.scrollTo(0,0);
+}
+
+// ══════════════════════════════════════════════
+// PAGE 1 — REGISTRATION
+// ══════════════════════════════════════════════
+let tokenCounter = 26;
+let registered = false;
+
+function showMsg(id, type, text) {
+  const el = document.getElementById(id);
+  el.className = 'inline-msg ' + type + ' show';
+  el.innerHTML = text;
+}
+
+function hideMsg(id) {
+  const el = document.getElementById(id);
+  el.className = 'inline-msg';
+}
+
+function doSearch() {
+  const val = document.getElementById('searchInput').value.trim();
+  if (!val) { showMsg('searchResult','msg-warn','⚠ Please enter a mobile number or Patient ID to search.'); return; }
+  if (val === '9876543210') {
+    showMsg('searchResult','msg-info','<div><strong>Existing patient found:</strong> Meena Ravi | Patient ID: PT-10041<br><span style="font-size:12px;color:var(--teal);">Continue as Follow-up? Pre-filling registration form...</span></div>');
+    document.getElementById('ptName').value = 'Meena Ravi';
+    document.getElementById('ptAge').value = '42';
+    document.getElementById('ptGender').value = 'Female';
+    document.getElementById('ptMobile').value = '9876543210';
+    document.getElementById('visitType').value = 'Follow-up';
+  } else {
+    showMsg('searchResult','msg-info','No existing record found. Please proceed with new registration.');
+  }
+}
+
+function registerVisit() {
+  const name   = document.getElementById('ptName').value.trim();
+  const age    = document.getElementById('ptAge').value;
+  const gender = document.getElementById('ptGender').value;
+  const mobile = document.getElementById('ptMobile').value.trim();
+  const dept   = document.getElementById('dept').value;
+  const sess   = document.getElementById('session').value;
+  const doctor = document.getElementById('doctorSelect').value;
+  const feeStatus = document.getElementById('feeStatus').value;
+  const deptText = document.getElementById('dept');
+  const sessText = document.getElementById('session');
+  const deptName = deptText.options[deptText.selectedIndex].text;
+
+  let errs = [];
+  if (!name) errs.push('Patient Name');
+  if (!age || parseInt(age) < 1 || parseInt(age) > 120) errs.push('Age (1-120)');
+  if (!gender) errs.push('Gender');
+  if (!mobile) errs.push('Mobile Number');
+  if (mobile && !/^\d{10}$/.test(mobile)) errs.push('Valid 10-digit Mobile Number');
+  if (!dept) errs.push('Department');
+  if (!sess) errs.push('Session');
+  if (!doctor) errs.push('Doctor');
+
+  if (errs.length) {
+    showMsg('regMsg','msg-error','⚠ Missing required fields: <strong>' + errs.join(', ') + '</strong>');
+    return;
+  }
+
+  tokenCounter++;
+  const tokenSeq = String(tokenCounter).padStart(3, '0');
+  const tokenNo = dept + '-' + tokenSeq;
+  const today = '2026-05-20';
+  const visitId = 'V-' + today.replace(/-/g,'') + '-' + tokenSeq;
+
+  document.getElementById('tokenNum').textContent = tokenNo;
+  document.getElementById('tokenVisitId').textContent = visitId;
+  document.getElementById('tokenDept').textContent = deptName;
+  document.getElementById('tokenSession').textContent = sessText.value;
+  document.getElementById('tokenPatient').textContent = name;
+  document.getElementById('tokenDoctor').textContent = doctor;
+
+  document.getElementById('tokenCard').style.display = 'block';
+  document.getElementById('noTokenMsg').style.display = 'none';
+  document.getElementById('tokenOutput').style.display = 'block';
+
+  showMsg('regMsg','msg-success','✓ Registration successful. Token <strong>' + tokenNo + '</strong> generated for ' + name + '. Consultation fee status: <strong>' + feeStatus + '</strong>.');
+  registered = true;
+}
+
+function printToken() {
+  if (!registered) {
+    showMsg('regMsg','msg-warn','⚠ Please complete registration before printing a token.');
+    return;
+  }
+  showMsg('printMsg','msg-success','🖨 Token printed / downloaded for manual handover.');
+}
+
+function clearRegForm() {
+  ['ptName','ptAge','ptMobile','searchInput'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  ['ptGender','visitType','dept','session','doctorSelect','referral','feeStatus'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.selectedIndex = 0;
+  });
+  hideMsg('regMsg'); hideMsg('searchResult'); hideMsg('printMsg');
+  document.getElementById('tokenCard').style.display = 'none';
+  document.getElementById('noTokenMsg').style.display = 'block';
+  document.getElementById('tokenOutput').style.display = 'none';
+  registered = false;
+}
+
+// ══════════════════════════════════════════════
+// PAGE 2 — QUEUE
+// ══════════════════════════════════════════════
+const statusColorMap = {
+  'Waiting': 'chip-grey', 'In Consultation': 'chip-teal', 'Lab Ordered': 'chip-amber',
+  'Pharmacy Pending': 'chip-blue', 'Completed': 'chip-green', 'No Show': 'chip-red'
+};
+
+function updateRouting() {
+  const token  = document.getElementById('routeToken').value;
+  const status = document.getElementById('routeStatus').value;
+  const dept   = document.getElementById('routeDept').value;
+  if (!token) { showMsg('routeMsg','msg-warn','⚠ Please select a token.'); return; }
+  if (!status) { showMsg('routeMsg','msg-warn','⚠ Please select a status to update.'); return; }
+  const chipEl = document.getElementById('stat-' + token);
+  if (chipEl) {
+    chipEl.textContent = status;
+    chipEl.className = 'chip ' + (statusColorMap[status] || 'chip-grey');
+  }
+  const deptPart = dept ? ' → routed to <strong>' + dept + '</strong>' : '';
+  showMsg('routeMsg','msg-success','✓ Token <strong>' + token + '</strong> updated to <strong>' + status + '</strong>' + deptPart + '.');
+}
+
+// ══════════════════════════════════════════════
+// PAGE 3 — DOCTOR WORKSPACE
+// ══════════════════════════════════════════════
+function doctorSearchPatient() {
+  const q = document.getElementById('doctorSearchInput').value.trim().toLowerCase();
+  const rows = document.querySelectorAll('#doctorQueueTable tbody tr');
+  let visible = 0;
+  rows.forEach(row => {
+    const hay = (row.dataset.search || '').toLowerCase();
+    const match = !q || hay.includes(q);
+    row.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  if (!q) {
+    showMsg('doctorQueueMsg','msg-info','ℹ Showing all assigned patients for today.');
+  } else if (visible) {
+    showMsg('doctorQueueMsg','msg-success','✓ Found ' + visible + ' matching patient record(s). Open the patient to continue consultation.');
+  } else {
+    showMsg('doctorQueueMsg','msg-warn','⚠ No assigned patient found for this search. Try Patient ID, token, name, or mobile.');
+  }
+}
+
+function resetDoctorSearch() {
+  document.getElementById('doctorSearchInput').value = '';
+  document.getElementById('doctorStatusFilter').value = 'all';
+  document.querySelectorAll('#doctorQueueTable tbody tr').forEach(row => row.style.display = '');
+  hideMsg('doctorQueueMsg');
+}
+
+function filterDoctorQueue() {
+  const status = document.getElementById('doctorStatusFilter').value;
+  const rows = document.querySelectorAll('#doctorQueueTable tbody tr');
+  let visible = 0;
+  rows.forEach(row => {
+    const match = status === 'all' || row.dataset.status === status;
+    row.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  showMsg('doctorQueueMsg','msg-info','Filter applied: <strong>' + (status === 'all' ? 'All Assigned Patients' : status) + '</strong> (' + visible + ' record(s)).');
+}
+
+function openDoctorPatient(name, patientId, visitId, token, ageGender, dept, visitType, lastVisit, allergy) {
+  document.getElementById('docPatientName').textContent = name;
+  document.getElementById('docPatientSub').innerHTML = patientId + ' &nbsp;|&nbsp; ' + visitId;
+  document.getElementById('docAgeGender').textContent = ageGender;
+  document.getElementById('docDept').textContent = dept;
+  document.getElementById('docVisitType').textContent = visitType;
+  document.getElementById('docLastVisit').textContent = lastVisit;
+  document.getElementById('docToken').textContent = token;
+  document.getElementById('docAllergy').textContent = allergy && allergy !== 'None recorded' ? '⚠ Allergy: ' + allergy : 'No allergy recorded';
+  showMsg('doctorQueueMsg','msg-success','✓ Patient <strong>' + name + '</strong> opened for consultation.');
+}
+
+
+let labOrderCount = 0;
+let rxCount = 0;
+
+function addLabOrder() {
+  const test = document.getElementById('labTest').value;
+  const type = document.getElementById('labType').value;
+  const urgency = document.getElementById('labUrgency').value;
+  if (!test) { showMsg('labMsg','msg-warn','⚠ Please select a test name.'); return; }
+  hideMsg('labMsg');
+  labOrderCount++;
+  const tbody = document.getElementById('labTbody');
+  const emptyRow = document.getElementById('labEmptyRow');
+  if (emptyRow) emptyRow.remove();
+  const urgClass = urgency === 'Urgent' ? 'chip-red' : 'chip-grey';
+  const payStatus = urgency === 'Urgent' ? '<span class="chip chip-teal">Not Required</span>' : '<span class="chip chip-amber">Pending Payment</span>';
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td>' + test + '</td><td><span class="chip chip-teal">' + type + '</span></td><td><span class="chip ' + urgClass + '">' + urgency + '</span></td><td>' + payStatus + '</td>';
+  tbody.appendChild(tr);
+  document.getElementById('labTest').selectedIndex = 0;
+  showMsg('labMsg','msg-success','✓ Lab order added: <strong>' + test + '</strong> (' + type + ', ' + urgency + ').');
+}
+
+function addMedicine() {
+  const name = document.getElementById('medName').value.trim();
+  const dos  = document.getElementById('medDosage').value.trim();
+  const freq = document.getElementById('medFreq').value.trim();
+  const dur  = document.getElementById('medDuration').value.trim();
+  const qty  = document.getElementById('medQty').value;
+  if (!name) { showMsg('rxMsg','msg-warn','⚠ Please enter a medicine name.'); return; }
+  const allergyText = (document.getElementById('docAllergy').textContent || '').toLowerCase();
+  if (allergyText.includes('penicillin') && name.toLowerCase().includes('penicillin')) {
+    showMsg('rxMsg','msg-error','⚠ Allergy warning: this patient has a recorded Penicillin allergy. Please review before adding this medicine.');
+    return;
+  }
+  hideMsg('rxMsg');
+  rxCount++;
+  const tbody = document.getElementById('rxTbody');
+  const emptyRow = document.getElementById('rxEmptyRow');
+  if (emptyRow) emptyRow.remove();
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td>' + name + '</td><td>' + (dos||'—') + '</td><td>' + (freq||'—') + '</td><td>' + (dur||'—') + '</td><td>' + (qty||'—') + '</td>';
+  tbody.appendChild(tr);
+  ['medName','medDosage','medFreq','medDuration','medQty'].forEach(id => document.getElementById(id).value = '');
+  showMsg('rxMsg','msg-success','✓ Medicine added: <strong>' + name + '</strong>.');
+}
+
+function finaliseRx() {
+  if (rxCount === 0) { showMsg('finaliseMsg','msg-warn','⚠ Please add at least one medicine before finalising.'); return; }
+  showMsg('finaliseMsg','msg-success','✅ Prescription finalised and sent to Pharmacy queue. Linked to Visit V-20260520-024.');
+}
+
+function saveConsultation() {
+  showMsg('saveMsg','msg-success','💾 Consultation saved with vitals and follow-up advice. Patient status updated to <strong>Consultation Completed</strong>. Token ' + document.getElementById('docToken').textContent + ' progressing to next stage.');
+}
+
+// ══════════════════════════════════════════════
+// PAGE 4 — LAB & PHARMACY
+// ══════════════════════════════════════════════
+function uploadReport(id) {
+  const el = document.getElementById('rpStatus-' + id);
+  if (el.textContent === 'Uploaded') { showMsg('uploadMsg','msg-info','ℹ Report for LO-' + id + ' already uploaded and marked.'); return; }
+  el.textContent = 'Uploaded';
+  el.className = 'chip chip-green';
+  showMsg('uploadMsg','msg-success','✓ Report for LO-' + id + ' marked as <strong>Uploaded</strong>. Doctor can now review.');
+}
+
+function markDispensed(id, qty) {
+  const dispEl = document.getElementById('disp-' + id);
+  const statEl = document.getElementById('dispStatus-' + id);
+  dispEl.textContent = qty;
+  statEl.textContent = 'Dispensed';
+  statEl.className = 'chip chip-green';
+  showMsg('dispMsg','msg-success','✓ RX-' + id + ' marked as <strong>Dispensed</strong> (' + qty + ' units).');
+}
+
+// ══════════════════════════════════════════════
+// PAGE 5 — ADMIN DASHBOARD
+// ══════════════════════════════════════════════
+const dashboardFocusData = {
+  all: {
+    icon:'🏥', title:'Department Active Load', note:'Overall OPD view: department load, queue pressure, lab exceptions, pharmacy gaps, and patient history reporting. Demo values only.',
+    kpis:[
+      ['OPD Visits Today','147','New: 35 | Follow-up: 112'],
+      ['Active Queue','26','Across all departments'],
+      ['Avg Wait Time','34m','Target: <45 min'],
+      ['Pending Lab Payments','5','Orders pending clearance'],
+      ['Reports Pending','3','External uploads missing'],
+      ['Pharmacy Gaps','6','Not or partially dispensed']
+    ],
+    bars:[
+      ['Cardiology','11 tokens',73],['Orthopaedics','8 tokens',53],['General Medicine','7 tokens',47],['Gynaecology','4 tokens',27],['Pediatrics','3 tokens',20],['Dermatology','2 tokens',13]
+    ]
+  },
+  visits: {
+    icon:'👥', title:'Visit Mix by Type / Session', note:'Visits focus shows sample OPD volume by visit type and session. In production, this would query Visits by VisitDate, VisitType, and Session.',
+    kpis:[
+      ['Total Visits','147','Today'],['New Visits','35','24% of visits'],['Follow-ups','112','76% of visits'],['Morning Session','91','Highest load'],['Evening Session','42','Second shift'],['Casualty / Specialty','14','Priority handling']
+    ],
+    bars:[
+      ['Follow-up Visits','112 visits',76],['New Visits','35 visits',24],['Morning Session','91 visits',62],['Evening Session','42 visits',29],['Casualty','9 visits',6],['Specialty','5 visits',3]
+    ]
+  },
+  queue: {
+    icon:'🔢', title:'Queue & Waiting-Time View', note:'Queue focus shows token load and wait-time risk. Long waiting tokens help OPD staff identify bottlenecks quickly.',
+    kpis:[
+      ['Active Tokens','26','Currently open'],['Longest Waiting','68m','Token CD-007 flagged'],['Avg Wait Time','34m','Target: <45 min'],['Busy Departments','2','Cardio + Ortho'],['Completed','103','Consultations done'],['No Shows','6','Marked absent']
+    ],
+    bars:[
+      ['Cardiology','11 tokens',73],['Orthopaedics','8 tokens',53],['General Medicine','7 tokens',47],['Pediatrics','3 tokens',20],['Gynaecology','4 tokens',27],['Dermatology','2 tokens',13]
+    ]
+  },
+  lab: {
+    icon:'🧪', title:'Lab Exception View', note:'Lab focus highlights pending payments, urgent orders, external report uploads, and completed reports. In production, this would query LabOrders and LabReports.',
+    kpis:[
+      ['Lab Orders Today','18','In-house + external'],['Pending Payments','5','Non-urgent orders'],['Urgent Orders','2','Not payment-blocked'],['External Pending','3','Awaiting upload'],['Uploaded Reports','7','Ready for review'],['Completed Orders','10','Reported today']
+    ],
+    bars:[
+      ['Pending Payments','5 orders',50],['External Pending','3 reports',30],['Urgent In Progress','2 orders',20],['Uploaded Reports','7 reports',70],['Completed Orders','10 orders',100],['Awaiting Review','4 reports',40]
+    ]
+  },
+  pharmacy: {
+    icon:'💊', title:'Pharmacy Dispensing View', note:'Pharmacy focus shows dispense gaps. Partial and not-dispensed medicines are tracked with reasons for follow-up.',
+    kpis:[
+      ['Prescription Lines','42','Issued today'],['Fully Dispensed','36','Completed'],['Not Dispensed','4','Needs follow-up'],['Partial Dispense','2','Limited stock'],['Stock Queries','3','Pharmacy review'],['Pharmacy Gaps','6','Not + partial']
+    ],
+    bars:[
+      ['Fully Dispensed','36 lines',86],['Not Dispensed','4 lines',10],['Partially Dispensed','2 lines',5],['Stock Pending','3 issues',7],['Prescription Review','1 issue',3],['Completed Rx','18 prescriptions',80]
+    ]
+  },
+  patient: {
+    icon:'📁', title:'Patient History Lookup View', note:'Patient history focus shows role-controlled access to visit history, report status, and prescription references for one Patient ID. Admin sees aggregate/authorised views only.',
+    kpis:[
+      ['Patient ID','PT-10041','Selected sample'],['Previous Visits','2','Read-only history'],['Reports Available','2','In-house + external'],['Pending Reports','1','Awaiting upload'],['Allergy Alerts','1','Penicillin'],['Last Visit','05 May','Follow-up record']
+    ],
+    bars:[
+      ['General Medicine','2 visits',100],['External Reports','1 report',50],['In-house Reports','1 report',50],['Prescriptions','2 records',100],['Follow-ups','1 visit',50],['Pending Upload','1 report',50]
+    ]
+  }
+};
+
+function updateAdminDashboard(focus) {
+  const data = dashboardFocusData[focus] || dashboardFocusData.all;
+  document.getElementById('chartIcon').textContent = data.icon;
+  document.getElementById('chartTitle').textContent = data.title;
+  document.getElementById('dashboardFocusNote').textContent = data.note;
+  data.kpis.forEach((k, idx) => {
+    const n = idx + 1;
+    document.getElementById('kpiLabel' + n).textContent = k[0];
+    document.getElementById('kpiVal' + n).textContent = k[1];
+    document.getElementById('kpiSub' + n).textContent = k[2];
+  });
+  data.bars.forEach((b, idx) => {
+    const n = idx + 1;
+    document.getElementById('barLabel' + n).textContent = b[0];
+    document.getElementById('barVal' + n).textContent = b[1];
+    document.getElementById('barFill' + n).style.width = b[2] + '%';
+  });
+}
+
+function filterInsights() {
+  const focus = document.getElementById('reportFocus').value;
+  updateAdminDashboard(focus || 'all');
+  const cards = document.querySelectorAll('.insight-card');
+  cards.forEach(c => {
+    if (!focus || c.dataset.focus === focus) {
+      c.style.display = 'block';
+    } else {
+      c.style.display = 'none';
+    }
+  });
+  hideMsg('exportMsg');
+}
+
+function exportReport() {
+  const focus = document.getElementById('reportFocus').value;
+  if (!focus) {
+    showMsg('exportMsg','msg-warn','⚠ Please select a dashboard focus before export.');
+    return;
+  }
+  const focusLabels = {visits:'Visits',queue:'Queue',lab:'Lab',pharmacy:'Pharmacy',patient:'Patient History'};
+  showMsg('exportMsg','msg-success','📋 Demo report for <strong>' + (focusLabels[focus]||focus) + '</strong> exported. In production, this would generate an authorised, audit-logged report from live OPD, lab, pharmacy, and visit-history data.');
+}
+window.addEventListener('DOMContentLoaded', function(){ updateAdminDashboard('all'); });
+</script>
+</body>
+</html>

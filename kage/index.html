@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KAGE Fitness Studio ERP — BA Portfolio Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8F6F0; --surface:#FFFFFF; --surface2:#FFFDF7; --soft:#F1EDE2;
+  --ink:#171713; --muted:#5E5A50; --subtle:#8D8677; --line:#E4DED1;
+  --gold:#F2B705; --gold2:#D89C00; --gold3:#FFF2B8; --charcoal:#1F1F1B;
+  --green:#228B5A; --green-soft:#E9F7F0; --red:#C7493A; --red-soft:#FCEDEC;
+  --blue:#2563EB; --blue-soft:#EFF4FF; --amber:#B7791F; --amber-soft:#FFF7E6;
+  --shadow:0 18px 60px rgba(31,31,27,.08); --shadow2:0 8px 24px rgba(31,31,27,.07);
+  --radius:20px; --radius2:14px; --serif:'DM Serif Display',Georgia,serif; --sans:'DM Sans',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0} html{scroll-behavior:smooth} body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.65;font-size:15px;overflow-x:hidden} a{color:inherit;text-decoration:none} img{max-width:100%;display:block}
+
+.brand-logo{width:54px;height:34px;object-fit:contain;background:#FFFDF7;border-radius:8px;padding:4px;border:1px solid rgba(242,183,5,.45);box-shadow:0 8px 20px rgba(31,31,27,.10)}
+.hero-logo{width:148px;background:#FFFDF7;border-radius:16px;padding:12px 18px;margin-bottom:18px;box-shadow:0 18px 44px rgba(31,31,27,.12);border:1px solid rgba(242,183,5,.45)}
+.mini-block{margin-top:18px;background:var(--surface2);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow2)}
+.mini-block h4{font-size:15px;margin-bottom:10px;color:var(--ink)}
+.mini-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}.mini-flow .step{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;min-height:96px}.mini-flow .step b{display:block;font-size:13px;margin-bottom:5px}.mini-flow .step span{font-size:12px;color:var(--muted);line-height:1.4;display:block}.mini-flow .step:before{content:'→';font-family:var(--mono);color:var(--gold2);font-weight:800;display:block;margin-bottom:4px}.mini-flow .step:first-child:before{content:'01';font-size:11px}.mini-note{margin-top:10px;color:var(--muted);font-size:12.8px}.rule-callout{margin-top:14px;border-left:4px solid var(--gold);background:#fff;border-radius:14px;padding:14px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.rule-callout b{display:block;margin-bottom:4px}.rule-callout p{font-size:13px;color:var(--muted)}
+@media(max-width:1100px){.mini-flow{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.mini-flow{grid-template-columns:1fr}.hero-logo{width:128px}.brand-logo{width:46px;height:30px}}
+
+.nav{position:sticky;top:0;z-index:100;background:rgba(248,246,240,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,4vw,54px)}
+.brand{display:flex;align-items:center;gap:12px}.mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--gold),#FFD95B);display:grid;place-items:center;font-weight:800;color:#19170E;box-shadow:0 8px 24px rgba(242,183,5,.25)}.brand-text{font-weight:700;letter-spacing:-.02em}.brand-text span{display:block;font-size:11px;color:var(--subtle);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:18px}.nav-links a{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}.nav-links a:hover{color:var(--gold2)}.nav-cta{background:var(--charcoal);color:#fff;padding:9px 14px;border-radius:999px;font-size:12px;font-weight:700}
+.hero{position:relative;min-height:calc(100vh - 68px);display:grid;place-items:center;padding:80px clamp(20px,5vw,72px);overflow:hidden;background:radial-gradient(circle at 82% 18%,rgba(242,183,5,.20),transparent 32%),linear-gradient(135deg,#FFF 0%,#FAF4DF 58%,#F4EFE4 100%)}.hero:before{content:'';position:absolute;inset:auto -140px -180px auto;width:520px;height:520px;border-radius:50%;background:rgba(31,31,27,.05)}
+.hero-inner{max-width:1180px;width:100%;display:grid;grid-template-columns:1.1fr .9fr;gap:54px;align-items:center;position:relative;z-index:1}.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);font-weight:600;margin-bottom:16px}.hero h1{font-family:var(--serif);font-size:clamp(44px,7vw,86px);line-height:.98;letter-spacing:-.03em;margin-bottom:16px}.hero h1 em{color:var(--gold2);font-style:italic}.lead{font-size:18px;color:var(--muted);max-width:660px;margin-bottom:24px}.note{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;color:var(--muted);margin-bottom:28px}.note:before{content:'✦';color:var(--gold2)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpi{background:rgba(255,255,255,.76);border:1px solid rgba(228,222,209,.86);border-radius:16px;padding:16px;box-shadow:var(--shadow2)}.kpi strong{font-family:var(--serif);display:block;color:var(--gold2);font-size:32px;line-height:1}.kpi span{font-size:12px;color:var(--muted);font-weight:600}
+.hero-panel{background:rgba(255,255,255,.78);border:1px solid rgba(228,222,209,.88);border-radius:26px;padding:28px;box-shadow:var(--shadow);backdrop-filter:blur(12px)}.panel-title{font-size:13px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);font-weight:700;margin-bottom:18px}.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.scope{border:1px solid var(--line);border-radius:14px;background:var(--surface2);padding:12px}.scope b{display:block;font-size:13px}.scope span{font-size:12px;color:var(--muted)}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:11px 16px;font-weight:700;font-size:13px;border:1px solid var(--line);background:#fff}.btn.primary{background:var(--gold);border-color:var(--gold);color:#19170E}.btn.dark{background:var(--charcoal);border-color:var(--charcoal);color:#fff}
+.section{padding:72px clamp(20px,5vw,72px);max-width:1240px;margin:0 auto}.section.full{max-width:none}.section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:34px}.section-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2);font-weight:700;margin-bottom:8px}.section h2{font-family:var(--serif);font-size:clamp(32px,4vw,54px);line-height:1.05;letter-spacing:-.03em}.section-desc{color:var(--muted);max-width:620px}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow2)}.card.soft{background:var(--surface2)}.card h3{font-size:18px;margin-bottom:8px}.card p{color:var(--muted);font-size:14px}.tag{display:inline-block;background:var(--gold3);color:#775700;border:1px solid rgba(242,183,5,.28);border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;margin-bottom:12px}.small{font-size:13px;color:var(--muted)}
+.problem-list{display:grid;gap:10px}.problem-item{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px}.num{font-family:var(--mono);font-size:11px;color:var(--gold2);font-weight:800;min-width:26px}.problem-item b{display:block}.problem-item span{color:var(--muted);font-size:13px}
+.workflow{display:grid;gap:12px}.wf-row{display:grid;grid-template-columns:180px 1fr 1fr;gap:12px;align-items:stretch}.wf-cell{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}.wf-area{font-weight:800;color:var(--charcoal);background:linear-gradient(135deg,var(--gold3),#fff)}.wf-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono);color:var(--subtle);font-weight:700;margin-bottom:5px}.wf-cell p{font-size:13.5px;color:var(--muted)}.asis{border-left:4px solid var(--red)}.tobe{border-left:4px solid var(--green)}
+.module-grid{display:grid;grid-template-columns:repeat(7, minmax(230px,1fr));gap:16px;overflow-x:auto;padding-bottom:6px}.module{min-height:280px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow2)}.module .icon{width:42px;height:42px;border-radius:14px;background:var(--gold3);display:grid;place-items:center;margin-bottom:14px;font-size:20px}.module h3{font-size:17px;margin-bottom:8px}.module p{font-size:13.5px;color:var(--muted);margin-bottom:12px}.module ul{list-style:none;display:grid;gap:6px}.module li{font-size:12.5px;color:var(--muted);display:flex;gap:8px}.module li:before{content:'→';color:var(--gold2);font-family:var(--mono)}
+.flow-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.flow-step{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;position:relative}.flow-step strong{font-family:var(--mono);color:var(--gold2);font-size:12px}.flow-step b{display:block;margin:8px 0 4px}.flow-step p{font-size:13px;color:var(--muted)}
+.logic-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow2)}.logic-table th{background:var(--charcoal);color:#fff;font-size:11px;letter-spacing:.08em;text-transform:uppercase;text-align:left;padding:14px;font-family:var(--mono)}.logic-table td{padding:14px;border-bottom:1px solid var(--line);color:var(--muted);font-size:13.5px;vertical-align:top}.logic-table tr:last-child td{border-bottom:none}.logic-table b{color:var(--ink)}
+.rules{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.rule{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;grid-template-columns:78px 1fr;gap:10px}.rule code{font-family:var(--mono);color:var(--gold2);font-size:12px;font-weight:800}.rule p{font-size:13.2px;color:var(--muted)}
+.sprints{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.sprint{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow2)}.sprint .sno{font-family:var(--mono);color:var(--gold2);font-size:11px;font-weight:800}.sprint h3{font-size:15px;line-height:1.25;margin:8px 0}.sprint p{font-size:12.5px;color:var(--muted)}.status{display:inline-block;margin-top:10px;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;background:var(--green-soft);color:var(--green)}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.metric-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;text-align:center;box-shadow:var(--shadow2)}.metric-card strong{font-family:var(--serif);font-size:34px;color:var(--gold2);display:block}.metric-card span{font-size:12px;color:var(--muted);font-weight:700}.prototype-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.proto{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow2)}.proto-link{display:block;color:inherit;text-decoration:none;cursor:pointer;transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease}.proto-link:hover{transform:translateY(-4px);box-shadow:0 18px 48px rgba(31,31,27,.12);border-color:var(--gold)}.proto-link:focus-visible{outline:3px solid var(--gold);outline-offset:4px}.proto img{height:132px;width:100%;object-fit:cover;border-radius:12px;border:1px solid var(--line);margin-bottom:12px}.proto b{font-size:14px}.proto p{font-size:12.5px;color:var(--muted)}.open-hint{display:inline-flex;margin-top:10px;font-size:12px;font-weight:800;color:var(--gold2);letter-spacing:.02em}
+.impact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.impact{background:#fff;border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:18px;padding:18px;box-shadow:var(--shadow2)}.impact b{display:block;margin-bottom:5px}.impact p{font-size:13px;color:var(--muted)}
+.artifacts{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.artifact{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow2);transition:.18s}.artifact:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.artifact span{display:block;font-family:var(--mono);font-size:10px;color:var(--gold2);letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px}.artifact b{display:block;margin-bottom:6px}.artifact p{font-size:12.5px;color:var(--muted)}.image-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:var(--shadow2)}.image-card img{border-radius:16px;border:1px solid var(--line);background:#fff}.caption{font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center}
+
+.placeholder-visual{height:132px;width:100%;border:1px solid var(--line);border-radius:12px;background:linear-gradient(135deg,#FFF8D8,#FFFFFF 45%,#F1E6C3);display:grid;place-items:center;text-align:center;color:var(--charcoal);font-weight:800;font-size:13px;position:relative;overflow:hidden}
+.placeholder-visual:after{content:'';position:absolute;right:-28px;bottom:-28px;width:86px;height:86px;border-radius:50%;background:rgba(242,183,5,.22)}
+.placeholder-visual span{position:relative;z-index:1}
+.diagram-placeholder{min-height:360px;border:1px dashed rgba(216,156,0,.45);border-radius:16px;background:linear-gradient(135deg,#FFFDF7,#FFF4C8);display:grid;place-items:center;text-align:center;padding:28px;color:var(--muted)}
+.diagram-placeholder b{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
+.status.mixed{background:var(--amber-soft);color:var(--amber)}
+
+.footer{background:var(--charcoal);color:#fff;padding:42px clamp(20px,5vw,72px);margin-top:60px}.footer-inner{max-width:1180px;margin:auto;display:flex;justify-content:space-between;gap:20px;align-items:center}.footer p{color:rgba(255,255,255,.62);font-size:13px}.footer b{font-family:var(--serif);font-size:26px;color:var(--gold)}
+@media(max-width:1100px){.hero-inner,.grid-2{grid-template-columns:1fr}.grid-3,.grid-4,.metrics,.impact-grid,.prototype-grid,.artifacts{grid-template-columns:repeat(2,1fr)}.flow-steps{grid-template-columns:repeat(2,1fr)}.sprints{grid-template-columns:repeat(3,1fr)}.nav-links{display:none}.wf-row{grid-template-columns:1fr}.module-grid{grid-template-columns:1fr 1fr;overflow:visible}.hero{min-height:auto}.footer-inner{flex-direction:column;align-items:flex-start}}
+@media(max-width:640px){.kpis,.grid-3,.grid-4,.metrics,.impact-grid,.prototype-grid,.artifacts,.flow-steps,.sprints,.module-grid,.rules{grid-template-columns:1fr}.section{padding:58px 18px}.hero{padding:58px 18px}.scope-grid{grid-template-columns:1fr}.rule{grid-template-columns:1fr}.nav{height:62px}.brand-text span{display:none}}
+
+/* FINAL ARTIFACT INTEGRATION */
+.asset-showcase{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:stretch}
+.asset-panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:var(--shadow2)}
+.asset-panel img{border-radius:16px;border:1px solid var(--line);background:#fff;width:100%;height:auto}
+.asset-notes{display:grid;gap:12px}
+.asset-note{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow2)}
+.asset-note b{display:block;margin-bottom:6px}.asset-note p{font-size:13px;color:var(--muted)}
+.renewal-decision-flow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:center}
+.process-step-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center;min-height:118px;box-shadow:var(--shadow2);display:flex;flex-direction:column;justify-content:center}
+.process-step-num{font-family:var(--mono);font-size:10px;color:var(--gold2);font-weight:800;margin-bottom:6px}.process-step-title{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:6px}.process-step-desc{font-size:12px;color:var(--muted);line-height:1.45}
+.decision-diamond-wrap{display:flex;align-items:center;justify-content:center;min-height:170px}
+.decision-diamond{width:140px;height:140px;background:var(--gold3);border:2px solid var(--gold);transform:rotate(45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 32px rgba(242,183,5,.20)}
+.decision-diamond span{transform:rotate(-45deg);font-size:13px;font-weight:900;color:var(--ink);text-align:center;line-height:1.25}
+.flow-branch{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.branch-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow2)}
+.branch-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold2);font-weight:900;margin-bottom:8px}.branch-title{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:5px}.branch-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.gap-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow2)}
+.gap-table th{background:var(--charcoal);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;text-align:left;padding:13px}.gap-table td{border-bottom:1px solid var(--line);padding:13px;color:var(--muted);font-size:13.2px;vertical-align:top}.gap-table tr:last-child td{border-bottom:none}.gap-area{font-weight:800;color:var(--ink)}
+.roi-breakdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}.roi-break-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow2)}
+.roi-break-val{font-family:var(--serif);font-size:30px;color:var(--gold2);line-height:1;margin-bottom:6px}.roi-break-title{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:5px}.roi-break-desc{font-size:12px;color:var(--muted);line-height:1.45}
+@media(max-width:1100px){.asset-showcase{grid-template-columns:1fr}.renewal-decision-flow,.roi-breakdown-grid{grid-template-columns:1fr}.flow-branch{grid-template-columns:1fr}.decision-diamond-wrap{min-height:150px}}
+
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="#top"><img class="brand-logo" src="assets/images/kage_logo_transparent.png" alt="kage Fitness Studio logo"><span class="brand-text">KAGE ERP<span>BA Portfolio Case Study</span></span></a>
+  <div class="nav-links"><a href="../index.html">← Portfolio Home</a><a href="#problem">Problem</a><a href="#gap-analysis">Gap</a><a href="#workflow">Workflow</a><a href="#modules">Modules</a><a href="#logic">Logic</a><a href="#logical-data-model">Data Model</a><a href="#uat">UAT</a><a href="#reflection">Reflection</a><a href="#artifacts">Artefacts</a><a class="nav-cta" href="live-erp-demo.html">Live Demo</a></div>
+</nav>
+<header class="hero" id="top">
+  <div class="hero-inner">
+    <div>
+      <img class="hero-logo" src="assets/images/kage_logo_transparent.png" alt="kage Fitness Studio logo">
+      <div class="eyebrow">Independent BA Portfolio Case Study · Fitness Studio Operations · May 2026</div>
+      <h1>KAGE Fitness Studio <em>ERP</em></h1>
+      <p class="lead">End-to-end Business Analyst case study showing how a premium fitness studio can move from manual gym operations to a structured ERP workflow for memberships, PT sessions, billing, freelancers, renewals, equipment, and reports.</p>
+      <div class="note">Inspired by real-world fitness studio operations; all data and screens are fictional for portfolio demonstration.</div>
+      <div class="kpis">
+        <div class="kpi"><strong>7</strong><span>Core ERP Modules</span></div>
+        <div class="kpi"><strong>26</strong><span>UAT Test Cases</span></div>
+        <div class="kpi"><strong>5</strong><span>Process Flows</span></div>
+        <div class="kpi"><strong>1</strong><span>Live ERP Prototype</span></div>
+      </div>
+    </div>
+    <div class="hero-panel">
+      <div class="panel-title">Case Study Scope</div>
+      <div class="scope-grid">
+        <div class="scope"><b>Memberships</b><span>Profiles, plans, expiry and status.</span></div>
+        <div class="scope"><b>PT Sessions</b><span>Trainer allocation, availability, package usage and progress tracking.</span></div>
+        <div class="scope"><b>Finance</b><span>Payments, invoices, refunds and revenue categories.</span></div>
+        <div class="scope"><b>Freelancers</b><span>Access fees, client fees and gate flag logic.</span></div>
+        <div class="scope"><b>Renewals</b><span>Renewal due, overdue queue and follow-up status.</span></div>
+        <div class="scope"><b>Equipment</b><span>Repair logs, maintenance and replacement review.</span></div>
+        <div class="scope"><b>Reports</b><span>Revenue, workload, renewals and maintenance KPIs.</span></div>
+        <div class="scope"><b>Progress Notes</b><span>Sub-feature under PT workflow for trainer-facing notes.</span></div>
+      </div>
+      <div class="hero-actions"><a class="btn primary" href="#artifacts">View Artefacts</a><a class="btn dark" href="live-erp-demo.html">Open Live ERP Demo →</a></div>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="context">
+  <div class="section-head"><div><div class="section-kicker">01 · Context</div><h2>Research Basis & Project Context</h2></div><p class="section-desc">The project is not positioned as a real implementation. It is a domain-informed BA case study based on practical exposure to gym operations.</p></div>
+  <div class="grid-3">
+    <div class="card"><span class="tag">Research basis</span><h3>Inspired by real gym operations</h3><p>This case study is based on observed gym operations and common fitness studio workflow patterns. The business logic focuses on daily operational problems: memberships, PT sessions, trainer availability, payments, renewals, freelancer billing, equipment maintenance, and reports.</p></div>
+    <div class="card soft"><span class="tag">Portfolio boundary</span><h3>Designed and documented, not implemented live</h3><p>All names, metrics, screens and business data are fictional and created for portfolio demonstration. The goal is to show BA thinking: workflow analysis, requirements, business rules, data modelling, UAT planning and stakeholder-friendly prototype communication.</p></div>
+    <div class="card"><span class="tag">About this project</span><h3>Built as a BA portfolio artefact</h3><p>Created by Adina Mohammed as an independent Business Analyst portfolio case study to demonstrate requirements thinking, ERP workflow design, business rules, UAT validation, data modelling and stakeholder-facing prototype communication.</p></div>
+  </div>
+</section>
+
+<section class="section" id="problem">
+  <div class="section-head"><div><div class="section-kicker">02 · Problem</div><h2>Business Problem</h2></div><p class="section-desc">KAGE needed operational visibility without adding more manual follow-up work for the owner, front desk team and trainers.</p></div>
+  <div class="problem-list">
+    <div class="problem-item"><span class="num">01</span><div><b>Scattered membership records</b><span>Member plans, expiry dates and status were difficult to manage consistently across spreadsheets and manual notes.</span></div></div>
+    <div class="problem-item"><span class="num">02</span><div><b>PT package tracking gaps</b><span>Trainer allocation, session count, completion status and package balance were not visible in one place.</span></div></div>
+    <div class="problem-item"><span class="num">03</span><div><b>Trainer availability not visible</b><span>During busy hours, admin had to ask trainers directly before assigning new PT enquiries or walk-in requests.</span></div></div>
+    <div class="problem-item"><span class="num">04</span><div><b>Renewals depended on memory</b><span>Membership renewals and inactive members could be missed when follow-ups depended on manual checking.</span></div></div>
+    <div class="problem-item"><span class="num">05</span><div><b>Freelancer revenue confusion</b><span>Freelancer access fees and per-client facility fees had to be separated from the freelancer’s own training income.</span></div></div>
+    <div class="problem-item"><span class="num">06</span><div><b>Equipment repair history was informal</b><span>Repeated repairs and replacement decisions were hard to justify without structured maintenance logs.</span></div></div>
+    <div class="problem-item"><span class="num">07</span><div><b>Delayed management reporting</b><span>Revenue, renewals, PT workload, freelancer income and maintenance costs were not available as a live operational view.</span></div></div>
+  </div>
+</section>
+
+
+<section class="section" id="gap-analysis">
+  <div class="section-head">
+    <div><div class="section-kicker">02B · Gap Analysis</div><h2>Manual Process vs ERP Improvement</h2></div>
+    <p class="section-desc">Gap analysis compares the current manual process with the future ERP-supported process.</p>
+  </div>
+  <table class="gap-table">
+    <thead><tr><th>Area</th><th>Current Gap</th><th>ERP Improvement</th></tr></thead>
+    <tbody>
+      <tr><td><span class="gap-area">Memberships</span></td><td>Renewals tracked manually through spreadsheets and follow-ups.</td><td>Renewal Due queue flag at 7 days before expiry; structured front-desk follow-up queue replaces manual tracking.</td></tr>
+      <tr><td><span class="gap-area">PT Sessions</span></td><td>Trainer sessions and commissions checked manually at month-end.</td><td>Session logging with controlled commission review.</td></tr>
+      <tr><td><span class="gap-area">Finance</span></td><td>No single view of revenue, expenses and profitability.</td><td>Revenue dashboard with payment, expense and profit visibility.</td></tr>
+      <tr><td><span class="gap-area">Freelancers</span></td><td>Freelancer dues and client-based fees were difficult to track.</td><td>Monthly freelancer billing and payment status tracking.</td></tr>
+      <tr><td><span class="gap-area">Equipment</span></td><td>Repair history was not tracked consistently.</td><td>Maintenance logs and frequent repair review flags.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="workflow">
+  <div class="section-head"><div><div class="section-kicker">03 · Transformation</div><h2>AS-IS vs TO-BE Workflow</h2></div><p class="section-desc">Native HTML workflow comparison showing how manual operations are converted into ERP-enabled workflows.</p></div>
+  <div class="workflow">
+    <div class="wf-row"><div class="wf-cell wf-area">Member Registration</div><div class="wf-cell asis"><div class="wf-label">AS-IS Manual</div><p>Staff records member details in spreadsheets or notes; duplicate checks are manual.</p></div><div class="wf-cell tobe"><div class="wf-label">TO-BE ERP</div><p>Digital member profile created with unique ID, plan, expiry date and status.</p></div></div>
+    <div class="wf-row"><div class="wf-cell wf-area">PT Sessions</div><div class="wf-cell asis"><div class="wf-label">AS-IS Manual</div><p>Trainer books verbally; package balance and session completion are not centrally visible.</p></div><div class="wf-cell tobe"><div class="wf-label">TO-BE ERP</div><p>Session linked to member, trainer, package and time slot; balance updates after completion.</p></div></div>
+    <div class="wf-row"><div class="wf-cell wf-area">Trainer Availability</div><div class="wf-cell asis"><div class="wf-label">AS-IS Manual</div><p>Admin asks trainers directly before assigning new PT sessions.</p></div><div class="wf-cell tobe"><div class="wf-label">TO-BE ERP</div><p>Dashboard shows Available, Busy, On Break or Absent status based on attendance and active sessions.</p></div></div>
+    <div class="wf-row"><div class="wf-cell wf-area">Renewals</div><div class="wf-cell asis"><div class="wf-label">AS-IS Manual</div><p>Owner/front desk checks expiry dates manually and follows up when remembered.</p></div><div class="wf-cell tobe"><div class="wf-label">TO-BE ERP</div><p>Renewal Due and Overdue Renewal queues guide daily follow-up ownership.</p></div></div>
+    <div class="wf-row"><div class="wf-cell wf-area">Payments</div><div class="wf-cell asis"><div class="wf-label">AS-IS Manual</div><p>Payments are acknowledged manually; revenue category clarity is delayed.</p></div><div class="wf-cell tobe"><div class="wf-label">TO-BE ERP</div><p>Payment recorded with invoice and category: membership, PT, freelancer or expense.</p></div></div>
+    <div class="wf-row"><div class="wf-cell wf-area">Freelancer Billing</div><div class="wf-cell asis"><div class="wf-label">AS-IS Manual</div><p>Monthly access and client fee calculations are handled manually.</p></div><div class="wf-cell tobe"><div class="wf-label">TO-BE ERP</div><p>Access fee and per-client fee are tracked separately; overdue payment can trigger gate flag.</p></div></div>
+    <div class="wf-row"><div class="wf-cell wf-area">Equipment</div><div class="wf-cell asis"><div class="wf-label">AS-IS Manual</div><p>Repairs are noted informally without clear frequency or replacement review logic.</p></div><div class="wf-cell tobe"><div class="wf-label">TO-BE ERP</div><p>Maintenance logs track repair count, cost, vendor and replacement review status.</p></div></div>
+    <div class="wf-row"><div class="wf-cell wf-area">Reporting</div><div class="wf-cell asis"><div class="wf-label">AS-IS Manual</div><p>Month-end summaries are prepared slowly from scattered sources.</p></div><div class="wf-cell tobe"><div class="wf-label">TO-BE ERP</div><p>Live dashboard shows revenue, trainer workload, renewals, freelancer revenue and maintenance costs.</p></div></div>
+  </div>
+</section>
+
+<section class="section full" id="modules">
+  <div class="section" style="padding-top:0;padding-bottom:0">
+    <div class="section-head"><div><div class="section-kicker">04 · Scope</div><h2>Core ERP Modules</h2></div><p class="section-desc">Seven focused modules keep the project practical, ERP-oriented and easy to explain.</p></div>
+  </div>
+  <div style="padding:0 clamp(20px,5vw,72px);">
+  <div class="module-grid">
+    <div class="module"><div class="icon">🪪</div><h3>Membership Management</h3><p>Create and maintain member profiles, plans, expiry dates and status.</p><ul><li>Member registration</li><li>Plan selection</li><li>Expiry tracking</li><li>Duplicate validation</li></ul></div>
+    <div class="module"><div class="icon">🏋️</div><h3>PT Session & Trainer Management</h3><p>Manage PT booking, trainer allocation, availability and package usage.</p><ul><li>Trainer attendance</li><li>Session start/completion</li><li>Package balance</li><li>Member progress notes</li></ul></div>
+    <div class="module"><div class="icon">💳</div><h3>Finance & Billing</h3><p>Track payments, invoices, refunds, pending dues, payment modes and revenue categories.</p><ul><li>Cash / UPI / Card / Bank Transfer</li><li>Invoice generation</li><li>Invoice sharing status</li><li>Paid / Partial / Pending</li></ul></div>
+    <div class="module"><div class="icon">🤝</div><h3>Freelancer Management</h3><p>Track freelancers using the facility and separate KAGE revenue clearly.</p><ul><li>Access fee</li><li>Per-client fee</li><li>Payment status</li><li>Gate flag</li></ul></div>
+    <div class="module"><div class="icon">🔁</div><h3>Renewals & Retention</h3><p>Protect recurring revenue with renewal due and overdue follow-up queues.</p><ul><li>Renewal due flag</li><li>Overdue queue</li><li>Follow-up owner</li><li>Reminder status</li></ul></div>
+    <div class="module"><div class="icon">🛠️</div><h3>Equipment Maintenance</h3><p>Track machine health, repair history, service dates and replacement review.</p><ul><li>Maintenance log</li><li>Repair cost</li><li>Machine status</li><li>Replacement flag</li></ul></div>
+    <div class="module"><div class="icon">📊</div><h3>Reports & Analytics</h3><p>Give owner/admin visibility across revenue, renewals, PT workload and costs.</p><ul><li>Revenue summary</li><li>Trainer workload</li><li>Freelancer revenue</li><li>Maintenance KPIs</li></ul></div>
+  </div>
+  </div>
+</section>
+
+
+<section class="section" id="pt-flow">
+  <div class="section-head">
+    <div><div class="section-kicker">05 · PT Operations</div><h2>PT Client Allocation & Trainer Availability Flow</h2></div>
+    <p class="section-desc">This flow explains how admin can allocate a PT client to a suitable trainer and then schedule sessions based on trainer/client availability.</p>
+  </div>
+
+  <div class="flow-steps">
+    <div class="flow-step"><strong>01</strong><b>New PT enquiry</b><p>Admin captures the client goal, preferred timing, package type and expected start date.</p></div>
+    <div class="flow-step"><strong>02</strong><b>Trainer load checked</b><p>Admin checks trainer availability, active PT clients, specialisation and current time slots.</p></div>
+    <div class="flow-step"><strong>03</strong><b>Trainer allocated</b><p>A suitable trainer is assigned to the client for continuity across the transformation journey.</p></div>
+    <div class="flow-step"><strong>04</strong><b>Sessions scheduled</b><p>Session timing is planned with admin, trainer and client based on availability.</p></div>
+    <div class="flow-step"><strong>05</strong><b>Progress tracked</b><p>Completed sessions reduce package balance and trainer notes support progress tracking.</p></div>
+  </div>
+
+  <div class="mini-block">
+    <h4>PT Trainer Allocation Rules</h4>
+    <table class="logic-table">
+      <thead>
+        <tr><th>Rule</th><th>Business meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>Trainer continuity</b></td><td>The same trainer should continue with the PT client wherever possible for one month or more, so progress, exercise planning and accountability stay consistent.</td></tr>
+        <tr><td><b>Availability check</b></td><td>Before allocation, admin checks trainer availability, current PT load, preferred time slots, client goal and trainer specialisation.</td></tr>
+        <tr><td><b>Multiple PT clients</b></td><td>A trainer can manage multiple PT clients across different time slots, alternate-day schedules or different days of the week.</td></tr>
+        <tr><td><b>Conflict control</b></td><td>The system should avoid double-booking the same trainer at the same time unless a shared/group PT session is intentionally planned.</td></tr>
+        <tr><td><b>Client/trainer timing</b></td><td>Admin can allocate the trainer, but the trainer and client can also agree on suitable session timings within the package period.</td></tr>
+        <tr><td><b>Balance deduction</b></td><td>PT package balance reduces only after the session is completed, not when it is only booked or cancelled before start time.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mini-block">
+    <h4>Trainer Slot Board — BA Logic View</h4>
+    <table class="logic-table">
+      <thead><tr><th>Trainer</th><th>Current Load</th><th>Preferred Slots</th><th>Today’s PT Sessions</th><th>Allocation View</th></tr></thead>
+      <tbody>
+        <tr><td><b>Trainer A</b></td><td>4 active PT clients</td><td>6 AM, 8 AM, 7 PM</td><td>3 sessions</td><td>Can take one new alternate-day client.</td></tr>
+        <tr><td><b>Trainer B</b></td><td>2 active PT clients</td><td>Morning slots</td><td>2 sessions</td><td>Available for 8 AM client.</td></tr>
+        <tr><td><b>Trainer C</b></td><td>5 active PT clients</td><td>Evening slots</td><td>4 sessions</td><td>High load; avoid new allocation unless approved.</td></tr>
+      </tbody>
+    </table>
+    <p class="mini-note">This board is a BA-level logic view showing the type of data admin needs before assigning a new PT client.</p>
+  </div>
+
+  <div class="card soft" style="margin-top:18px">
+    <span class="tag">Important BA decision</span>
+    <h3>PT is treated as a client journey, not only a one-time booking</h3>
+    <p>Trainer view shows assigned PT clients, completed session count, remaining package balance, progress notes and commission status. This supports continuity because the trainer usually works with the same client across multiple sessions instead of handling each session as an unrelated booking.</p>
+  </div>
+</section>
+
+<section class="section" id="logic">
+  <div class="section-head"><div><div class="section-kicker">06 · Differentiators</div><h2>Freelancer, Renewal & Maintenance Logic</h2></div><p class="section-desc">These business rules make the ERP more realistic than a simple gym membership app.</p></div>
+  <div class="grid-3">
+    <div class="card"><span class="tag">Freelancer Billing</span><h3>Monthly payable changes with active clients</h3><p>Freelancer clients are registered as KAGE members and pay their fixed gym package fee to KAGE. Any private PT coaching fee collected by the freelancer is outside KAGE billing scope.</p><table class="logic-table" style="margin-top:14px"><thead><tr><th>Month</th><th>Own Fee</th><th>Active Clients</th><th>Per-Client Fee</th><th>Monthly Payable</th></tr></thead><tbody><tr><td><b>Month 1</b></td><td>₹5,000</td><td>4</td><td>₹3,000</td><td><b>₹17,000</b></td></tr><tr><td><b>Month 2</b></td><td>₹5,000</td><td>3</td><td>₹3,000</td><td><b>₹14,000</b></td></tr><tr><td><b>Month 3</b></td><td>₹5,000</td><td>5</td><td>₹3,000</td><td><b>₹20,000</b></td></tr></tbody></table><p class="mini-note">Billing recalculates monthly because freelancer client count can change.</p></div>
+    <div class="card"><span class="tag">Renewals</span><h3>Expiry-driven retention queue</h3><p>System checks membership expiry daily and moves members through clear follow-up states.</p><div class="mini-flow" style="grid-template-columns:1fr"><div class="step"><b>7 days before expiry</b><span>Status becomes Renewal Due and appears in follow-up queue.</span></div><div class="step"><b>Expiry date passed</b><span>Status becomes Expired and remains visible for front desk follow-up.</span></div><div class="step"><b>3+ days after expiry</b><span>Status becomes Overdue Renewal with admin escalation flag.</span></div><div class="step"><b>Payment received</b><span>Status becomes Renewed and member is removed from queue.</span></div></div><p class="mini-note">Reminder channel is configurable: SMS, WhatsApp, email or manual call follow-up. No vendor-specific integration is defined in MVP.</p></div>
+    <div class="card"><span class="tag">Equipment</span><h3>Repair frequency to replacement review</h3><p>Repair logs help the owner compare recurring repair cost and decide whether equipment should be monitored, serviced or reviewed for replacement.</p><table class="logic-table" style="margin-top:14px"><tr><td><b>Treadmill 02</b></td><td>3 repairs / 6 months → Review</td></tr><tr><td><b>Leg Press</b></td><td>1 repair / 6 months → Monitor</td></tr></table><div class="rule-callout"><b>Decision-support rule</b><p>3 or more repairs in a rolling 6-month window triggers Replacement Review. The system flags the issue; the owner/admin makes the final replacement decision.</p></div></div>
+  </div>
+  <div class="mini-block"><h4>Finance & Invoice Flow</h4><div class="mini-flow"><div class="step"><b>Payment Entry</b><span>Front desk selects member and payment purpose.</span></div><div class="step"><b>Payment Mode</b><span>Cash, UPI, Card or Bank Transfer is recorded.</span></div><div class="step"><b>Invoice Generated</b><span>System creates invoice number and receipt record.</span></div><div class="step"><b>Invoice Shared</b><span>Download/shared status is tracked; no API integration in MVP.</span></div><div class="step"><b>Status Updated</b><span>Payment moves to Paid, Partial or Pending.</span></div></div></div>
+</section>
+
+
+<section class="section" id="logical-data-model">
+  <div class="section-head">
+    <div><div class="section-kicker">Data Model Artefact</div><h2>Logical Data Model</h2></div>
+    <p class="section-desc">This BA-level model shows how memberships, PT sessions, payments, freelancer billing, equipment maintenance and reporting connect together. It is meant for stakeholder explanation, not as a final physical database schema.</p>
+  </div>
+  <div class="asset-showcase">
+    <div class="asset-panel">
+      <img src="assets/images/logical-data-model.png" alt="KAGE Fitness Studio ERP Logical Data Model">
+      <p class="caption">Click/open image in browser to review the model in full size.</p>
+    </div>
+    <div class="asset-notes">
+      <div class="asset-note"><b>Why this artefact matters</b><p>It explains the main business records and how they connect across membership, PT, finance, freelancer and maintenance workflows.</p></div>
+      <div class="asset-note"><b>Important modelling decision</b><p>Direct Members, Freelancers and Freelancer Clients all use a Member record. Member Type separates their billing and reporting treatment.</p></div>
+      <div class="asset-note"><b>Reporting view note</b><p>Revenue Report is shown as a reporting view for BA explanation. It does not have to be a physical database table during implementation.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="renewal-flow">
+  <div class="section-head">
+    <div><div class="section-kicker">Simple Process Flow</div><h2>Renewal Reminder Workflow</h2></div>
+    <p class="section-desc">This flow shows how the ERP reduces missed renewals by adding a clear payment decision point.</p>
+  </div>
+  <div class="renewal-decision-flow">
+    <div class="process-step-card"><div class="process-step-num">01</div><div class="process-step-title">Expiry Detected</div><div class="process-step-desc">System checks upcoming membership expiry dates.</div></div>
+    <div class="process-step-card"><div class="process-step-num">02</div><div class="process-step-title">Reminder Queued</div><div class="process-step-desc">Front desk is notified to follow up. Automated WhatsApp/SMS channel is configurable but not integrated in MVP.</div></div>
+    <div class="decision-diamond-wrap"><div class="decision-diamond"><span>Payment<br>Received?</span></div></div>
+  </div>
+  <div class="flow-branch">
+    <div class="branch-card"><div class="branch-label">Yes</div><div class="branch-title">Membership Renewed</div><div class="branch-desc">Payment is recorded and the member status stays active.</div></div>
+    <div class="branch-card"><div class="branch-label">No</div><div class="branch-title">Overdue Follow-up</div><div class="branch-desc">Front desk follows up only with members who have not renewed.</div></div>
+  </div>
+</section>
+
+<section class="section" id="requirements">
+  <div class="section-head"><div><div class="section-kicker">07 · Requirements</div><h2>Functional Requirements & Business Rules</h2></div><p class="section-desc">A short, visible summary of key requirements. Full artefacts remain linked in the downloads section.</p></div>
+  <div class="grid-2">
+    <div class="card"><h3>Key Functional Requirements</h3><div class="rules" style="grid-template-columns:1fr;margin-top:14px">
+      <div class="rule"><code>FR-01</code><p>Create unique member profile with plan, expiry date and status.</p></div>
+      <div class="rule"><code>FR-02</code><p>Allocate PT client to a suitable trainer and schedule sessions based on trainer/client availability.</p></div>
+      <div class="rule"><code>FR-03</code><p>Prevent conflicting trainer schedules unless a shared/group PT session is intentionally planned.</p></div>
+      <div class="rule"><code>FR-04</code><p>Deduct PT package balance only after session completion.</p></div>
+      <div class="rule"><code>FR-05</code><p>Calculate freelancer monthly payable using own monthly fee and active client access fee.</p></div>
+      <div class="rule"><code>FR-06</code><p>Flag renewal due members before expiry and overdue renewals after grace period.</p></div>
+      <div class="rule"><code>FR-07</code><p>Track equipment repairs, cost and replacement review status.</p></div>
+      <div class="rule"><code>FR-08</code><p>Show revenue, renewals, PT usage and maintenance KPIs in reports.</p></div>
+      <div class="rule"><code>FR-09</code><p>Generate invoice number and track invoice sharing status for recorded payments.</p></div>
+      <div class="rule"><code>FR-10</code><p>Cancel PT sessions without reducing package balance when cancellation happens before session start.</p></div>
+    </div></div>
+    <div class="card"><h3>Key Business Rules</h3><div class="rules" style="grid-template-columns:1fr;margin-top:14px">
+      <div class="rule"><code>BR-01</code><p>A duplicate member cannot be created with the same phone/email combination.</p></div>
+      <div class="rule"><code>BR-02</code><p>Only completed PT sessions reduce package balance.</p></div>
+      <div class="rule"><code>BR-03</code><p>Trainer commission is calculated only for completed eligible sessions.</p></div>
+      <div class="rule"><code>BR-04</code><p>Trainers can view estimated commission after package completion; final payout approval remains with Admin/Finance.</p></div>
+      <div class="rule"><code>BR-05</code><p>Freelancer-owned training charges are not KAGE revenue.</p></div>
+      <div class="rule"><code>BR-06</code><p>If freelancer monthly payable is overdue by more than 5 working days, gate flag activates for admin review. The threshold is configurable by Admin.</p></div>
+      <div class="rule"><code>BR-07</code><p>Renewal Due flag appears 7 days before membership expiry.</p></div>
+      <div class="rule"><code>BR-08</code><p>Equipment with 3 or more repairs in a rolling 6-month window is flagged for replacement review.</p></div>
+      <div class="rule"><code>BR-09</code><p>Every payment must capture amount, mode, date, collected-by user, invoice number and payment status.</p></div>
+      <div class="rule"><code>BR-10</code><p>Cancelled PT sessions do not reduce package balance and must be logged with reason and timestamp.</p></div>
+    </div></div>
+  </div>
+  <div class="card soft" style="margin-top:18px"><span class="tag">Non-functional requirements</span><h3>Simple MVP NFRs</h3><div class="rules" style="grid-template-columns:1fr;margin-top:14px"><div class="rule"><code>NFR-01</code><p>System should support simultaneous use by Admin, Front Desk, Trainer and Finance roles during operating hours.</p></div><div class="rule"><code>NFR-02</code><p>Member, payment, PT session and freelancer billing records should be retained for a minimum of 3 years based on studio policy.</p></div><div class="rule"><code>NFR-03</code><p>Member lookup, PT booking and billing actions should respond within 3 seconds under normal load.</p></div><div class="rule"><code>NFR-04</code><p>Access to full revenue reports, commission values and freelancer billing details should be restricted by role. Trainers see assigned sessions and approved commission status, while Admin/Finance access payout and revenue data.</p></div></div></div>
+</section>
+
+<section class="section" id="data">
+  <div class="section-head"><div><div class="section-kicker">08 · Data</div><h2>Data Model Summary</h2></div><p class="section-desc">Plain-language entity summary for BA explanation. The detailed data dictionary stays as a supporting artefact.</p></div>
+  <table class="logic-table"><thead><tr><th>Entity</th><th>What it stores</th><th>Connected to</th></tr></thead><tbody>
+    <tr><td><b>Member</b></td><td>Profile, plan, expiry, status</td><td>Payments, PT Sessions, Member Progress</td></tr>
+    <tr><td><b>Trainer</b></td><td>Role, shift, commission rate, specialisation</td><td>PT Sessions, Attendance</td></tr>
+    <tr><td><b>PT Session</b></td><td>Booking, package, completion, commission reference</td><td>Member, Trainer, Payment</td></tr>
+    <tr><td><b>Payment</b></td><td>Amount, mode, date, category, invoice number, sharing status</td><td>Member, Finance, Revenue Report</td></tr>
+    <tr><td><b>Freelancer</b></td><td>Own monthly fee, active client count, payment status, gate flag</td><td>Member, Freelancer Client, Revenue Report</td></tr>
+    <tr><td><b>Freelancer Client</b></td><td>Member profile linked to freelancer, package type, active status</td><td>Member, Freelancer, Payment</td></tr>
+    <tr><td><b>Equipment</b></td><td>Machine status, category, service history</td><td>Maintenance Log</td></tr>
+    <tr><td><b>Revenue Report</b></td><td>Period revenue, expenses and net profit</td><td>Summarised from all modules</td></tr>
+  </tbody></table>
+  <div class="card soft" style="margin-top:18px"><span class="tag">Member type note</span><p>Direct Members, Freelancers and Freelancer Clients all carry an underlying Member record. The Member Type field differentiates them in billing logic, reports and access rules.</p></div>
+</section>
+
+<section class="section" id="uat">
+  <div class="section-head"><div><div class="section-kicker">09 · Validation</div><h2>UAT Summary</h2></div><p class="section-desc">Realistic first-cycle UAT result showing passed, failed and pending items rather than a perfect artificial result.</p></div>
+  <div class="metrics">
+    <div class="metric-card"><strong>26</strong><span>Total Test Cases</span></div>
+    <div class="metric-card"><strong>20</strong><span>Passed</span></div>
+    <div class="metric-card"><strong>4</strong><span>Failed</span></div>
+    <div class="metric-card"><strong>2</strong><span>Pending</span></div>
+    <div class="metric-card"><strong>77%</strong><span>Initial Pass Rate</span></div>
+  </div>
+  <div class="card soft" style="margin-top:18px"><h3>How failed and pending items were treated</h3><p>Failed cases were treated as defects, critical issues were fixed before final sign-off, and lower-priority notification/integration items were moved to future enhancement. This keeps the UAT outcome realistic and shows controlled scope management.</p></div>
+  <table class="logic-table" style="margin-top:18px"><thead><tr><th>Module</th><th>What was validated</th><th>Outcome</th></tr></thead><tbody>
+    <tr><td><b>Membership</b></td><td>Registration, duplicate validation, membership plans, expired status</td><td>Core rules validated</td></tr>
+    <tr><td><b>Finance</b></td><td>Payments, invoices, refunds, blank amount validation</td><td>Defects logged and reviewed</td></tr>
+    <tr><td><b>PT Sessions</b></td><td>Booking, trainer attendance, cancellation and rescheduling</td><td>Session controls validated</td></tr>
+    <tr><td><b>Renewals</b></td><td>Renewal Due queue, overdue flags, follow-up owner and reminder status</td><td>Queue logic validated; automated notification channel deferred</td></tr>
+    <tr><td><b>Equipment</b></td><td>Repair tracking, overdue service and replacement flag</td><td>Maintenance logic validated</td></tr>
+    <tr><td><b>Freelancer</b></td><td>Access fee, per-client fee, payment status and gate flag</td><td>Revenue classification validated</td></tr>
+  </tbody></table>
+</section>
+
+<section class="section" id="prototype">
+  <div class="section-head"><div><div class="section-kicker">10 · Prototype</div><h2>Live ERP Prototype Highlights</h2></div><p class="section-desc">The prototype is a communication artefact to show how requirements could appear to stakeholders. It is not positioned as a production ERP.</p></div>
+  <div class="prototype-grid clickable-prototypes">
+    <a class="proto proto-link" href="live-erp-demo.html" aria-label="Open Live ERP Demo dashboard preview"><div class="placeholder-visual"><span>Admin Dashboard<br>Preview</span></div><b>Admin Dashboard</b><p>Revenue, active members, PT sessions and operational status.</p><span class="open-hint">Open demo →</span></a>
+    <a class="proto proto-link" href="live-erp-demo.html" aria-label="Open Live ERP Demo freelancer billing preview"><div class="placeholder-visual"><span>Freelancer Billing<br>Preview</span></div><b>Freelancer Billing</b><p>Access fee, client fee, overdue payment and gate flag view.</p><span class="open-hint">Open demo →</span></a>
+    <a class="proto proto-link" href="live-erp-demo.html" aria-label="Open Live ERP Demo equipment maintenance preview"><div class="placeholder-visual"><span>Equipment Maintenance<br>Preview</span></div><b>Equipment Maintenance</b><p>Machine status, repair history and review flag alerts.</p><span class="open-hint">Open demo →</span></a>
+    <a class="proto proto-link" href="live-erp-demo.html" aria-label="Open Live ERP Demo reports dashboard preview"><div class="placeholder-visual"><span>Reports Dashboard<br>Preview</span></div><b>Reports Dashboard</b><p>Revenue distribution, PT performance and operational KPI view.</p><span class="open-hint">Open demo →</span></a>
+    <a class="proto proto-link live-proto-card" href="live-erp-demo.html" aria-label="Open Live ERP Prototype"><div style="height:132px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(135deg,var(--charcoal),#38382F);display:grid;place-items:center;color:var(--gold);font-weight:800">LIVE ERP</div><b>Interactive Demo</b><p>Open the separate HTML prototype for module-level screens.</p><span class="open-hint">Open demo →</span></a>
+  </div>
+  <div style="margin-top:20px"><a class="btn primary" href="live-erp-demo.html">Open Live ERP Prototype →</a></div>
+</section>
+
+<section class="section" id="impact">
+  <div class="section-head"><div><div class="section-kicker">11 · Impact</div><h2>Expected Business Impact</h2></div><p class="section-desc">All business impact points are illustrative portfolio assumptions, not live implementation results.</p></div>
+  <div class="impact-grid">
+    <div class="impact"><b>Reduced manual admin work</b><p>Central profile, booking, billing and renewal workflows reduce scattered spreadsheet dependency.</p></div>
+    <div class="impact"><b>Improved renewal follow-up</b><p>Renewal Due and Overdue queues create visible ownership for front desk/admin follow-up.</p></div>
+    <div class="impact"><b>Better PT package visibility</b><p>Each completed session updates package balance and member notification.</p></div>
+    <div class="impact"><b>Clear trainer workload</b><p>Admin can view trainer availability, current sessions and upcoming PT slots.</p></div>
+    <div class="impact"><b>Correct freelancer revenue</b><p>Freelancer-owned income is separated from KAGE access and facility fee revenue.</p></div>
+    <div class="impact"><b>Maintenance decision support</b><p>Repeated repair patterns support replacement review and budgeting decisions.</p></div>
+    <div class="impact"><b>Faster reporting</b><p>Revenue, renewals, trainer workload and maintenance costs become visible in management dashboards.</p></div>
+    <div class="impact"><b>Future expansion foundation</b><p>Structured membership, billing and reporting logic can support future multi-branch growth as the studio scales.</p></div>
+  </div>
+</section>
+
+
+<section class="section" id="reflection">
+  <div class="section-head"><div><div class="section-kicker">12 · BA Reflection</div><h2>What I Learned From This Project</h2></div><p class="section-desc">A short reflection on the BA decisions behind the ERP scope, billing logic and validation approach.</p></div>
+  <div class="grid-3">
+    <div class="card"><span class="tag">Scope control</span><h3>ERP scope should stay connected, not oversized</h3><p>While building KAGE, I learned that an ERP case study becomes useful only when the modules connect to real operational decisions. I kept the MVP focused on memberships, PT sessions, billing, renewals, freelancer access, equipment and reports because these areas directly affect daily gym operations.</p></div>
+    <div class="card soft"><span class="tag">Decision made</span><h3>Freelancer billing is access-fee based</h3><p>One important decision was to keep freelancer billing monthly and access-fee based instead of session-based. The freelancer may earn private coaching income separately, but KAGE needs to track only its own facility access revenue: own fee plus active client access fee.</p></div>
+    <div class="card"><span class="tag">If this were real</span><h3>Validation would come from users</h3><p>If this were a live gym project, I would validate the assumptions with the owner, front desk staff, trainers and freelancers before finalising rules. I would especially confirm renewal thresholds, trainer allocation rules, gate-flag policy and equipment replacement review criteria.</p></div>
+  </div>
+  <div class="card soft" style="margin-top:18px"><span class="tag">Reflection summary</span><p>This project helped me practise how a Business Analyst converts messy operations into clear workflows, business rules, data relationships, UAT scenarios and a stakeholder-friendly prototype without over-claiming it as a production system.</p></div>
+</section>
+
+<section class="section" id="artifacts">
+  <div class="section-head"><div><div class="section-kicker">13 · Final Artefacts</div><h2>Portfolio Artefact Pack</h2></div><p class="section-desc">Final cleaned files with consistent naming. The Live ERP Demo includes role-based login, Owner/Admin view, Front Desk access and a lightweight Trainer Dashboard/Mobile View.</p></div>
+  <div class="artifacts">
+    <a class="artifact" href="assets/pdfs/kage_erp_overview_document.pdf"><span>PDF</span><b>ERP Overview Document</b><p>High-level project scope, business context, modules, assumptions, delivery approach and validation snapshot.</p></a>
+    <a class="artifact" href="live-erp-demo.html"><span>HTML</span><b>Live ERP Demo</b><p>Clickable prototype with role-based access, member management, PT allocation, freelancer billing, renewals, equipment, reports and trainer view.</p></a>
+    <a class="artifact" href="assets/pdfs/kage_logical_data_model_overview.pdf"><span>PDF</span><b>Logical Data Model Overview</b><p>Business-friendly explanation of entities, relationships and reporting connections.</p></a>
+    <a class="artifact" href="assets/pdfs/kage_detailed_data_dictionary.pdf"><span>PDF</span><b>Detailed Data Dictionary</b><p>Field-level structure, data types, validations and business rules.</p></a>
+    <a class="artifact" href="assets/pdfs/kage_business_rules_summary.pdf"><span>PDF</span><b>Business Rules Summary</b><p>Rules for membership, PT sessions, billing, freelancer access, renewals, equipment, reports and trainer role access.</p></a>
+    <a class="artifact" href="assets/pdfs/kage_process_flow_artefacts.pdf"><span>PDF</span><b>Process Flow Artefacts</b><p>AS-IS/TO-BE comparison and decision-path flows for PT, freelancer billing, renewals and maintenance.</p></a>
+    <a class="artifact" href="assets/pdfs/kage_uat_summary_validation_tracker.pdf"><span>PDF</span><b>UAT Summary & Validation Tracker</b><p>Simulated UAT snapshot with 26 test cases, pass/fail/pending status and defect handling summary.</p></a>
+    <a class="artifact" href="README.md"><span>MD</span><b>README / Reviewer Guide</b><p>Supporting guide for recruiters/interviewers. This is not a separate BA artefact; it explains how to review the Live ERP Demo.</p></a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner"><div><b>KAGE Fitness Studio ERP</b><p>Business Analyst portfolio case study · Fitness studio operations · ERP workflow design</p></div><p>Prepared as an independent BA portfolio artefact. All data is fictional.</p></div>
+</footer>
+</body>
+</html>
