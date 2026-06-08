@@ -1,0 +1,2554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAGE Fitness Studio ERP - Live ERP Demo</title>
+<style>
+  /* ===== CSS RESET & VARIABLES ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:          #FAF7F2;
+    --card:        #FFFFFF;
+    --charcoal:    #1F1F1B;
+    --charcoal2:   #2C2C2C;
+    --gold:        #C9A84C;
+    --gold-bright: #F2B705;
+    --gold-light:  #FDF3D7;
+    --gold-border: #E8D49A;
+    --muted:       #5E5A50;
+    --border:      #E4DED1;
+    --success:     #228B5A;
+    --success-bg:  #EAF7F1;
+    --warn:        #D89C00;
+    --warn-bg:     #FFF8E1;
+    --error:       #C7493A;
+    --error-bg:    #FDECEA;
+    --sidebar-w:   240px;
+    --header-h:    64px;
+    --radius:      10px;
+    --radius-sm:   6px;
+    --shadow:      0 2px 12px rgba(31,31,27,0.08);
+    --shadow-lg:   0 4px 24px rgba(31,31,27,0.12);
+    --font-main:   'Georgia', 'Palatino', 'Times New Roman', serif;
+    --font-ui:     'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+  }
+
+  body {
+    font-family: var(--font-ui);
+    background: var(--bg);
+    color: var(--charcoal);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+
+  /* ===== LOGO / BRANDING ===== */
+  .erp-logo-header{width:48px;height:38px;object-fit:contain;background:#FFFDF7;border-radius:9px;padding:4px;border:1px solid rgba(242,183,5,.45);box-shadow:0 6px 16px rgba(0,0,0,.14);flex-shrink:0}
+  .header-copy{display:flex;flex-direction:column;gap:2px}
+  .login-logo{width:158px;max-width:70%;object-fit:contain;background:#FFFDF7;border-radius:16px;padding:12px 18px;border:1px solid rgba(242,183,5,.45);box-shadow:0 20px 46px rgba(0,0,0,.22);margin-bottom:22px}
+  .dashboard-brand-strip{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,#1F1F1B,#2C2C2C);color:#fff;border-radius:14px;padding:16px 20px;margin-bottom:24px;border-left:4px solid var(--gold-bright);box-shadow:var(--shadow)}
+  .dashboard-brand-strip img{width:86px;height:62px;object-fit:contain;background:#FFFDF7;border-radius:12px;padding:8px;border:1px solid rgba(242,183,5,.45);flex-shrink:0}
+  .dashboard-brand-strip b{display:block;font-family:var(--font-main);font-size:1.2rem;color:#fff;margin-bottom:2px}.dashboard-brand-strip span{display:block;color:rgba(255,255,255,.68);font-size:.78rem;line-height:1.45}
+
+  /* ===== HEADER ===== */
+  .header {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: var(--header-h);
+    background: var(--charcoal);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px 0 calc(var(--sidebar-w) + 28px);
+    z-index: 100;
+    border-bottom: 3px solid var(--gold);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-title {
+    font-family: var(--font-main);
+    font-size: 1.25rem; font-weight: bold;
+    color: #FFFFFF; letter-spacing: 0.02em;
+  }
+  .header-title span { color: var(--gold-bright); }
+  .header-subtitle { font-size: 0.7rem; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .header-badge {
+    background: var(--gold-bright); color: var(--charcoal);
+    font-size: 0.65rem; font-weight: bold; padding: 3px 10px;
+    border-radius: 20px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .header-user {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+  }
+  .header-user-name { color: #FFFFFF; font-size: 0.8rem; font-weight: 600; }
+  .header-user-role { color: var(--muted); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    position: fixed; top: var(--header-h); left: 0; bottom: 0;
+    width: var(--sidebar-w);
+    background: var(--charcoal2);
+    overflow-y: auto;
+    z-index: 90;
+    padding: 20px 0;
+    border-right: 1px solid rgba(201,168,76,0.2);
+  }
+  .sidebar-section-label {
+    font-size: 0.6rem; color: rgba(255,255,255,0.3);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    padding: 14px 20px 6px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 20px;
+    cursor: pointer;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.85rem;
+    transition: all 0.18s ease;
+    border-left: 3px solid transparent;
+    user-select: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+  .nav-item.active {
+    background: rgba(201,168,76,0.15);
+    color: var(--gold-bright);
+    border-left-color: var(--gold-bright);
+    font-weight: 600;
+  }
+  .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+  .sidebar-footer {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 14px 20px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.65rem; color: rgba(255,255,255,0.25);
+    line-height: 1.5;
+  }
+
+  /* ===== MAIN CONTENT ===== */
+  .main {
+    margin-top: var(--header-h);
+    margin-left: var(--sidebar-w);
+    min-height: calc(100vh - var(--header-h));
+    padding: 28px;
+    overflow-x: hidden;
+  }
+
+  /* ===== PAGE SECTIONS ===== */
+  .page { display: none; animation: fadeIn 0.2s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ===== DEMO BANNER ===== */
+  .demo-banner {
+    background: linear-gradient(135deg, #FFF8E1, #FDF3D7);
+    border: 1px solid var(--gold-border);
+    border-left: 4px solid var(--gold-bright);
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    font-size: 0.75rem;
+    color: #6B5E00;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .demo-banner strong { color: #4A4000; }
+
+  /* ===== PAGE HEADER ===== */
+  .page-header { margin-bottom: 24px; }
+  .page-title {
+    font-family: var(--font-main);
+    font-size: 1.6rem; color: var(--charcoal); font-weight: bold;
+    margin-bottom: 4px;
+  }
+  .page-desc { font-size: 0.82rem; color: var(--muted); }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-title-main { font-family: var(--font-main); font-size: 0.95rem; font-weight: bold; color: var(--charcoal); text-transform: none; letter-spacing: 0; }
+
+  /* ===== KPI GRID ===== */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+    border-top: 3px solid var(--border);
+    transition: box-shadow 0.2s;
+  }
+  .kpi-card:hover { box-shadow: var(--shadow-lg); }
+  .kpi-card.gold { border-top-color: var(--gold-bright); }
+  .kpi-card.green { border-top-color: var(--success); }
+  .kpi-card.warn  { border-top-color: var(--warn); }
+  .kpi-card.red   { border-top-color: var(--error); }
+  .kpi-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+  .kpi-value { font-family: var(--font-main); font-size: 1.75rem; font-weight: bold; color: var(--charcoal); line-height: 1; }
+  .kpi-value.rupee { font-size: 1.3rem; }
+  .kpi-sub { font-size: 0.7rem; color: var(--muted); margin-top: 5px; }
+
+  /* ===== GRID LAYOUTS ===== */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  @media(max-width:900px) { .grid-2,.grid-3 { grid-template-columns:1fr; } }
+
+  /* ===== TABLES ===== */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  thead tr { background: #F5F2EC; }
+  th { padding: 10px 14px; text-align: left; font-size: 0.67rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); font-weight: 700; border-bottom: 2px solid var(--border); white-space: nowrap; }
+  td { padding: 11px 14px; border-bottom: 1px solid #F0EDE6; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #FDFBF7; }
+
+  /* ===== STATUS CHIPS ===== */
+  .chip {
+    display: inline-block; padding: 3px 10px;
+    border-radius: 20px; font-size: 0.67rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+  }
+  .chip-active    { background: #E8F7EF; color: #1A7A4A; border: 1px solid #B8DFD0; }
+  .chip-expired   { background: #FDECEA; color: #A33020; border: 1px solid #EBB9B3; }
+  .chip-pending   { background: #FFF3E0; color: #B06500; border: 1px solid #FBCB78; }
+  .chip-paid      { background: #E8F7EF; color: #1A7A4A; border: 1px solid #B8DFD0; }
+  .chip-overdue   { background: #FDECEA; color: #A33020; border: 1px solid #EBB9B3; }
+  .chip-due       { background: #FFF8E1; color: #9B7000; border: 1px solid #F0D070; }
+  .chip-gate      { background: #FDECEA; color: #A33020; border: 1px solid #EBB9B3; }
+  .chip-clear     { background: #E8F7EF; color: #1A7A4A; border: 1px solid #B8DFD0; }
+  .chip-completed { background: #E8F7EF; color: #1A7A4A; border: 1px solid #B8DFD0; }
+  .chip-estimated { background: #FFF3E0; color: #B06500; border: 1px solid #FBCB78; }
+  .chip-approved  { background: var(--gold-light); color: #8A6000; border: 1px solid var(--gold-border); }
+  .chip-repair    { background: #FFF3E0; color: #B06500; border: 1px solid #FBCB78; }
+  .chip-review    { background: #FDECEA; color: #A33020; border: 1px solid #EBB9B3; }
+  .chip-available { background: #E8F7EF; color: #1A7A4A; border: 1px solid #B8DFD0; }
+  .chip-busy      { background: #FFF3E0; color: #B06500; border: 1px solid #FBCB78; }
+  .chip-highload  { background: #FDECEA; color: #A33020; border: 1px solid #EBB9B3; }
+  .chip-onhold    { background: #F3F1FF; color: #5040A0; border: 1px solid #C0B8E8; }
+  .chip-renewed   { background: var(--gold-light); color: #8A6000; border: 1px solid var(--gold-border); }
+  .chip-inactive  { background: #F3F0EC; color: #888070; border: 1px solid #D8D4CC; }
+
+  /* ===== FORMS ===== */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media(max-width:700px) { .form-grid,.form-grid-3 { grid-template-columns:1fr; } }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group.full { grid-column: 1 / -1; }
+  label { font-size: 0.72rem; font-weight: 700; color: var(--charcoal2); text-transform: uppercase; letter-spacing: 0.07em; }
+  input, select, textarea {
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-family: var(--font-ui);
+    color: var(--charcoal);
+    background: #FDFBF8;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--gold); background: #FFFFFF; }
+  input[readonly] { background: #F5F2EC; color: var(--muted); cursor: not-allowed; }
+  textarea { resize: vertical; min-height: 70px; }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 20px; border-radius: var(--radius-sm);
+    font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em;
+    cursor: pointer; border: none; font-family: var(--font-ui);
+    transition: all 0.15s ease; user-select: none;
+  }
+  .btn-primary { background: var(--charcoal); color: #FFFFFF; }
+  .btn-primary:hover { background: var(--charcoal2); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(31,31,27,0.2); }
+  .btn-gold { background: var(--gold-bright); color: var(--charcoal); }
+  .btn-gold:hover { background: var(--gold); transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--charcoal); border: 1.5px solid var(--border); }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-success { background: var(--success); color: #FFFFFF; }
+  .btn-success:hover { background: #1A7A4A; }
+  .btn-danger { background: var(--error); color: #FFFFFF; }
+  .btn-danger:hover { background: #A33020; }
+  .btn-warn { background: var(--warn); color: #FFFFFF; }
+  .btn-warn:hover { background: #B07A00; }
+  .btn-sm { padding: 6px 14px; font-size: 0.72rem; }
+  .btn-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+  /* ===== MESSAGES ===== */
+  .msg {
+    padding: 10px 14px; border-radius: var(--radius-sm);
+    font-size: 0.8rem; margin-top: 12px;
+    display: none; align-items: flex-start; gap: 8px; line-height: 1.5;
+  }
+  .msg.show { display: flex; }
+  .msg-success { background: var(--success-bg); border: 1px solid #B8DFD0; color: #1A5C3A; border-left: 3px solid var(--success); }
+  .msg-error   { background: var(--error-bg);   border: 1px solid #EBB9B3; color: #7A2020; border-left: 3px solid var(--error); }
+  .msg-warn    { background: var(--warn-bg);    border: 1px solid #F0D070; color: #7A5000; border-left: 3px solid var(--warn); }
+  .msg-info    { background: var(--gold-light);  border: 1px solid var(--gold-border); color: #6B5000; border-left: 3px solid var(--gold-bright); }
+
+  /* ===== BA INSIGHT BOX ===== */
+  .ba-insight {
+    background: linear-gradient(135deg, #1F1F1B 0%, #2C2C2C 100%);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 20px;
+    border-left: 4px solid var(--gold-bright);
+  }
+  .ba-insight-label {
+    font-size: 0.62rem; color: var(--gold-bright);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    margin-bottom: 7px; font-weight: 700;
+  }
+  .ba-insight p { font-size: 0.8rem; color: rgba(255,255,255,0.8); line-height: 1.6; }
+
+  /* ===== FORMULA BOX ===== */
+  .formula-box {
+    background: var(--charcoal);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--gold-bright);
+  }
+  .formula-label { font-size: 0.62rem; color: var(--gold-bright); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; font-weight: 700; }
+  .formula-text  { font-size: 0.9rem; color: #FFFFFF; font-family: 'Courier New', monospace; letter-spacing: 0.04em; }
+  .formula-text span { color: var(--gold-bright); }
+
+  /* ===== FILTER CHIPS ===== */
+  .filter-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .filter-chip {
+    padding: 5px 14px; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 600; cursor: pointer;
+    border: 1.5px solid var(--border); background: var(--card); color: var(--muted);
+    transition: all 0.15s;
+  }
+  .filter-chip:hover { border-color: var(--gold); color: var(--gold); }
+  .filter-chip.active { background: var(--charcoal); color: var(--gold-bright); border-color: var(--charcoal); }
+
+  /* ===== PT TRAINER CARDS ===== */
+  .trainer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  @media(max-width:900px) { .trainer-grid { grid-template-columns: 1fr; } }
+  .trainer-card {
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 16px 18px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .trainer-card:hover { border-color: var(--gold); box-shadow: var(--shadow); }
+  .trainer-card.suggested { border-color: var(--success); background: #FAFDF8; }
+  .trainer-card.busy      { border-color: var(--warn); background: #FFFCF5; opacity: 0.85; }
+  .trainer-card.highload  { border-color: var(--error); background: #FFF8F8; opacity: 0.8; }
+  .trainer-name { font-weight: 700; font-size: 0.9rem; color: var(--charcoal); margin-bottom: 4px; }
+  .trainer-spec { font-size: 0.74rem; color: var(--muted); margin-bottom: 10px; }
+  .trainer-meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.72rem; color: var(--muted); }
+  .trainer-badge {
+    display: inline-block; font-size: 0.62rem; font-weight: 700; padding: 2px 8px;
+    border-radius: 3px; text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .trainer-badge.suggested { background: var(--success-bg); color: var(--success); }
+  .trainer-badge.busy { background: var(--warn-bg); color: var(--warn); }
+  .trainer-badge.highload { background: var(--error-bg); color: var(--error); }
+
+  /* ===== PACKAGE PANEL ===== */
+  .package-panel {
+    background: linear-gradient(135deg, #1F1F1B 0%, #2C2C2C 100%);
+    border-radius: var(--radius); padding: 22px 24px;
+    margin-bottom: 20px; color: #FFFFFF;
+  }
+  .package-label { font-size: 0.62rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; font-weight: 700; }
+  .package-name  { font-family: var(--font-main); font-size: 1.4rem; font-weight: bold; color: #FFFFFF; margin-bottom: 4px; }
+  .package-sub   { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 18px; }
+  .session-counters { display: flex; gap: 30px; margin-top: 12px; }
+  .session-count-box { text-align: center; }
+  .session-count-num { font-family: var(--font-main); font-size: 2rem; font-weight: bold; line-height: 1; }
+  .session-count-num.gold { color: var(--gold-bright); }
+  .session-count-num.green { color: #4ADA9A; }
+  .session-count-num.remain { color: #FFFFFF; }
+  .session-count-lbl { font-size: 0.67rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; }
+  .session-bar-wrap { margin-top: 14px; }
+  .session-bar-bg { background: rgba(255,255,255,0.12); border-radius: 20px; height: 7px; overflow: hidden; }
+  .session-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold-bright), var(--gold)); border-radius: 20px; transition: width 0.5s ease; }
+  .session-bar-lbl { font-size: 0.68rem; color: rgba(255,255,255,0.45); margin-top: 5px; }
+
+  /* ===== REPORT / DEMO GUIDE ===== */
+  .guide-section { margin-bottom: 24px; }
+  .guide-section-title {
+    font-family: var(--font-main); font-size: 1.1rem;
+    color: var(--charcoal); margin-bottom: 12px;
+    padding-bottom: 8px; border-bottom: 2px solid var(--gold-border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .guide-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gold-bright); }
+  .guide-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .guide-list li {
+    font-size: 0.82rem; color: var(--charcoal2); line-height: 1.55;
+    padding-left: 18px; position: relative;
+  }
+  .guide-list li::before { content: '—'; position: absolute; left: 0; color: var(--gold); font-weight: bold; }
+  .guide-not-list li::before { content: '✕'; color: var(--error); }
+  .guide-skills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .skill-chip {
+    background: var(--charcoal); color: var(--gold-bright);
+    border-radius: 4px; font-size: 0.72rem; font-weight: 700;
+    padding: 5px 12px; letter-spacing: 0.04em;
+  }
+  .talking-point {
+    background: linear-gradient(135deg, #FAF7F2, #F5F0E4);
+    border: 1px solid var(--gold-border);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-size: 0.82rem; color: var(--charcoal2); line-height: 1.6;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--gold-bright);
+  }
+  .two-col-guide { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media(max-width:750px) { .two-col-guide { grid-template-columns:1fr; } }
+  .snapshot-table { width:100%; font-size:0.82rem; border-collapse:collapse; }
+  .snapshot-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .snapshot-table td:first-child { color: var(--muted); font-weight: 600; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; width: 38%; }
+  .snapshot-table tr:last-child td { border-bottom:none; }
+
+
+  /* ===== MOBILE RESPONSIVE LAYOUT ===== */
+  @media(max-width: 760px) {
+    :root { --header-h: auto; }
+    body { display: block; }
+    .header {
+      position: relative;
+      height: auto;
+      padding: 14px 16px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .header-right {
+      width: 100%;
+      justify-content: space-between;
+    }
+    .header-user { align-items: flex-start; }
+    .sidebar {
+      position: relative;
+      top: 0;
+      width: 100%;
+      bottom: auto;
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 8px 10px;
+      gap: 6px;
+      border-right: none;
+      border-bottom: 2px solid var(--gold);
+    }
+    .sidebar-section-label,
+    .sidebar-footer { display: none; }
+    .nav-item {
+      flex: 0 0 auto;
+      border-left: none;
+      border-bottom: 3px solid transparent;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 0.78rem;
+    }
+    .nav-item.active { border-left-color: transparent; border-bottom-color: var(--gold-bright); }
+    .main {
+      margin-left: 0;
+      margin-top: 0;
+      padding: 18px 14px 28px;
+    }
+    .kpi-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .session-counters { gap: 18px; justify-content: space-between; }
+    table { font-size: 0.76rem; }
+  }
+
+  @media(max-width: 520px) {
+    .kpi-grid,
+    .renewal-status-grid,
+    .eq-status-grid { grid-template-columns: 1fr; }
+    .header-title { font-size: 1.05rem; }
+    .page-title { font-size: 1.32rem; }
+    .card { padding: 16px; }
+    .session-counters { flex-direction: column; align-items: flex-start; gap: 10px; }
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ===== DIVIDERS ===== */
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* ===== FREELANCER CALC ===== */
+  .calc-result {
+    background: var(--gold-light); border: 1px solid var(--gold-border);
+    border-radius: var(--radius-sm); padding: 12px 16px;
+    font-family: var(--font-main); font-size: 1.4rem; font-weight: bold;
+    color: var(--charcoal); display: none;
+    align-items: center; gap: 10px; margin-top: 12px;
+  }
+  .calc-result.show { display: flex; }
+  .calc-result span { font-size: 0.72rem; color: var(--muted); font-family: var(--font-ui); font-weight: 600; }
+
+  /* ===== WALKTHROUGH STEPS ===== */
+  .walkthrough-steps { display: flex; flex-direction: column; gap: 10px; }
+  .walk-step {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 12px 16px;
+    font-size: 0.82rem; color: var(--charcoal2);
+  }
+  .walk-num {
+    min-width: 26px; height: 26px; background: var(--charcoal);
+    color: var(--gold-bright); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 800; flex-shrink: 0;
+  }
+  .walk-text { line-height: 1.5; }
+  .walk-text strong { color: var(--charcoal); }
+
+  /* ===== BADGE IN HEADER ===== */
+  .module-badge {
+    display: inline-block; font-size: 0.62rem; font-weight: 700;
+    background: var(--gold-light); color: var(--gold);
+    padding: 2px 9px; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    border: 1px solid var(--gold-border);
+  }
+
+  /* ===== RULE TAGS ===== */
+  .rule-tag {
+    display: inline-block; font-size: 0.62rem; font-weight: 700;
+    background: #F0ECE4; color: var(--muted);
+    padding: 2px 8px; border-radius: 3px;
+    border: 1px solid var(--border);
+    margin: 2px;
+  }
+
+  /* ===== SECTION STAT ROWS ===== */
+  .stat-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: var(--charcoal2); }
+  .stat-val { font-weight: 700; color: var(--charcoal); font-family: var(--font-main); }
+  .stat-val.green { color: var(--success); }
+  .stat-val.red   { color: var(--error); }
+  .stat-val.gold  { color: var(--warn); }
+
+  /* ===== RENEWAL STATUS CARD ===== */
+  .renewal-status-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
+  @media(max-width:700px) { .renewal-status-grid { grid-template-columns: 1fr 1fr; } }
+  .renewal-stat-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 18px;
+    text-align: center; box-shadow: var(--shadow);
+  }
+  .renewal-stat-num { font-family: var(--font-main); font-size: 2rem; font-weight: bold; }
+  .renewal-stat-num.warn { color: var(--warn); }
+  .renewal-stat-num.red  { color: var(--error); }
+  .renewal-stat-num.green{ color: var(--success); }
+  .renewal-stat-num.gold { color: var(--gold); }
+  .renewal-stat-lbl { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 700; margin-top: 4px; }
+
+  /* ===== ARTEFACT LINKS ===== */
+  .artefact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 12px; }
+  .artefact-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px 16px;
+    font-size: 0.78rem; color: var(--charcoal2); line-height: 1.4;
+    border-left: 3px solid var(--gold-border);
+  }
+  .artefact-card-title { font-weight: 700; color: var(--charcoal); margin-bottom: 4px; font-size: 0.8rem; }
+
+  /* Misc */
+  .text-muted { color: var(--muted); font-size: 0.78rem; }
+  .mt-4 { margin-top: 4px; }
+  .mt-8 { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mb-0 { margin-bottom: 0; }
+  .bold { font-weight: 700; }
+  .gold-text { color: var(--gold); }
+
+  /* Equipment status cards reuse renewal-stat-card */
+  .eq-status-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
+  @media(max-width:700px) { .eq-status-grid { grid-template-columns: 1fr 1fr; } }
+
+
+  /* ===== LOGIN / ROLE ACCESS ===== */
+  .login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#1F1F1B,#2C2C2C);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px}
+  .login-card{width:min(920px,100%);background:#FFFDF8;border:1px solid var(--gold-border);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.35);overflow:hidden;display:grid;grid-template-columns:1.1fr 1fr}
+  .login-brand{background:linear-gradient(135deg,#1F1F1B,#3A362A);color:#fff;padding:42px;display:flex;flex-direction:column;justify-content:center;border-right:4px solid var(--gold-bright)}
+  .login-brand h1{font-family:var(--font-main);font-size:2.2rem;line-height:1.08;margin-bottom:14px}.login-brand h1 span{color:var(--gold-bright)}
+  .login-brand p{color:rgba(255,255,255,.72);font-size:.86rem;line-height:1.65}.login-panel{padding:36px}
+  .login-panel h2{font-family:var(--font-main);font-size:1.35rem;margin-bottom:6px}.login-panel p{font-size:.82rem;color:var(--muted);margin-bottom:18px;line-height:1.55}
+  .role-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;margin-bottom:10px;border:1.5px solid var(--border);border-radius:10px;background:#fff;cursor:pointer;text-align:left;transition:.15s}
+  .role-btn:hover{border-color:var(--gold-bright);box-shadow:var(--shadow);transform:translateY(-1px)}.role-btn b{display:block;color:var(--charcoal);font-size:.9rem}.role-btn span{font-size:.72rem;color:var(--muted)}
+  .access-denied{padding:32px;border:1px solid #EBB9B3;background:#FDECEA;border-radius:12px;color:#7A2020;margin:20px 0}.hidden-by-role{display:none!important}
+  .mobile-shell{max-width:430px;margin:0 auto;background:#1F1F1B;border-radius:26px;padding:14px;box-shadow:var(--shadow-lg)}.mobile-screen{background:#FAF7F2;border-radius:20px;padding:16px;min-height:620px}.mobile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.mobile-title{font-family:var(--font-main);font-size:1.1rem;font-weight:bold}.session-mobile-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}.session-mobile-card .time{font-weight:800;color:var(--gold);font-size:.8rem}.session-mobile-card .client{font-weight:800;margin-top:4px}.quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .fee-matrix{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.fee-card{background:#fff;border:1px solid var(--border);border-left:3px solid var(--gold-bright);border-radius:10px;padding:14px}.fee-card b{display:block;margin-bottom:6px}.fee-card small{color:var(--muted);line-height:1.45;display:block}
+  @media(max-width:760px){.dashboard-brand-strip{flex-direction:column;align-items:flex-start}.dashboard-brand-strip img{width:76px;height:56px}.erp-logo-header{width:44px;height:34px}.login-card{grid-template-columns:1fr}.login-brand{padding:28px}.login-panel{padding:24px}.header{position:relative;height:auto;padding:14px;flex-wrap:wrap}.sidebar{position:relative;top:auto;width:100%;display:flex;overflow-x:auto;padding:8px}.sidebar-section-label,.sidebar-footer{display:none}.nav-item{white-space:nowrap;border-left:0;border-bottom:3px solid transparent}.nav-item.active{border-left:0;border-bottom-color:var(--gold-bright)}.main{margin-left:0;margin-top:0;padding:16px}.kpi-grid{grid-template-columns:1fr 1fr}.header-right{gap:8px}.header-badge{display:none}}
+
+</style>
+</head>
+<body>
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-brand">
+      <img class="login-logo" src="assets/images/kage_logo_transparent.png" alt="KAGE Fitness Studio logo">
+      <div class="header-subtitle" style="color:var(--gold-bright);margin-bottom:12px">Access-based demo login</div>
+      <h1><span>KAGE</span> Fitness Studio ERP</h1>
+      <p>This login is only for portfolio demonstration. It shows how different users may see different ERP modules based on role access.</p>
+      <div class="demo-banner" style="margin-top:22px;margin-bottom:0;background:rgba(255,248,225,.08);color:rgba(255,255,255,.75);border-color:rgba(242,183,5,.35)"><strong style="color:#fff">Demo only:</strong> no password, no backend, no real data.</div>
+    </div>
+    <div class="login-panel">
+      <h2>Select demo role</h2>
+      <p>Choose a role to enter the prototype. Owner/Admin has full access; Front Desk and Trainer views demonstrate controlled access.</p>
+      <button class="role-btn" onclick="loginAs('admin')"><div><b>D Kamal Kumar</b><span>Owner / Admin · Full module access</span></div><strong>→</strong></button>
+      <button class="role-btn" onclick="loginAs('frontdesk')"><div><b>Front Desk Staff</b><span>Members, renewals, finance entry, equipment log</span></div><strong>→</strong></button>
+      <button class="role-btn" onclick="loginAs('trainer')"><div><b>Trainer View</b><span>PT allocation and mobile session view only</span></div><strong>→</strong></button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-left">
+    <img class="erp-logo-header" src="assets/images/kage_logo_transparent.png" alt="KAGE Fitness Studio logo">
+    <div class="header-copy">
+      <div class="header-title"><span>KAGE</span> Fitness Studio ERP</div>
+      <div class="header-subtitle">BA Portfolio Live Demo — Stakeholder Communication Prototype</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-badge">Fictional Prototype</div>
+    <div class="header-user">
+      <div class="header-user-name" id="current-user-name">D Kamal Kumar</div>
+      <div class="header-user-role" id="current-user-role">Owner / Admin</div>
+    </div>
+    <button class="btn btn-sm btn-gold" onclick="showLogin()">Switch Role</button>
+  </div>
+</header>
+
+<!-- ===== SIDEBAR ===== -->
+<nav class="sidebar">
+  <div class="sidebar-section-label">Core Operations</div>
+  <div class="nav-item active" data-page="dashboard" data-roles="admin" onclick="showPage('dashboard')">
+    <span class="nav-icon">◈</span> Dashboard
+  </div>
+  <div class="nav-item" data-page="members" data-roles="admin,frontdesk" onclick="showPage('members')">
+    <span class="nav-icon">◉</span> Members
+  </div>
+  <div class="nav-item" data-page="pt" data-roles="admin,trainer" onclick="showPage('pt')">
+    <span class="nav-icon">◎</span> PT Allocation
+  </div>
+  <div class="nav-item" data-page="trainer-mobile" data-roles="admin,trainer" onclick="showPage('trainer-mobile')">
+    <span class="nav-icon">▣</span> Trainer Mobile View
+  </div>
+  <div class="sidebar-section-label">Finance</div>
+  <div class="nav-item" data-page="finance" data-roles="admin,frontdesk" onclick="showPage('finance')">
+    <span class="nav-icon">◈</span> Finance &amp; Billing
+  </div>
+  <div class="nav-item" data-page="freelancer" data-roles="admin" onclick="showPage('freelancer')">
+    <span class="nav-icon">◉</span> Freelancer Billing
+  </div>
+  <div class="sidebar-section-label">Retention &amp; Assets</div>
+  <div class="nav-item" data-page="renewals" data-roles="admin,frontdesk" onclick="showPage('renewals')">
+    <span class="nav-icon">◎</span> Renewals
+  </div>
+  <div class="nav-item" data-page="equipment" data-roles="admin,frontdesk" onclick="showPage('equipment')">
+    <span class="nav-icon">◈</span> Equipment
+  </div>
+  <div class="sidebar-section-label">Insights</div>
+  <div class="nav-item" data-page="reports" data-roles="admin" onclick="showPage('reports')">
+    <span class="nav-icon">◉</span> Reports &amp; Analytics
+  </div>
+  <div class="nav-item" data-page="guide" data-roles="admin,frontdesk,trainer" onclick="showPage('guide')">
+    <span class="nav-icon">◎</span> Demo Guide
+  </div>
+  <div class="sidebar-footer">
+    KAGE ERP v1.0 — BA Portfolio<br>Prepared by Adina Mohammed<br>May 2026 · Fictional Prototype
+  </div>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main">
+
+<!-- ============================================================ -->
+<!-- PAGE: DASHBOARD -->
+<!-- ============================================================ -->
+<section id="page-dashboard" class="page active">
+  <div class="demo-banner">
+    <strong>⚑ Demo Prototype:</strong>&nbsp;All data is fictional. This prototype demonstrates BA thinking — ERP scope, workflows, business rules, and validation logic only.
+  </div>
+  <div class="page-header">
+    <div class="page-title">Dashboard <span class="module-badge">Owner / Admin View</span></div>
+    <div class="page-desc">Real-time operational visibility across all KAGE Fitness Studio modules.</div>
+  </div>
+
+  <div class="dashboard-brand-strip">
+    <img src="assets/images/kage_logo_transparent.png" alt="KAGE Fitness Studio logo">
+    <div><b>Owner/Admin operational dashboard for KAGE Fitness Studio</b><span>Brand-aligned management view for members, PT sessions, renewals, billing, freelancer access revenue, maintenance and net revenue visibility.</span></div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card green">
+      <div class="kpi-label">Active Members</div>
+      <div class="kpi-value">142</div>
+      <div class="kpi-sub">All member types</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">PT Sessions Today</div>
+      <div class="kpi-value">18</div>
+      <div class="kpi-sub">Across all trainers</div>
+    </div>
+    <div class="kpi-card warn">
+      <div class="kpi-label">Renewals Due</div>
+      <div class="kpi-value">14</div>
+      <div class="kpi-sub">Due within 7 days</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">Overdue Payments</div>
+      <div class="kpi-value">7</div>
+      <div class="kpi-sub">Requires follow-up</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">Freelancer Rev MTD</div>
+      <div class="kpi-value rupee">₹68,000</div>
+      <div class="kpi-sub">Access fee billing</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">Maintenance Cost MTD</div>
+      <div class="kpi-value rupee">₹12,400</div>
+      <div class="kpi-sub">Repair &amp; service</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Net Revenue MTD</div>
+      <div class="kpi-value rupee">₹2,82,600</div>
+      <div class="kpi-sub">All categories</div>
+    </div>
+  </div>
+
+  <!-- Revenue by Category + PT Sessions -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="card-title-main">Revenue by Category</span> <span class="module-badge">May 2026</span></div>
+      <div class="stat-row"><span class="stat-label">Membership Revenue</span><span class="stat-val">₹1,45,000</span></div>
+      <div class="stat-row"><span class="stat-label">PT Revenue</span><span class="stat-val">₹82,000</span></div>
+      <div class="stat-row"><span class="stat-label">Freelancer Revenue</span><span class="stat-val">₹68,000</span></div>
+      <div class="stat-row"><span class="stat-label">Maintenance Cost</span><span class="stat-val red">−₹12,400</span></div>
+      <div class="divider mb-0" style="margin:10px 0 8px;"></div>
+      <div class="stat-row"><span class="stat-label bold">Estimated Net Revenue</span><span class="stat-val green">₹2,82,600</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-main">PT Sessions by Trainer</span> <span class="module-badge">Today</span></div>
+      <div class="stat-row"><span class="stat-label">Amit Sharma (Trainer A)</span><span class="stat-val">7 sessions</span></div>
+      <div class="stat-row"><span class="stat-label">Sneha Rao (Trainer B)</span><span class="stat-val">5 sessions</span></div>
+      <div class="stat-row"><span class="stat-label">Vikram Menon (Trainer C)</span><span class="stat-val gold">6 sessions</span></div>
+      <div class="divider mb-0" style="margin:10px 0 8px;"></div>
+      <div class="stat-row"><span class="stat-label bold">Total Today</span><span class="stat-val">18 sessions</span></div>
+    </div>
+  </div>
+
+  <!-- Renewal + Equipment Status -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="card-title-main">Renewal Follow-up Status</span></div>
+      <div class="stat-row"><span class="stat-label">Renewal Due</span><span class="stat-val gold">14</span></div>
+      <div class="stat-row"><span class="stat-label">Expired</span><span class="stat-val red">8</span></div>
+      <div class="stat-row"><span class="stat-label">Overdue</span><span class="stat-val red">5</span></div>
+      <div class="stat-row"><span class="stat-label">Renewed This Month</span><span class="stat-val green">19</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-main">Equipment Status</span></div>
+      <div class="stat-row"><span class="stat-label">Operational</span><span class="stat-val green">24</span></div>
+      <div class="stat-row"><span class="stat-label">Under Repair</span><span class="stat-val gold">2</span></div>
+      <div class="stat-row"><span class="stat-label">Out of Service</span><span class="stat-val red">1</span></div>
+      <div class="stat-row"><span class="stat-label">Review Flagged</span><span class="stat-val red">2</span></div>
+    </div>
+  </div>
+
+  <div class="ba-insight">
+    <div class="ba-insight-label">⚑ BA Insight — Data Sources</div>
+    <p>Dashboard aggregates data from <strong style="color:var(--gold-bright)">Member, Payment, PTSession, FreelancerBilling, MaintenanceLog,</strong> and <strong style="color:var(--gold-bright)">RevenueReport</strong> entities. Owner/Admin role has full revenue visibility. Trainer-level users should only see assigned sessions and commission status — role-based access is a key ERP design consideration.</p>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PAGE: MEMBERS -->
+<!-- ============================================================ -->
+<section id="page-members" class="page">
+  <div class="demo-banner"><strong>⚑ Demo Prototype:</strong>&nbsp;Validation logic is live. Duplicate phone/email uses mock values: <strong>9876543210</strong> and <strong>rahul@example.com</strong></div>
+  <div class="page-header">
+    <div class="page-title">Member Management <span class="module-badge">Admin</span></div>
+    <div class="page-desc">Create and maintain member records. Member type controls billing, PT, and reporting treatment.</div>
+  </div>
+
+  <!-- Registration Form -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Register New Member</span></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="m-name" placeholder="e.g. Priya Sharma">
+      </div>
+      <div class="form-group">
+        <label>Phone Number *</label>
+        <input type="text" id="m-phone" placeholder="10-digit mobile number">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="m-email" placeholder="e.g. priya@example.com">
+      </div>
+      <div class="form-group">
+        <label>Member Type *</label>
+        <select id="m-type" onchange="updatePlanFee()">
+          <option value="">— Select Member Type —</option>
+          <option>Direct Member</option>
+          <option>Freelancer</option>
+          <option>Freelancer Client</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Membership Plan *</label>
+        <select id="m-plan" onchange="updatePlanFee()">
+          <option value="">— Select Plan —</option>
+          <option>Direct Membership - 1 Month</option>
+          <option>Direct Membership - 3 Months</option>
+          <option>Direct Membership - 6 Months</option>
+          <option>Direct Membership - 12 Months</option>
+          <option>Freelancer Monthly Access</option>
+          <option>Freelancer Client Access - 1 Month</option>
+          <option>Freelancer Client Access - 3 Months</option>
+          <option>PT Package - 12 Sessions</option>
+          <option>PT Package - 16 Sessions</option>
+          <option>PT Package - 20 Sessions</option>
+          <option>PT Package - 24 Sessions</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Join Date *</label>
+        <input type="date" id="m-joindate">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="m-status">
+          <option>Active</option>
+          <option>Expired</option>
+          <option>On Hold</option>
+          <option>Inactive</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Base Fee / Package Fee</label>
+        <input type="text" id="m-planfee" readonly placeholder="Auto-calculated / negotiable">
+      </div>
+      <div class="form-group">
+        <label>Agreed Final Fee (Negotiable)</label>
+        <input type="number" id="m-agreedfee" placeholder="Enter final agreed amount">
+      </div>
+      <div class="form-group">
+        <label>Expiry Date (Auto)</label>
+        <input type="text" id="m-expiry" readonly placeholder="Calculated from join date + plan">
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="saveMember()">Save Member</button>
+      <button class="btn btn-outline" onclick="clearMemberForm()">Clear Form</button>
+    </div>
+    <div id="member-msg" class="msg"></div>
+  </div>
+
+  <!-- Business Rules -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Member Records</span> <span class="module-badge">4 sample records shown</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Member ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Member Type</th>
+            <th>Plan</th>
+            <th>Status</th>
+            <th>Expiry Date</th>
+          </tr>
+        </thead>
+        <tbody id="member-table-body">
+          <tr>
+            <td>MBR-10021</td>
+            <td>Rahul Kumar</td>
+            <td>9876543210</td>
+            <td>Direct Member</td>
+            <td>Direct Membership - 1 Month</td>
+            <td><span class="chip chip-active">Active</span></td>
+            <td>2026-06-20</td>
+          </tr>
+          <tr>
+            <td>MBR-20005</td>
+            <td>Rajan Iyer</td>
+            <td>9840012345</td>
+            <td>Freelancer</td>
+            <td>Freelancer Monthly Access</td>
+            <td><span class="chip chip-active">Active</span></td>
+            <td>2026-06-30</td>
+          </tr>
+          <tr>
+            <td>MBR-30018</td>
+            <td>Kavitha Rajan</td>
+            <td>9876543211</td>
+            <td>Freelancer Client</td>
+            <td>Freelancer Client Access - 1 Month</td>
+            <td><span class="chip chip-active">Active</span></td>
+            <td>2026-06-06</td>
+          </tr>
+          <tr>
+            <td>MBR-10032</td>
+            <td>Mohan Das</td>
+            <td>9123456789</td>
+            <td>Direct Member</td>
+            <td>Direct Membership - 3 Months</td>
+            <td><span class="chip chip-expired">Expired</span></td>
+            <td>2026-05-28</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ba-insight" style="margin-top:16px;">
+      <div class="ba-insight-label">⚑ BA Insight — Business Rules</div>
+      <p><strong style="color:var(--gold-bright)">Member Type</strong> drives billing and reporting classification. Freelancers are billed via the access-fee model; their private coaching income is outside KAGE scope. <strong style="color:var(--gold-bright)">Freelancer Clients</strong> are treated as standard members for facility access. Clean member data is the foundation of Payments, Renewals, PT Sessions, and Reports.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PAGE: PT ALLOCATION -->
+<!-- ============================================================ -->
+<section id="page-pt" class="page">
+  <div class="demo-banner"><strong>⚑ Demo:</strong>&nbsp;Mark Completed updates session counters. Conflict check fires for Trainer B at 07:00–08:00. Trainer C high-load warning is live.</div>
+  <div class="page-header">
+    <div class="page-title">PT Session &amp; Trainer Allocation <span class="module-badge">Admin / Trainer</span></div>
+    <div class="page-desc">Allocate PT clients to suitable trainers, schedule sessions, and track package balance.</div>
+  </div>
+
+  <!-- Package Panel -->
+  <div class="package-panel">
+    <div class="package-label">Client PT Package</div>
+    <div class="package-name">Ananya Krishnan</div>
+    <div class="package-sub">Goal: Weight Loss + Strength · Preferred Time: Morning 7–9 AM</div>
+    <div class="package-sub" style="margin-bottom:0; color:rgba(255,255,255,0.65);">Premium PT Package — 24 Sessions</div>
+    <div class="session-counters">
+      <div class="session-count-box">
+        <div class="session-count-num gold">24</div>
+        <div class="session-count-lbl">Total Sessions</div>
+      </div>
+      <div class="session-count-box">
+        <div id="pt-completed" class="session-count-num green">10</div>
+        <div class="session-count-lbl">Completed</div>
+      </div>
+      <div class="session-count-box">
+        <div id="pt-remaining" class="session-count-num remain">14</div>
+        <div class="session-count-lbl">Remaining</div>
+      </div>
+    </div>
+    <div class="session-bar-wrap">
+      <div class="session-bar-bg"><div id="pt-bar" class="session-bar-fill" style="width:41.7%"></div></div>
+      <div class="session-bar-lbl" id="pt-bar-lbl">10 of 24 sessions used (41.7%)</div>
+    </div>
+  </div>
+
+  <!-- Trainer Availability Board -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Trainer Availability Board</span></div>
+    <div class="trainer-grid">
+      <div class="trainer-card suggested">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+          <div class="trainer-name">Amit Sharma</div>
+          <span class="trainer-badge suggested">⭐ Suggested</span>
+        </div>
+        <div class="trainer-spec">Strength &amp; Conditioning</div>
+        <div class="trainer-meta">
+          <span><span class="chip chip-available" style="font-size:0.6rem;padding:2px 7px;">Available</span></span>
+          <span>4 active clients</span>
+        </div>
+      </div>
+      <div class="trainer-card busy">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+          <div class="trainer-name">Sneha Rao</div>
+          <span class="trainer-badge busy">Busy</span>
+        </div>
+        <div class="trainer-spec">Weight Loss &amp; HIIT</div>
+        <div class="trainer-meta">
+          <span><span class="chip chip-busy" style="font-size:0.6rem;padding:2px 7px;">Busy</span></span>
+          <span>2 active clients</span>
+        </div>
+      </div>
+      <div class="trainer-card highload">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+          <div class="trainer-name">Vikram Menon</div>
+          <span class="trainer-badge highload">⚠ High Load</span>
+        </div>
+        <div class="trainer-spec">Functional Fitness</div>
+        <div class="trainer-meta">
+          <span><span class="chip chip-highload" style="font-size:0.6rem;padding:2px 7px;">High Load</span></span>
+          <span>5 active clients</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session Scheduling Form -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Schedule PT Session</span></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Select Trainer *</label>
+        <select id="pt-trainer" onchange="checkTrainerWarning()">
+          <option value="">— Select Trainer —</option>
+          <option value="A">Amit Sharma (Trainer A — Available)</option>
+          <option value="B">Sneha Rao (Trainer B — Busy)</option>
+          <option value="C">Vikram Menon (Trainer C — High Load)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Session Date</label>
+        <input type="date" id="pt-date">
+      </div>
+      <div class="form-group">
+        <label>Start Time</label>
+        <input type="time" id="pt-start" onchange="checkConflict()">
+      </div>
+      <div class="form-group">
+        <label>End Time</label>
+        <input type="time" id="pt-end" onchange="checkConflict()">
+      </div>
+      <div class="form-group">
+        <label>Session Status</label>
+        <select id="pt-status">
+          <option>Scheduled</option>
+          <option>Completed</option>
+          <option>Cancelled</option>
+          <option>No Show</option>
+          <option>Rescheduled</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Commission Status (Read-only)</label>
+        <input type="text" value="Estimated" readonly>
+        <span class="text-muted">Estimated means trainer payout is calculated but still awaiting Admin/Finance approval.</span>
+      </div>
+    </div>
+    <div id="pt-trainer-warn" class="msg msg-warn"></div>
+    <div id="pt-conflict-warn" class="msg msg-warn"></div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="schedulePT()">Schedule Session</button>
+      <button class="btn btn-success" onclick="markCompleted()">Mark Completed</button>
+      <button class="btn btn-danger" onclick="cancelSession()">Cancel Session</button>
+    </div>
+    <div id="pt-msg" class="msg"></div>
+    <div class="ba-insight" style="margin-top:16px;">
+      <div class="ba-insight-label">⚑ BA Insight — PT Business Rules</div>
+      <p>Trainer allocation considers: <strong style="color:var(--gold-bright)">availability, PT load, preferred time, client goal, and specialisation continuity.</strong> Package balance reduces only when SessionStatus = Completed. Cancelled sessions before start time do not consume package balance. Commission remains Estimated until Admin/Finance approval.</p>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- ============================================================ -->
+<!-- PAGE: TRAINER MOBILE VIEW -->
+<!-- ============================================================ -->
+<section id="page-trainer-mobile" class="page">
+  <div class="demo-banner"><strong>⚑ Role-based trainer view:</strong>&nbsp;This page shows only trainer-owned PT clients, assigned sessions, pending/completed sessions, progress notes, and own commission status. It is not a full mobile app scope.</div>
+  <div class="page-header">
+    <div class="page-title">Trainer Dashboard &amp; Mobile View <span class="module-badge">Trainer Role</span></div>
+    <div class="page-desc">A limited trainer-facing view for daily PT work: assigned clients, today’s sessions, pending/completed sessions, progress notes, and own commission visibility.</div>
+  </div>
+
+  <!-- Trainer-owned KPI cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card green">
+      <div class="kpi-label">My Active PT Clients</div>
+      <div class="kpi-value">8</div>
+      <div class="kpi-sub">Assigned to this trainer</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">Today’s Sessions</div>
+      <div class="kpi-value">4</div>
+      <div class="kpi-sub">Scheduled for today</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Completed Today</div>
+      <div class="kpi-value">2</div>
+      <div class="kpi-sub">Marked completed</div>
+    </div>
+    <div class="kpi-card warn">
+      <div class="kpi-label">Pending Today</div>
+      <div class="kpi-value">2</div>
+      <div class="kpi-sub">Yet to complete</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">Month Completed</div>
+      <div class="kpi-value">42</div>
+      <div class="kpi-sub">Completed PT sessions</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">Estimated Commission</div>
+      <div class="kpi-value rupee">₹18,500</div>
+      <div class="kpi-sub">Pending finance approval</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Approved Commission</div>
+      <div class="kpi-value rupee">₹12,000</div>
+      <div class="kpi-sub">Approved for payout</div>
+    </div>
+    <div class="kpi-card warn">
+      <div class="kpi-label">Pending Approval</div>
+      <div class="kpi-value rupee">₹6,500</div>
+      <div class="kpi-sub">Estimated, not final</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="card-title-main">My PT Client Summary</span> <span class="module-badge">Trainer-owned data only</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Goal</th>
+              <th>Package</th>
+              <th>Completed</th>
+              <th>Remaining</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Ananya Krishnan</td><td>Weight Loss + Strength</td><td>24 Sessions</td><td>10</td><td>14</td><td><span class="chip chip-active">Active</span></td></tr>
+            <tr><td>Rahul Kumar</td><td>Strength</td><td>16 Sessions</td><td>6</td><td>10</td><td><span class="chip chip-active">Active</span></td></tr>
+            <tr><td>Kavitha Rajan</td><td>General Fitness</td><td>12 Sessions</td><td>4</td><td>8</td><td><span class="chip chip-pending">Pending Today</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-title-main">Commission Visibility</span> <span class="module-badge">Own commission only</span></div>
+      <div class="stat-row"><span class="stat-label">Estimated Commission</span><span class="stat-val gold">₹18,500</span></div>
+      <div class="stat-row"><span class="stat-label">Approved Commission</span><span class="stat-val green">₹12,000</span></div>
+      <div class="stat-row"><span class="stat-label">Pending Approval</span><span class="stat-val gold">₹6,500</span></div>
+      <div class="stat-row"><span class="stat-label">Paid This Month</span><span class="stat-val green">₹9,000</span></div>
+      <div class="ba-insight" style="margin-top:16px;">
+        <div class="ba-insight-label">⚑ Access Rule</div>
+        <p>Trainer can see only their own assigned clients, sessions, progress notes, and own commission status. Full gym revenue, freelancer billing, and other trainer payouts stay restricted to Owner/Admin/Finance.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-shell">
+    <div class="mobile-screen">
+      <div class="mobile-top"><div class="mobile-title">Today’s PT Sessions</div><span class="chip chip-available">Trainer View</span></div>
+      <div class="session-mobile-card">
+        <div class="time">07:00 AM — 08:00 AM</div><div class="client">Ananya Krishnan</div><div class="text-muted">Goal: Weight Loss + Strength · Package: 24 sessions · Remaining: 14</div>
+        <div class="quick-actions"><button class="btn btn-success btn-sm" onclick="trainerMobileDone('tm-msg-1')">Mark Completed</button><button class="btn btn-outline btn-sm">Add Note</button></div><div id="tm-msg-1" class="msg"></div>
+      </div>
+      <div class="session-mobile-card">
+        <div class="time">08:30 AM — 09:30 AM</div><div class="client">Rahul Kumar</div><div class="text-muted">Goal: Strength · Package: 16 sessions · Remaining: 10</div>
+        <div class="quick-actions"><button class="btn btn-success btn-sm" onclick="trainerMobileDone('tm-msg-2')">Mark Completed</button><button class="btn btn-outline btn-sm">Add Note</button></div><div id="tm-msg-2" class="msg"></div>
+      </div>
+      <div class="session-mobile-card">
+        <div class="time">05:00 PM — 06:00 PM</div><div class="client">Kavitha Rajan</div><div class="text-muted">Goal: General Fitness · Status: Scheduled · Remaining: 8</div>
+        <textarea placeholder="Progress note for trainer handover / continuity"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="ba-insight">
+    <div class="ba-insight-label">⚑ BA Scope Decision</div>
+    <p>A small trainer dashboard is useful because trainers need visibility of their assigned PT clients, today’s sessions, pending/completed sessions, progress notes, and own commission status. It stays lightweight in MVP. Full member mobile app, chat, attendance tracking, payroll, and advanced trainer analytics remain future scope.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PAGE: FINANCE -->
+<!-- ============================================================ -->
+<section id="page-finance" class="page">
+  <div class="demo-banner"><strong>⚑ Demo:</strong>&nbsp;Duplicate invoice validation uses <strong>INV-2026-041</strong>. Amount and date validations are live.</div>
+  <div class="page-header">
+    <div class="page-title">Finance &amp; Billing <span class="module-badge">Admin / Finance</span></div>
+    <div class="page-desc">Track payments, invoices, payment status, and revenue classification across all categories.</div>
+  </div>
+
+  <!-- Payment Configuration / Fee Options -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Payment Types & Negotiable Fee Logic</span> <span class="module-badge">BA Rule</span></div>
+    <div class="fee-matrix">
+      <div class="fee-card"><b>Direct Membership</b><small>Payment can be collected for 1, 3, 6, or 12 months. Base fee is shown, but final fee can be negotiated by Admin/Owner.</small></div>
+      <div class="fee-card"><b>PT Package</b><small>PT packages can be sold for 12, 16, 20, or 24 sessions. PT fee is negotiable based on trainer, package, and business approval.</small></div>
+      <div class="fee-card"><b>Freelancer</b><small>Freelancer payment follows monthly access-fee logic: OwnFee + ActiveClientCount × PerClientAccessFee.</small></div>
+      <div class="fee-card"><b>Freelancer Client</b><small>Freelancer clients are members for facility access. Private coaching fee collected by freelancer remains outside KAGE billing scope.</small></div>
+    </div>
+  </div>
+
+  <!-- Payment Entry Form -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Record Payment</span></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Member Name *</label>
+        <input type="text" id="f-member" placeholder="e.g. Rahul Kumar">
+      </div>
+      <div class="form-group">
+        <label>Payment Purpose *</label>
+        <select id="f-purpose">
+          <option value="">— Select Purpose —</option>
+          <option>Direct Membership</option>
+          <option>PT Package</option>
+          <option>Renewal</option>
+          <option>Freelancer Monthly Access Fee</option>
+          <option>Freelancer Client Access Fee</option>
+          <option>Maintenance Expense</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Billing / Package Type</label>
+        <select id="f-paytype">
+          <option value="">— Select Type —</option>
+          <option>Membership - 1 Month</option>
+          <option>Membership - 3 Months</option>
+          <option>Membership - 6 Months</option>
+          <option>Membership - 12 Months</option>
+          <option>PT Package - 12 Sessions</option>
+          <option>PT Package - 16 Sessions</option>
+          <option>PT Package - 20 Sessions</option>
+          <option>PT Package - 24 Sessions</option>
+          <option>Freelancer Monthly Access</option>
+          <option>Freelancer Client Access</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Base Fee / Final Negotiated Fee (₹)</label>
+        <input type="number" id="f-finalfee" placeholder="Optional agreed amount">
+      </div>
+      <div class="form-group">
+        <label>Amount (₹) *</label>
+        <input type="number" id="f-amount" placeholder="Enter amount">
+      </div>
+      <div class="form-group">
+        <label>Payment Mode *</label>
+        <select id="f-mode">
+          <option value="">— Select Mode —</option>
+          <option>Cash</option>
+          <option>UPI</option>
+          <option>Card</option>
+          <option>Bank Transfer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Payment Status</label>
+        <select id="f-status">
+          <option>Paid</option>
+          <option>Partial</option>
+          <option>Pending</option>
+          <option>Overdue</option>
+          <option>Refunded</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Invoice Number *</label>
+        <input type="text" id="f-invoice" placeholder="e.g. INV-2026-045">
+      </div>
+      <div class="form-group">
+        <label>Invoice Shared Status</label>
+        <select id="f-shared">
+          <option>Not Shared</option>
+          <option>Sent</option>
+          <option>Downloaded</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Payment Date *</label>
+        <input type="date" id="f-date">
+      </div>
+      <div class="form-group">
+        <label>Collected By</label>
+        <input type="text" id="f-collector" placeholder="Staff name">
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="savePayment()">Save Payment</button>
+      <button class="btn btn-outline" onclick="clearFinanceForm()">Clear Form</button>
+    </div>
+    <div id="finance-msg" class="msg"></div>
+  </div>
+
+  <!-- Payment Table -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Payment Records</span> <span class="module-badge">Sample Data</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Payment ID</th>
+            <th>Member</th>
+            <th>Purpose</th>
+            <th>Amount</th>
+            <th>Mode</th>
+            <th>Status</th>
+            <th>Invoice</th>
+            <th>Shared</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PAY-50012</td>
+            <td>Rahul Kumar</td>
+            <td>Membership</td>
+            <td><strong>₹2,500</strong></td>
+            <td>UPI</td>
+            <td><span class="chip chip-paid">Paid</span></td>
+            <td>INV-2026-041</td>
+            <td><span class="chip chip-completed" style="font-size:0.6rem">Sent</span></td>
+            <td>2026-05-12</td>
+          </tr>
+          <tr>
+            <td>PAY-50013</td>
+            <td>Ananya Krishnan</td>
+            <td>PT Package</td>
+            <td><strong>₹18,000</strong></td>
+            <td>Card</td>
+            <td><span class="chip chip-paid">Paid</span></td>
+            <td>INV-2026-042</td>
+            <td><span class="chip chip-approved" style="font-size:0.6rem">Downloaded</span></td>
+            <td>2026-05-14</td>
+          </tr>
+          <tr>
+            <td>PAY-50014</td>
+            <td>Rajan Iyer</td>
+            <td>Freelancer Fee</td>
+            <td><strong>₹17,000</strong></td>
+            <td>Bank Transfer</td>
+            <td><span class="chip chip-pending">Pending</span></td>
+            <td>INV-2026-043</td>
+            <td><span class="chip chip-inactive" style="font-size:0.6rem">Not Shared</span></td>
+            <td>2026-06-01</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ba-insight" style="margin-top:16px;">
+      <div class="ba-insight-label">⚑ BA Insight — Finance Business Rules</div>
+      <p>Amount cannot be blank, zero, or negative. <strong style="color:var(--gold-bright)">PaymentPurpose</strong> classifies revenue into membership, PT, freelancer, and maintenance streams. <strong style="color:var(--gold-bright)">InvoiceNumber</strong> must be unique per transaction. Direct membership payments can be for 1, 3, 6, or 12 months and the fee can be negotiated by Owner/Admin. PT package payments can be for 12, 16, 20, or 24 sessions and can also be negotiated. Only Paid and approved revenue-related payments should feed reporting aggregates. Pending, Overdue, and Refunded items should be handled separately.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PAGE: FREELANCER BILLING -->
+<!-- ============================================================ -->
+<section id="page-freelancer" class="page">
+  <div class="demo-banner"><strong>⚑ Demo:</strong>&nbsp;Formula calculator is live. Admin Gate Flag override is interactive. Billing is access-fee based, not session-based.</div>
+  <div class="page-header">
+    <div class="page-title">Freelancer Billing <span class="module-badge">Admin / Finance</span></div>
+    <div class="page-desc">Track monthly access billing for freelance trainers. Formula-based calculation with gate flag control.</div>
+  </div>
+
+  <!-- Formula Box -->
+  <div class="formula-box">
+    <div class="formula-label">⚑ Billing Formula</div>
+    <div class="formula-text"><span>MonthlyPayable</span> = OwnFee + ( ActiveClientCount × PerClientAccessFee )</div>
+  </div>
+
+  <!-- Freelancer Billing Cards -->
+  <div class="grid-3">
+    <!-- Card 1 -->
+    <div class="card mb-0">
+      <div class="card-title"><span class="card-title-main">Rajan Iyer</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Freelancer ID</span><span class="bold" style="font-size:0.82rem">FRL-001</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Member ID</span><span style="font-size:0.82rem">MBR-20005</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Billing Month</span><span style="font-size:0.82rem">May 2026</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Own Fee</span><span style="font-size:0.82rem">₹5,000</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Active Clients</span><span style="font-size:0.82rem">4</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Per-Client Fee</span><span style="font-size:0.82rem">₹3,000</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Monthly Payable</span><span class="stat-val" style="font-size:1rem;">₹17,000</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+        <span class="chip chip-pending">Pending</span>
+        <span class="chip chip-clear">Gate: Clear</span>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card mb-0">
+      <div class="card-title"><span class="card-title-main">Priya Nair</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Freelancer ID</span><span class="bold" style="font-size:0.82rem">FRL-002</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Member ID</span><span style="font-size:0.82rem">MBR-20006</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Billing Month</span><span style="font-size:0.82rem">May 2026</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Own Fee</span><span style="font-size:0.82rem">₹5,000</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Active Clients</span><span style="font-size:0.82rem">2</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Per-Client Fee</span><span style="font-size:0.82rem">₹3,000</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Monthly Payable</span><span class="stat-val" style="font-size:1rem;">₹11,000</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+        <span class="chip chip-paid">Paid</span>
+        <span class="chip chip-clear">Gate: Clear</span>
+      </div>
+    </div>
+
+    <!-- Card 3 — Overdue with Gate Flag -->
+    <div class="card mb-0" style="border-color:var(--error);border-width:1.5px;">
+      <div class="card-title"><span class="card-title-main">Ajay Menon</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Freelancer ID</span><span class="bold" style="font-size:0.82rem">FRL-003</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Member ID</span><span style="font-size:0.82rem">MBR-20007</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Billing Month</span><span style="font-size:0.82rem">April 2026</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Own Fee</span><span style="font-size:0.82rem">₹5,000</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Active Clients</span><span style="font-size:0.82rem">3</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Per-Client Fee</span><span style="font-size:0.82rem">₹3,000</span></div>
+      <div class="stat-row"><span class="stat-label" style="font-size:0.72rem;color:var(--muted)">Monthly Payable</span><span class="stat-val" style="font-size:1rem;">₹14,000</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+        <span class="chip chip-overdue">Overdue</span>
+        <span id="ajay-gate-chip" class="chip chip-gate">⚑ Gate Flag Active</span>
+      </div>
+      <div id="ajay-gate-warn" class="msg msg-warn show" style="margin-top:10px;font-size:0.75rem;">
+        <span>⚠ Overdue payment — Gate Flag is Active. Admin override required to restore access.</span>
+      </div>
+      <div style="margin-top:12px;">
+        <button class="btn btn-warn btn-sm" onclick="overrideGateFlag()">Admin Override Gate Flag</button>
+      </div>
+      <div id="gate-override-msg" class="msg"></div>
+    </div>
+  </div>
+
+  <!-- Calculator -->
+  <div class="card" style="margin-top:20px;">
+    <div class="card-title"><span class="card-title-main">Monthly Payable Calculator</span></div>
+    <div class="form-grid-3">
+      <div class="form-group">
+        <label>Own Fee (₹)</label>
+        <input type="number" id="calc-own" placeholder="e.g. 5000">
+      </div>
+      <div class="form-group">
+        <label>Active Client Count</label>
+        <input type="number" id="calc-clients" placeholder="e.g. 4">
+      </div>
+      <div class="form-group">
+        <label>Per-Client Access Fee (₹)</label>
+        <input type="number" id="calc-perclient" placeholder="e.g. 3000">
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-gold" onclick="calcMonthlyPayable()">Calculate Monthly Payable</button>
+    </div>
+    <div id="calc-result" class="calc-result">
+      <span>Monthly Payable =</span>
+      <strong id="calc-result-val" style="font-size:1.8rem;color:var(--charcoal)"></strong>
+    </div>
+  </div>
+
+  <div class="ba-insight">
+    <div class="ba-insight-label">⚑ BA Insight — Freelancer Billing Rules</div>
+    <p>Freelancer billing is <strong style="color:var(--gold-bright)">monthly and access-fee based</strong> — not session-based. Private coaching income collected directly by the freelancer is <strong style="color:var(--gold-bright)">outside KAGE billing scope</strong>. If payment is overdue beyond the threshold, Gate Flag becomes active, restricting facility access. Admin can override with a recorded payment arrangement. This separation keeps KAGE revenue reporting clean.</p>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PAGE: RENEWALS -->
+<!-- ============================================================ -->
+<section id="page-renewals" class="page">
+  <div class="demo-banner"><strong>⚑ Demo:</strong>&nbsp;Follow-up save is interactive. WhatsApp/SMS automation is outside MVP scope.</div>
+  <div class="page-header">
+    <div class="page-title">Renewals &amp; Retention <span class="module-badge">Admin / Staff</span></div>
+    <div class="page-desc">Track renewal due, expired, and overdue members. Drive follow-up accountability.</div>
+  </div>
+
+  <!-- Status Cards -->
+  <div class="renewal-status-grid">
+    <div class="renewal-stat-card">
+      <div class="renewal-stat-num warn">14</div>
+      <div class="renewal-stat-lbl">Renewal Due</div>
+    </div>
+    <div class="renewal-stat-card">
+      <div class="renewal-stat-num red">8</div>
+      <div class="renewal-stat-lbl">Expired</div>
+    </div>
+    <div class="renewal-stat-card">
+      <div class="renewal-stat-num red">5</div>
+      <div class="renewal-stat-lbl">Overdue Renewal</div>
+    </div>
+    <div class="renewal-stat-card">
+      <div class="renewal-stat-num green">19</div>
+      <div class="renewal-stat-lbl">Renewed This Month</div>
+    </div>
+  </div>
+
+  <!-- Filter Chips -->
+  <div class="filter-chips">
+    <div class="filter-chip active" onclick="filterRenewals(this, 'all')">All Members</div>
+    <div class="filter-chip" onclick="filterRenewals(this, 'due')">Renewal Due</div>
+    <div class="filter-chip" onclick="filterRenewals(this, 'expired')">Expired</div>
+    <div class="filter-chip" onclick="filterRenewals(this, 'overdue')">Overdue</div>
+    <div class="filter-chip" onclick="filterRenewals(this, 'renewed')">Renewed</div>
+  </div>
+
+  <!-- Renewal Queue Table -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Renewal Queue</span> <span class="module-badge">Sample Records</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Member Name</th>
+            <th>Phone</th>
+            <th>Plan</th>
+            <th>Expiry</th>
+            <th>Status</th>
+            <th>Days</th>
+            <th>Follow-up Owner</th>
+            <th>Last Contacted</th>
+            <th>Next Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-renewal="due">
+            <td>Kavitha Rajan</td>
+            <td>9876543211</td>
+            <td>Direct Membership - 1 Month</td>
+            <td>2026-06-06</td>
+            <td><span class="chip chip-due">Renewal Due</span></td>
+            <td>3 days left</td>
+            <td>Sneha</td>
+            <td>2026-06-01</td>
+            <td>Follow-up call</td>
+          </tr>
+          <tr data-renewal="expired">
+            <td>Mohan Das</td>
+            <td>9123456789</td>
+            <td>Direct Membership - 3 Months</td>
+            <td>2026-05-28</td>
+            <td><span class="chip chip-expired">Expired</span></td>
+            <td>6 days overdue</td>
+            <td>Ravi</td>
+            <td>2026-05-30</td>
+            <td>Send reminder</td>
+          </tr>
+          <tr data-renewal="overdue">
+            <td>Ananya Krishnan</td>
+            <td>9456789012</td>
+            <td>Direct Membership - 12 Months</td>
+            <td>2026-05-10</td>
+            <td><span class="chip chip-overdue">Overdue Renewal</span></td>
+            <td>24 days overdue</td>
+            <td>Sneha</td>
+            <td>2026-05-15</td>
+            <td>Escalate to Owner</td>
+          </tr>
+          <tr data-renewal="renewed">
+            <td>Suresh Kumar</td>
+            <td>8765432109</td>
+            <td>Direct Membership - 1 Month</td>
+            <td>2026-05-31</td>
+            <td><span class="chip chip-renewed">Renewed</span></td>
+            <td>Completed</td>
+            <td>Ravi</td>
+            <td>2026-05-29</td>
+            <td>Completed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Follow-up Form -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Log Follow-up Note</span></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Select Member</label>
+        <select id="r-member">
+          <option>Kavitha Rajan</option>
+          <option>Mohan Das</option>
+          <option>Ananya Krishnan</option>
+          <option>Suresh Kumar</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Next Action</label>
+        <select id="r-action">
+          <option>Follow-up Call</option>
+          <option>Visit Reminder</option>
+          <option>Escalate to Owner</option>
+          <option>Mark Inactive</option>
+          <option>Renewed</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Follow-up Note</label>
+        <textarea id="r-note" placeholder="Enter follow-up details, call summary, or next steps..."></textarea>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="saveFollowup()">Save Follow-up</button>
+    </div>
+    <div id="renewal-msg" class="msg"></div>
+    <div class="msg msg-warn show" style="margin-top:14px;font-size:0.76rem;">
+      <span>⚑ <strong>Out of MVP Scope:</strong> WhatsApp/SMS automation, automated reminder scheduling. Manual follow-up log and state update is accepted for MVP.</span>
+    </div>
+  </div>
+
+  <div class="ba-insight">
+    <div class="ba-insight-label">⚑ BA Insight — Renewal Business Rules</div>
+    <p>Renewal Due flag triggers <strong style="color:var(--gold-bright)">7 days before expiry</strong>. Expired members remain visible for follow-up tracking — they should not be deleted. Follow-up Owner field provides accountability. WhatsApp/SMS automation is outside MVP; manual calls and logged notes are the accepted process. Renewed members are preserved in the queue for historical view.</p>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PAGE: EQUIPMENT -->
+<!-- ============================================================ -->
+<section id="page-equipment" class="page">
+  <div class="demo-banner"><strong>⚑ Demo:</strong>&nbsp;Repair cost validation and replacement review trigger are interactive. Negative cost shows inline error.</div>
+  <div class="page-header">
+    <div class="page-title">Equipment Maintenance <span class="module-badge">Admin / Maintenance</span></div>
+    <div class="page-desc">Track equipment condition, repair logs, costs, vendors, and replacement review flags. Replacement review is a flag, not a CurrentStatus value.</div>
+  </div>
+
+  <!-- Status Cards -->
+  <div class="eq-status-grid">
+    <div class="renewal-stat-card">
+      <div class="renewal-stat-num green">24</div>
+      <div class="renewal-stat-lbl">Operational</div>
+    </div>
+    <div class="renewal-stat-card">
+      <div class="renewal-stat-num gold">2</div>
+      <div class="renewal-stat-lbl">Under Repair</div>
+    </div>
+    <div class="renewal-stat-card">
+      <div class="renewal-stat-num red">1</div>
+      <div class="renewal-stat-lbl">Out of Service</div>
+    </div>
+    <div class="renewal-stat-card">
+      <div class="renewal-stat-num red">2</div>
+      <div class="renewal-stat-lbl">Review Flagged</div>
+    </div>
+  </div>
+  <div class="demo-banner" style="margin-top:-8px;"><strong>Equipment logic:</strong>&nbsp;CurrentStatus uses Operational, Under Repair, Out of Service, or Decommissioned. ReplacementReviewFlag is separate Yes/No review flag.</div>
+
+  <!-- Equipment Table -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Equipment Maintenance Log</span> <span class="module-badge">Sample Records</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Equipment</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Repair Date</th>
+            <th>Cost</th>
+            <th>Vendor</th>
+            <th>Issue Notes</th>
+            <th>Resolution</th>
+            <th>Replace Review</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Treadmill #3</td>
+            <td>Cardio</td>
+            <td><span class="chip chip-repair">Under Repair</span></td>
+            <td>2026-05-29</td>
+            <td>₹3,500</td>
+            <td>FitServ India</td>
+            <td>Belt slippage / motor noise</td>
+            <td><span class="chip chip-pending" style="font-size:0.6rem">Pending Vendor</span></td>
+            <td><span class="chip chip-inactive" style="font-size:0.6rem">No</span></td>
+          </tr>
+          <tr>
+            <td>Leg Press Machine</td>
+            <td>Strength</td>
+            <td><span class="chip chip-active">Operational</span></td>
+            <td>2026-04-10</td>
+            <td>₹1,200</td>
+            <td>GymFix Co.</td>
+            <td>Cable fraying</td>
+            <td><span class="chip chip-completed" style="font-size:0.6rem">Resolved</span></td>
+            <td><span class="chip chip-inactive" style="font-size:0.6rem">No</span></td>
+          </tr>
+          <tr>
+            <td>Rowing Machine #1</td>
+            <td>Cardio</td>
+            <td><span class="chip chip-repair">Under Repair</span></td>
+            <td>2026-05-02</td>
+            <td>₹8,000</td>
+            <td>FitServ India</td>
+            <td>3rd repair in 6 months</td>
+            <td><span class="chip chip-pending" style="font-size:0.6rem">Under Review</span></td>
+            <td><span class="chip chip-overdue" style="font-size:0.6rem">Yes</span></td>
+          </tr>
+          <tr>
+            <td>Battle Ropes Set</td>
+            <td>Functional</td>
+            <td><span class="chip chip-expired">Out of Service</span></td>
+            <td>2026-05-15</td>
+            <td>₹0</td>
+            <td>N/A</td>
+            <td>Wear and tear</td>
+            <td><span class="chip chip-expired" style="font-size:0.6rem">Under Review</span></td>
+            <td><span class="chip chip-overdue" style="font-size:0.6rem">Yes</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- New Maintenance Entry Form -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Log New Maintenance Entry</span></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Equipment Name *</label>
+        <input type="text" id="eq-name" placeholder="e.g. Treadmill #5">
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="eq-cat">
+          <option>Cardio</option>
+          <option>Strength</option>
+          <option>Functional</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Repair Date</label>
+        <input type="date" id="eq-date">
+      </div>
+      <div class="form-group">
+        <label>Repair Cost (₹) — Enter 0 if none</label>
+        <input type="number" id="eq-cost" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>Vendor Name</label>
+        <input type="text" id="eq-vendor" placeholder="e.g. FitServ India">
+      </div>
+      <div class="form-group">
+        <label>Resolution Status *</label>
+        <select id="eq-resolution">
+          <option value="">— Select Status —</option>
+          <option>Open</option>
+          <option>Under Review</option>
+          <option>Resolved</option>
+          <option>Pending Vendor</option>
+          <option>Escalated</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Issue Notes *</label>
+        <textarea id="eq-notes" placeholder="Describe the issue clearly — this feeds the maintenance log and replacement review decision..."></textarea>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="saveEquipment()">Save Maintenance Log</button>
+      <button class="btn btn-danger" onclick="triggerReplacement()">Trigger Replacement Review</button>
+    </div>
+    <div id="equipment-msg" class="msg"></div>
+    <div class="ba-insight" style="margin-top:16px;">
+      <div class="ba-insight-label">⚑ BA Insight — Equipment Business Rules</div>
+      <p>Every maintenance log links to one equipment item. <strong style="color:var(--gold-bright)">RepairCost must be zero or greater</strong>. Repeated repairs can trigger a ReplacementReviewFlag — but the <strong style="color:var(--gold-bright)">system only flags; owner/admin makes the final replacement decision.</strong> This separation of system suggestion and human decision is an important business rule.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PAGE: REPORTS -->
+<!-- ============================================================ -->
+<section id="page-reports" class="page">
+  <div class="demo-banner"><strong>⚑ Demo:</strong>&nbsp;Report filters are interactive — category selection updates KPI cards and the revenue summary table. Exporting without period/date filters is blocked.</div>
+  <div class="page-header">
+    <div class="page-title">Reports &amp; Analytics <span class="module-badge">Owner / Admin / Finance</span></div>
+    <div class="page-desc">Management-level business performance overview. Role-restricted — trainers should not see full revenue.</div>
+  </div>
+
+  <!-- Report Filters -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Report Filters &amp; Export</span></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Report Period *</label>
+        <select id="rpt-period" onchange="updateReportValues()">
+          <option value="">— Select Period —</option>
+          <option>Weekly</option>
+          <option>Monthly</option>
+          <option>Quarterly</option>
+          <option>Custom</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Revenue Category</label>
+        <select id="rpt-category" onchange="updateReportValues()">
+          <option>All</option>
+          <option>Membership</option>
+          <option>PT</option>
+          <option>Freelancer</option>
+          <option>Maintenance</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Date Range From</label>
+        <input type="date" id="rpt-from" onchange="updateReportValues()">
+      </div>
+      <div class="form-group">
+        <label>Date Range To</label>
+        <input type="date" id="rpt-to" onchange="updateReportValues()">
+      </div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="exportReport()">Export Report</button>
+      <button class="btn btn-outline" onclick="applyFilters()">Apply Filters</button>
+    </div>
+    <div id="report-msg" class="msg"></div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card green">
+      <div class="kpi-label">Membership Revenue</div>
+      <div id="rpt-membership-value" class="kpi-value rupee">₹1,45,000</div>
+      <div id="rpt-membership-sub" class="kpi-sub">Payment — Membership &amp; Renewals</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">PT Revenue</div>
+      <div id="rpt-pt-value" class="kpi-value rupee">₹82,000</div>
+      <div id="rpt-pt-sub" class="kpi-sub">Payment / PT Package</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">Freelancer Revenue</div>
+      <div id="rpt-freelancer-value" class="kpi-value rupee">₹68,000</div>
+      <div id="rpt-freelancer-sub" class="kpi-sub">FreelancerBilling</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">Maintenance Cost</div>
+      <div id="rpt-maintenance-value" class="kpi-value rupee">₹12,400</div>
+      <div id="rpt-maintenance-sub" class="kpi-sub">MaintenanceLog</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Net Revenue</div>
+      <div id="rpt-net-value" class="kpi-value rupee">₹2,82,600</div>
+      <div id="rpt-net-sub" class="kpi-sub">Calculated reporting value</div>
+    </div>
+  </div>
+
+  <!-- Formula -->
+  <div class="formula-box">
+    <div class="formula-label">⚑ Net Revenue Formula</div>
+    <div class="formula-text"><span>NetRevenue</span> = MembershipRevenue + PTRevenue + FreelancerRevenue − MaintenanceCost − OtherExpenses</div>
+  </div>
+
+  <!-- Revenue Summary Table -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Revenue Summary Table</span> <span id="rpt-period-label" class="module-badge">Monthly Demo</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Source Entity</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody id="revenue-summary-body">
+          <tr>
+            <td>Membership Revenue</td>
+            <td><strong>₹1,45,000</strong></td>
+            <td>Payment</td>
+            <td>Membership and renewal payments</td>
+          </tr>
+          <tr>
+            <td>PT Revenue</td>
+            <td><strong>₹82,000</strong></td>
+            <td>Payment / PTPackage</td>
+            <td>PT package payments</td>
+          </tr>
+          <tr>
+            <td>Freelancer Revenue</td>
+            <td><strong>₹68,000</strong></td>
+            <td>FreelancerBilling</td>
+            <td>Monthly access-fee billing</td>
+          </tr>
+          <tr>
+            <td>Maintenance Cost</td>
+            <td style="color:var(--error);font-weight:700;">−₹12,400</td>
+            <td>MaintenanceLog</td>
+            <td>Repair and service expenses</td>
+          </tr>
+          <tr style="background:#F8F5EE;">
+            <td><strong>Net Revenue</strong></td>
+            <td><strong style="color:var(--success);font-size:1rem;">₹2,82,600</strong></td>
+            <td>RevenueReport</td>
+            <td>Calculated reporting value</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="msg msg-info show" style="margin-top:14px;">
+      <span>ℹ These are demo sample values. In a production ERP, report filters would query live transaction data from Payments, PT Packages, Freelancer Billing, and Maintenance Logs.</span>
+    </div>
+    <div class="ba-insight" style="margin-top:16px;">
+      <div class="ba-insight-label">⚑ BA Insight — Reporting Business Rules</div>
+      <p><strong style="color:var(--gold-bright)">RevenueReport is a reporting view</strong>, not a transaction table. Owner, Admin, and Finance roles can see full revenue. <strong style="color:var(--gold-bright)">Trainer users should only see their assigned sessions and commission status</strong> — never full revenue. Empty export filters must be blocked to prevent unscoped data exports. Reporting depends on clean transaction data upstream.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PAGE: DEMO GUIDE -->
+<!-- ============================================================ -->
+<section id="page-guide" class="page">
+  <div class="page-header">
+    <div class="page-title">Demo Guide <span class="module-badge">BA Portfolio</span></div>
+    <div class="page-desc">For recruiters, hiring managers, and interviewers — understanding what this prototype demonstrates.</div>
+  </div>
+
+  <!-- Project Snapshot -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-main">Project Snapshot</span></div>
+    <table class="snapshot-table">
+      <tbody>
+        <tr><td>Project Name</td><td><strong>KAGE Fitness Studio ERP</strong></td></tr>
+        <tr><td>Project Type</td><td>Independent BA Portfolio Case Study</td></tr>
+        <tr><td>Domain</td><td>Fitness Studio / ERP / Gym Operations</td></tr>
+        <tr><td>Artefact Type</td><td>Live ERP Demo / Stakeholder Communication Prototype</td></tr>
+        <tr><td>Prepared by</td><td><strong>Adina Mohammed</strong></td></tr>
+        <tr><td>Date</td><td>May 2026</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="two-col-guide">
+    <!-- What this is -->
+    <div class="guide-section">
+      <div class="guide-section-title"><div class="guide-dot"></div>What This Demo Is</div>
+      <ul class="guide-list">
+        <li>A front-end prototype built in HTML, CSS, and JavaScript</li>
+        <li>A BA communication artefact for stakeholder walkthroughs</li>
+        <li>A visual representation of ERP workflows and screen logic</li>
+        <li>A fictional portfolio demonstration of business analyst thinking</li>
+        <li>A tool to explain modules, screens, validation rules, and business logic</li>
+        <li>An end-to-end ERP scope covering 7 core ERP modules, plus a limited role-based trainer view</li>
+      </ul>
+    </div>
+    <!-- What this is NOT -->
+    <div class="guide-section">
+      <div class="guide-section-title"><div class="guide-dot" style="background:var(--error)"></div>What This Demo Is Not</div>
+      <ul class="guide-list guide-not-list">
+        <li>Not a production ERP system</li>
+        <li>Not connected to a real database or backend</li>
+        <li>Not using real customer data</li>
+        <li>Not a live client implementation</li>
+        <li>Not integrated with payment gateway, WhatsApp/SMS, or biometric attendance</li>
+        <li>Does not include GST filing, payroll, or bank reconciliation</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Modules Covered -->
+  <div class="guide-section">
+    <div class="guide-section-title"><div class="guide-dot"></div>7 Core ERP Modules Covered</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <span class="skill-chip">Dashboard</span>
+      <span class="skill-chip">Member Management</span>
+      <span class="skill-chip">PT Allocation</span>
+      <span class="skill-chip">Finance &amp; Billing</span>
+      <span class="skill-chip">Freelancer Billing</span>
+      <span class="skill-chip">Renewals &amp; Retention</span>
+      <span class="skill-chip">Equipment Maintenance</span>
+      <span class="skill-chip">Reports &amp; Analytics</span>
+    </div>
+    <div class="ba-insight" style="margin-top:14px;">
+      <div class="ba-insight-label">Role-based view note</div>
+      <p><strong style="color:var(--gold-bright)">Trainer Dashboard / Mobile View</strong> is treated as a limited role-based view of the PT module, not as an additional ERP module or full mobile app.</p>
+    </div>
+  </div>
+
+  <!-- Suggested Walkthrough -->
+  <div class="guide-section">
+    <div class="guide-section-title"><div class="guide-dot"></div>Suggested Walkthrough for Interviewers</div>
+    <div class="walkthrough-steps">
+      <div class="walk-step"><div class="walk-num">1</div><div class="walk-text"><strong>Dashboard</strong> — Start here to see the full operational overview and understand how modules connect to KPIs.</div></div>
+      <div class="walk-step"><div class="walk-num">2</div><div class="walk-text"><strong>Members</strong> — Try registering a member. Use phone 9876543210 or email rahul@example.com to see duplicate validation fire.</div></div>
+      <div class="walk-step"><div class="walk-num">3</div><div class="walk-text"><strong>PT Allocation</strong> — Select Trainer C to see high-load warning. Set time 07:00–08:00 for Trainer B to see conflict warning. Click Mark Completed to see package balance update.</div></div>
+      <div class="walk-step"><div class="walk-num">4</div><div class="walk-text"><strong>Trainer Dashboard / Mobile View</strong> — Login as Trainer View to see only assigned clients, today’s sessions, pending/completed counts, progress notes, and own commission status.</div></div>
+      <div class="walk-step"><div class="walk-num">5</div><div class="walk-text"><strong>Finance &amp; Billing</strong> — Try entering 0 or negative amount. Use invoice INV-2026-041 to trigger duplicate warning.</div></div>
+      <div class="walk-step"><div class="walk-num">6</div><div class="walk-text"><strong>Freelancer Billing</strong> — Use the calculator to verify the formula. Click Admin Override Gate Flag on Ajay Menon's overdue card.</div></div>
+      <div class="walk-step"><div class="walk-num">7</div><div class="walk-text"><strong>Renewals</strong> — Use filter chips to isolate Overdue or Renewal Due records. Log a follow-up note.</div></div>
+      <div class="walk-step"><div class="walk-num">8</div><div class="walk-text"><strong>Equipment</strong> — Enter a negative repair cost to see validation. Click Trigger Replacement Review to see the flag system.</div></div>
+      <div class="walk-step"><div class="walk-num">9</div><div class="walk-text"><strong>Reports</strong> — Try exporting without a period selected to see validation. Then select Monthly and export successfully.</div></div>
+    </div>
+  </div>
+
+  <!-- BA Skills -->
+  <div class="guide-section">
+    <div class="guide-section-title"><div class="guide-dot"></div>BA Skills Demonstrated</div>
+    <div class="guide-skills">
+      <span class="skill-chip">Requirement Visualisation</span>
+      <span class="skill-chip">Process Understanding</span>
+      <span class="skill-chip">Module Scoping</span>
+      <span class="skill-chip">Business Rule Translation</span>
+      <span class="skill-chip">Data Awareness</span>
+      <span class="skill-chip">UAT Thinking</span>
+      <span class="skill-chip">Stakeholder Communication</span>
+      <span class="skill-chip">MVP Boundary Control</span>
+      <span class="skill-chip">Validation Logic Design</span>
+      <span class="skill-chip">Role-Based Access Thinking</span>
+      <span class="skill-chip">Trainer-Owned Data Visibility</span>
+    </div>
+  </div>
+
+  <!-- Artefact Connections -->
+  <div class="guide-section">
+    <div class="guide-section-title"><div class="guide-dot"></div>How This Connects to Other Artefacts</div>
+    <div class="artefact-grid">
+      <div class="artefact-card"><div class="artefact-card-title">ERP Overview Document</div>Defines full project scope and module boundaries</div>
+      <div class="artefact-card"><div class="artefact-card-title">Logical Data Model Overview</div>Explains entities, attributes, and relationships</div>
+      <div class="artefact-card"><div class="artefact-card-title">Detailed Data Dictionary</div>Defines every field, data type, and constraint</div>
+      <div class="artefact-card"><div class="artefact-card-title">Business Rules Summary</div>Documents validations and decision logic</div>
+      <div class="artefact-card"><div class="artefact-card-title">Process Flow Artefacts</div>Shows AS-IS/TO-BE and decision paths for key workflows</div>
+      <div class="artefact-card"><div class="artefact-card-title">UAT Summary & Validation Tracker</div>Contains 26 simulated test cases and defect-handling logic</div>
+    </div>
+  </div>
+
+  <!-- Interview Talking Points -->
+  <div class="guide-section">
+    <div class="guide-section-title"><div class="guide-dot"></div>Interview Talking Points</div>
+    <div class="talking-point">I created this prototype to demonstrate BA thinking visually — not just through written documents. A stakeholder can interact with the screens and immediately understand the intended system behaviour.</div>
+    <div class="talking-point">I selected modules based on operational pain points in gym management: member churn, PT scheduling conflicts, freelancer billing complexity, and untracked equipment costs.</div>
+    <div class="talking-point">I kept freelancer billing access-fee based to clearly separate KAGE facility revenue from freelancer private coaching income — this is a key business rule that affects revenue reporting accuracy.</div>
+    <div class="talking-point">Trainer allocation rules include availability, load, client goal, and continuity because PT scheduling involves human judgment, not just slot availability.</div>
+    <div class="talking-point">I kept WhatsApp/SMS automation outside MVP to avoid over-scoping. The prototype flags this boundary clearly so stakeholders understand what is and is not in scope.</div>
+    <div class="talking-point">In a real project, I would validate every screen with stakeholders through structured walkthroughs, feedback sessions, and UAT cycles before development begins.</div>
+  </div>
+
+  <!-- Footer note -->
+  <div style="background:var(--charcoal);border-radius:var(--radius);padding:18px 24px;margin-top:8px;display:flex;align-items:center;gap:16px;">
+    <div style="width:4px;height:40px;background:var(--gold-bright);border-radius:2px;flex-shrink:0;"></div>
+    <div>
+      <div style="font-size:0.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:4px;">Portfolio Note</div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.75);line-height:1.6;">This is a front-end BA portfolio prototype created to demonstrate ERP scope, workflows, business rules, and validation thinking. It is not a production system, does not contain real data, and is not connected to any backend, API, or database. Created by <strong style="color:#FFFFFF;">Adina Mohammed</strong> — May 2026.</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+// ========================
+// LOGIN + ROLE ACCESS + NAVIGATION
+// ========================
+let currentRole = 'admin';
+const roleAccess = {
+  admin: ['dashboard','members','pt','trainer-mobile','finance','freelancer','renewals','equipment','reports','guide'],
+  frontdesk: ['members','finance','renewals','equipment','guide'],
+  trainer: ['pt','trainer-mobile','guide']
+};
+const roleLabels = {
+  admin: {name:'D Kamal Kumar', role:'Owner / Admin'},
+  frontdesk: {name:'Front Desk Staff', role:'Front Desk / Admin Support'},
+  trainer: {name:'Trainer View', role:'Trainer'}
+};
+function showLogin(){ document.getElementById('loginOverlay').style.display='flex'; }
+function loginAs(role, targetPage){
+  currentRole = role;
+  document.getElementById('current-user-name').textContent = roleLabels[role].name;
+  document.getElementById('current-user-role').textContent = roleLabels[role].role;
+  document.getElementById('loginOverlay').style.display='none';
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const allowed = (item.dataset.roles || '').split(',').includes(role);
+    item.classList.toggle('hidden-by-role', !allowed);
+  });
+  const defaultPage = targetPage || (role === 'admin' ? 'dashboard' : (role === 'frontdesk' ? 'members' : 'trainer-mobile'));
+  showPage(defaultPage);
+}
+function showPage(id, replaceHash = true) {
+  if (!roleAccess[currentRole].includes(id)) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const main = document.querySelector('.main');
+    let denied = document.getElementById('page-access-denied');
+    if (!denied) {
+      denied = document.createElement('section');
+      denied.id = 'page-access-denied';
+      denied.className = 'page';
+      denied.innerHTML = '<div class="access-denied"><h2>Access restricted</h2><p>This role does not have access to the selected module in the demo. Switch role to Owner/Admin to view all modules, or choose Trainer View for trainer-owned PT data only.</p></div>';
+      main.appendChild(denied);
+    }
+    denied.classList.add('active');
+    return;
+  }
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const activeNav = document.querySelector(`.nav-item[data-page="${id}"]`);
+  if (activeNav) activeNav.classList.add('active');
+  if (replaceHash && window.location.hash !== '#' + id) {
+    history.replaceState(null, '', '#' + id);
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function openDirectModuleFromHash(){
+  const directPage = (window.location.hash || '').replace('#','').trim();
+  const validPages = ['dashboard','members','pt','trainer-mobile','finance','freelancer','renewals','equipment','reports','guide'];
+  if (!validPages.includes(directPage)) return false;
+  // Direct links from the portfolio bypass the login overlay for reviewer convenience.
+  // Admin role is used because it has access to all prototype highlight modules.
+  loginAs('admin', directPage);
+  return true;
+}
+
+// ========================
+// MEMBER MODULE
+// ========================
+const planFees = {
+  'Direct Membership - 1 Month': 2500,
+  'Direct Membership - 3 Months': 7000,
+  'Direct Membership - 6 Months': 13000,
+  'Direct Membership - 12 Months': 24000,
+  'Freelancer Monthly Access': 5000,
+  'Freelancer Client Access - 1 Month': 2500,
+  'Freelancer Client Access - 3 Months': 7000,
+  'PT Package - 12 Sessions': 12000,
+  'PT Package - 16 Sessions': 15000,
+  'PT Package - 20 Sessions': 18000,
+  'PT Package - 24 Sessions': 21000
+};
+const planDurations = {
+  'Direct Membership - 1 Month': 30,
+  'Direct Membership - 3 Months': 90,
+  'Direct Membership - 6 Months': 180,
+  'Direct Membership - 12 Months': 365,
+  'Freelancer Monthly Access': 30,
+  'Freelancer Client Access - 1 Month': 30,
+  'Freelancer Client Access - 3 Months': 90,
+  'PT Package - 12 Sessions': 0,
+  'PT Package - 16 Sessions': 0,
+  'PT Package - 20 Sessions': 0,
+  'PT Package - 24 Sessions': 0
+};
+const mockPhones = ['9876543210'];
+const mockEmails = ['rahul@example.com'];
+
+function updatePlanFee() {
+  const plan = document.getElementById('m-plan').value;
+  const joinDate = document.getElementById('m-joindate').value;
+  const feeEl = document.getElementById('m-planfee');
+  const expiryEl = document.getElementById('m-expiry');
+  if (plan && planFees[plan] !== undefined) {
+    feeEl.value = '₹' + planFees[plan].toLocaleString('en-IN') + ' base / negotiable';
+  }
+  if (plan && plan.startsWith('PT Package')) {
+    expiryEl.value = 'Package sessions — no membership expiry';
+  } else if (plan && joinDate && planDurations[plan]) {
+    const join = new Date(joinDate);
+    const expiry = new Date(join);
+    expiry.setDate(expiry.getDate() + planDurations[plan]);
+    expiryEl.value = expiry.toISOString().split('T')[0];
+  } else {
+    expiryEl.value = '';
+  }
+}
+
+function showMsg(elId, type, text) {
+  const el = document.getElementById(elId);
+  el.className = 'msg msg-' + type + ' show';
+  el.innerHTML = text;
+  setTimeout(() => { el.classList.remove('show'); }, 6000);
+}
+
+function saveMember() {
+  const name = document.getElementById('m-name').value.trim();
+  const phone = document.getElementById('m-phone').value.trim();
+  const email = document.getElementById('m-email').value.trim();
+  const type = document.getElementById('m-type').value;
+  const plan = document.getElementById('m-plan').value;
+  const joinDate = document.getElementById('m-joindate').value;
+
+  if (!name) return showMsg('member-msg', 'error', '⚠ Full Name is required.');
+  if (!phone) return showMsg('member-msg', 'error', '⚠ Phone Number is required.');
+  if (!type) return showMsg('member-msg', 'error', '⚠ Member Type is required.');
+  if (!plan) return showMsg('member-msg', 'error', '⚠ Membership Plan is required.');
+  if (!joinDate) return showMsg('member-msg', 'error', '⚠ Join Date is required.');
+  if (joinDate > new Date().toISOString().split('T')[0]) {
+    return showMsg('member-msg', 'error', '⚠ Join Date cannot be a future date.');
+  }
+  if (mockPhones.includes(phone)) {
+    return showMsg('member-msg', 'warn', '⚠ A member with this phone number already exists. Please check the existing member profile before creating a duplicate record.');
+  }
+  if (email && mockEmails.includes(email.toLowerCase())) {
+    return showMsg('member-msg', 'warn', '⚠ A member with this email already exists. Please verify before proceeding.');
+  }
+  // Add to table
+  const tbody = document.getElementById('member-table-body');
+  const newId = 'MBR-' + Math.floor(10000 + Math.random() * 89999);
+  const expiry = document.getElementById('m-expiry').value || '—';
+  const status = document.getElementById('m-status').value;
+  const chipClass = status === 'Active' ? 'chip-active' : status === 'Expired' ? 'chip-expired' : status === 'On Hold' ? 'chip-onhold' : 'chip-inactive';
+  const row = `<tr>
+    <td>${newId}</td><td>${name}</td><td>${phone}</td>
+    <td>${type}</td><td>${plan}</td>
+    <td><span class="chip ${chipClass}">${status}</span></td>
+    <td>${expiry}</td>
+  </tr>`;
+  tbody.insertAdjacentHTML('beforeend', row);
+  showMsg('member-msg', 'success', '✓ Member record saved successfully. Member ID: ' + newId);
+  clearMemberForm();
+}
+
+function clearMemberForm() {
+  ['m-name','m-phone','m-email','m-planfee','m-expiry','m-agreedfee'].forEach(id => document.getElementById(id).value = '');
+  ['m-type','m-plan','m-status'].forEach(id => document.getElementById(id).selectedIndex = 0);
+  document.getElementById('m-joindate').value = '';
+}
+
+// ========================
+// PT MODULE
+// ========================
+let ptCompleted = 10;
+let ptTotal = 24;
+
+function checkTrainerWarning() {
+  const val = document.getElementById('pt-trainer').value;
+  const warnEl = document.getElementById('pt-trainer-warn');
+  if (val === 'C') {
+    warnEl.className = 'msg msg-warn show';
+    warnEl.innerHTML = '⚠ Vikram Menon (Trainer C) has a high PT load (5 active clients). Consider allocating Amit Sharma (Trainer A) unless admin approves this assignment.';
+  } else {
+    warnEl.className = 'msg';
+  }
+}
+
+function checkConflict() {
+  const trainer = document.getElementById('pt-trainer').value;
+  const start = document.getElementById('pt-start').value;
+  const end = document.getElementById('pt-end').value;
+  const conflictEl = document.getElementById('pt-conflict-warn');
+  // Mock conflict: Trainer B at 07:00-08:00
+  if (trainer === 'B' && start && end && start <= '07:00' && end >= '08:00') {
+    conflictEl.className = 'msg msg-warn show';
+    conflictEl.innerHTML = '⚠ Trainer double-booking detected for Sneha Rao (Trainer B) at 07:00–08:00 AM. Shared/group PT requires admin approval.';
+  } else {
+    conflictEl.className = 'msg';
+  }
+}
+
+function schedulePT() {
+  const trainer = document.getElementById('pt-trainer').value;
+  if (!trainer) return showMsg('pt-msg', 'error', '⚠ Please select a trainer before scheduling.');
+  showMsg('pt-msg', 'success', '✓ PT Session scheduled successfully. Awaiting confirmation from trainer.');
+}
+
+function markCompleted() {
+  const trainer = document.getElementById('pt-trainer').value;
+  if (!trainer) return showMsg('pt-msg', 'error', '⚠ Please select a trainer and fill session details before marking complete.');
+  if (ptCompleted >= ptTotal) return showMsg('pt-msg', 'error', '⚠ All sessions in this package have been used. Please create a new PT package.');
+
+  ptCompleted += 1;
+  const remaining = ptTotal - ptCompleted;
+  document.getElementById('pt-completed').textContent = ptCompleted;
+  document.getElementById('pt-remaining').textContent = remaining;
+
+  const pct = (ptCompleted / ptTotal * 100).toFixed(1);
+  document.getElementById('pt-bar').style.width = pct + '%';
+  document.getElementById('pt-bar-lbl').textContent = ptCompleted + ' of ' + ptTotal + ' sessions used (' + pct + '%)';
+  document.getElementById('pt-status').value = 'Completed';
+  showMsg('pt-msg', 'success', '✓ Session marked as Completed. Package balance updated — Remaining: ' + remaining + ' sessions. Commission Status remains <strong>Estimated</strong> until Admin/Finance approval.');
+}
+
+function cancelSession() {
+  showMsg('pt-msg', 'info', 'ℹ Cancelled sessions before start time do not reduce the package balance. No session count has been deducted. Package remains at ' + (ptTotal - ptCompleted) + ' remaining sessions.');
+}
+
+// ========================
+// FINANCE MODULE
+// ========================
+const mockInvoices = ['INV-2026-041', 'INV-2026-042', 'INV-2026-043'];
+
+function savePayment() {
+  const member = document.getElementById('f-member').value.trim();
+  const purpose = document.getElementById('f-purpose').value;
+  const amount = parseFloat(document.getElementById('f-amount').value);
+  const mode = document.getElementById('f-mode').value;
+  const invoice = document.getElementById('f-invoice').value.trim();
+  const date = document.getElementById('f-date').value;
+
+  if (!purpose) return showMsg('finance-msg', 'error', '⚠ Payment Purpose is required.');
+  if (!mode) return showMsg('finance-msg', 'error', '⚠ Payment Mode is required.');
+  if (!document.getElementById('f-amount').value.trim()) return showMsg('finance-msg', 'error', '⚠ Amount cannot be blank.');
+  if (isNaN(amount) || amount <= 0) return showMsg('finance-msg', 'error', '⚠ Amount cannot be zero or negative. Please enter a valid payment amount.');
+  if (!invoice) return showMsg('finance-msg', 'error', '⚠ Invoice Number is required.');
+  if (mockInvoices.map(i => i.toUpperCase()).includes(invoice.toUpperCase())) {
+    return showMsg('finance-msg', 'warn', '⚠ Invoice Number ' + invoice + ' already exists in the system. Invoice numbers must be unique per transaction.');
+  }
+  if (date > new Date().toISOString().split('T')[0]) {
+    return showMsg('finance-msg', 'error', '⚠ Payment Date cannot be a future date.');
+  }
+  mockInvoices.push(invoice);
+  showMsg('finance-msg', 'success', '✓ Payment recorded successfully. Invoice: ' + invoice + ' — ₹' + parseFloat(amount).toLocaleString('en-IN'));
+  clearFinanceForm();
+}
+
+function clearFinanceForm() {
+  ['f-member','f-amount','f-invoice','f-collector','f-finalfee'].forEach(id => document.getElementById(id).value = '');
+  ['f-purpose','f-paytype','f-mode','f-status','f-shared'].forEach(id => document.getElementById(id).selectedIndex = 0);
+  document.getElementById('f-date').value = '';
+}
+
+// ========================
+// FREELANCER MODULE
+// ========================
+function calcMonthlyPayable() {
+  const own = parseFloat(document.getElementById('calc-own').value) || 0;
+  const clients = parseFloat(document.getElementById('calc-clients').value) || 0;
+  const perClient = parseFloat(document.getElementById('calc-perclient').value) || 0;
+  const result = own + (clients * perClient);
+  const el = document.getElementById('calc-result');
+  document.getElementById('calc-result-val').textContent = '₹' + result.toLocaleString('en-IN');
+  el.className = 'calc-result show';
+}
+
+function overrideGateFlag() {
+  document.getElementById('ajay-gate-chip').className = 'chip chip-clear';
+  document.getElementById('ajay-gate-chip').textContent = 'Gate: Cleared';
+  document.getElementById('ajay-gate-warn').className = 'msg';
+  showMsg('gate-override-msg', 'warn', '⚑ Gate Flag cleared by Admin override for Ajay Menon (FRL-003). A payment arrangement must be recorded by Finance. Flag will re-activate if next billing cycle payment is also missed.');
+}
+
+// ========================
+// RENEWALS MODULE
+// ========================
+function filterRenewals(chip, type) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  const rows = document.querySelectorAll('[data-renewal]');
+  rows.forEach(row => {
+    if (type === 'all' || row.dataset.renewal === type) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
+
+function saveFollowup() {
+  const member = document.getElementById('r-member').value;
+  const note = document.getElementById('r-note').value.trim();
+  const action = document.getElementById('r-action').value;
+  if (!note) return showMsg('renewal-msg', 'error', '⚠ Please enter a follow-up note before saving.');
+  showMsg('renewal-msg', 'success', '✓ Follow-up note saved for ' + member + '. Next action: ' + action + '. Manual follow-up state updated in the renewal queue.');
+  document.getElementById('r-note').value = '';
+}
+
+// ========================
+// EQUIPMENT MODULE
+// ========================
+function saveEquipment() {
+  const name = document.getElementById('eq-name').value.trim();
+  const cost = parseFloat(document.getElementById('eq-cost').value);
+  const notes = document.getElementById('eq-notes').value.trim();
+  const resolution = document.getElementById('eq-resolution').value;
+
+  if (!name) return showMsg('equipment-msg', 'error', '⚠ Equipment Name is required.');
+  if (!isNaN(cost) && cost < 0) return showMsg('equipment-msg', 'error', '⚠ Repair Cost must be zero or greater. Negative costs are not valid.');
+  if (!notes) return showMsg('equipment-msg', 'error', '⚠ Issue Notes are required to create a maintenance log entry.');
+  if (!resolution) return showMsg('equipment-msg', 'error', '⚠ Resolution Status is required.');
+  showMsg('equipment-msg', 'success', '✓ Maintenance log saved for "' + name + '". Entry logged with status: ' + resolution + '.');
+}
+
+function triggerReplacement() {
+  const name = document.getElementById('eq-name').value.trim() || 'selected equipment';
+  showMsg('equipment-msg', 'warn', '⚑ Replacement Review flagged for "' + name + '". Final replacement decision remains with Owner/Admin. Log has been updated with ReplacementReviewFlag = Yes.');
+}
+
+// ========================
+// TRAINER MOBILE MODULE
+// ========================
+function trainerMobileDone(msgId){ showMsg(msgId, 'success', '✓ Session marked completed in trainer view. Admin/Finance still controls final payout approval.'); }
+
+// ========================
+// REPORTS MODULE
+// ========================
+const baseMonthlyReportData = {
+  membership: 145000,
+  pt: 82000,
+  freelancer: 68000,
+  maintenance: 12400
+};
+
+function getReportMultiplier() {
+  const period = document.getElementById('rpt-period').value;
+  const from = document.getElementById('rpt-from').value;
+  const to = document.getElementById('rpt-to').value;
+
+  if (period === 'Weekly') return { multiplier: 0.25, label: 'Weekly Demo', valid: true };
+  if (period === 'Monthly' || !period) return { multiplier: 1, label: 'Monthly Demo', valid: true };
+  if (period === 'Quarterly') return { multiplier: 3, label: 'Quarterly Demo', valid: true };
+
+  if (period === 'Custom') {
+    if (!from || !to) return { multiplier: 1, label: 'Custom Range Required', valid: false, error: 'Please select From Date and To Date for Custom report.' };
+    const start = new Date(from);
+    const end = new Date(to);
+    if (end < start) return { multiplier: 1, label: 'Invalid Date Range', valid: false, error: 'To Date cannot be earlier than From Date.' };
+    const days = Math.max(1, Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1);
+    return { multiplier: days / 30, label: 'Custom Range · ' + days + ' days', valid: true };
+  }
+
+  return { multiplier: 1, label: 'Monthly Demo', valid: true };
+}
+
+function buildReportData() {
+  const periodInfo = getReportMultiplier();
+  const multiplier = periodInfo.multiplier;
+  const scaled = {
+    membership: Math.round(baseMonthlyReportData.membership * multiplier),
+    pt: Math.round(baseMonthlyReportData.pt * multiplier),
+    freelancer: Math.round(baseMonthlyReportData.freelancer * multiplier),
+    maintenance: Math.round(baseMonthlyReportData.maintenance * multiplier)
+  };
+  const rowsAll = ['Membership Revenue','PT Revenue','Freelancer Revenue','Maintenance Cost','Net Revenue'];
+  return {
+    periodInfo,
+    All: { ...scaled, rows: rowsAll },
+    Membership: { membership: scaled.membership, pt: 0, freelancer: 0, maintenance: 0, rows: ['Membership Revenue','Net Revenue'] },
+    PT: { membership: 0, pt: scaled.pt, freelancer: 0, maintenance: 0, rows: ['PT Revenue','Net Revenue'] },
+    Freelancer: { membership: 0, pt: 0, freelancer: scaled.freelancer, maintenance: 0, rows: ['Freelancer Revenue','Net Revenue'] },
+    Maintenance: { membership: 0, pt: 0, freelancer: 0, maintenance: scaled.maintenance, rows: ['Maintenance Cost','Net Revenue'] }
+  };
+}
+
+function formatINR(num) {
+  const abs = Math.abs(num || 0).toLocaleString('en-IN');
+  return (num < 0 ? '−₹' : '₹') + abs;
+}
+
+function updateReportValues(showMessage=false) {
+  const cat = document.getElementById('rpt-category').value || 'All';
+  const reportData = buildReportData();
+  const periodInfo = reportData.periodInfo;
+  const d = reportData[cat] || reportData.All;
+  const net = d.membership + d.pt + d.freelancer - d.maintenance;
+
+  const periodLabel = document.getElementById('rpt-period-label');
+  if (periodLabel) periodLabel.textContent = periodInfo.label;
+
+  const values = {
+    'rpt-membership-value': d.membership,
+    'rpt-pt-value': d.pt,
+    'rpt-freelancer-value': d.freelancer,
+    'rpt-maintenance-value': d.maintenance,
+    'rpt-net-value': net
+  };
+  Object.entries(values).forEach(([id,val]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = formatINR(val);
+  });
+  const sub = {
+    'rpt-membership-sub': d.membership ? 'Payment — Membership & Renewals' : 'Filtered out',
+    'rpt-pt-sub': d.pt ? 'Payment / PT Package' : 'Filtered out',
+    'rpt-freelancer-sub': d.freelancer ? 'FreelancerBilling' : 'Filtered out',
+    'rpt-maintenance-sub': d.maintenance ? 'MaintenanceLog' : 'Filtered out',
+    'rpt-net-sub': cat === 'Maintenance' ? 'Expense-only filtered view' : 'Calculated reporting value'
+  };
+  Object.entries(sub).forEach(([id,text]) => { const el=document.getElementById(id); if(el) el.textContent=text; });
+
+  const rowMap = {
+    'Membership Revenue': ['Membership Revenue', formatINR(d.membership), 'Payment', 'Membership and renewal payments for selected period'],
+    'PT Revenue': ['PT Revenue', formatINR(d.pt), 'Payment / PTPackage', 'PT package payments for selected period'],
+    'Freelancer Revenue': ['Freelancer Revenue', formatINR(d.freelancer), 'FreelancerBilling', 'Monthly access-fee billing for selected period'],
+    'Maintenance Cost': ['Maintenance Cost', formatINR(d.maintenance), 'MaintenanceLog', 'Repair and service expenses for selected period'],
+    'Net Revenue': ['Net Revenue', formatINR(net), 'RevenueReport', cat === 'Maintenance' ? 'Expense-only filtered view' : 'Calculated reporting value for selected period']
+  };
+  const tbody = document.getElementById('revenue-summary-body');
+  if (tbody) {
+    tbody.innerHTML = d.rows.map(name => {
+      const row = rowMap[name];
+      const isNet = name === 'Net Revenue';
+      const isCost = name === 'Maintenance Cost';
+      return `<tr${isNet ? ' style="background:#F8F5EE;"' : ''}>
+        <td>${isNet ? '<strong>' + row[0] + '</strong>' : row[0]}</td>
+        <td>${isCost ? '<strong style="color:var(--error);">−' + row[1] + '</strong>' : isNet ? '<strong style="color:var(--success);font-size:1rem;">' + row[1] + '</strong>' : '<strong>' + row[1] + '</strong>'}</td>
+        <td>${row[2]}</td>
+        <td>${row[3]}</td>
+      </tr>`;
+    }).join('');
+  }
+  if (showMessage) {
+    if (!periodInfo.valid) return showMsg('report-msg', 'error', '⚠ ' + periodInfo.error);
+    showMsg('report-msg', 'info', 'ℹ Filters applied. Period: ' + periodInfo.label + ' | Category: ' + cat + '. These are sample demo values; production reports would query live transactions.');
+  }
+}
+
+function exportReport() {
+  const period = document.getElementById('rpt-period').value;
+  const from = document.getElementById('rpt-from').value;
+  const to = document.getElementById('rpt-to').value;
+  if (!period && (!from || !to)) {
+    return showMsg('report-msg', 'error', '⚠ Please select a Report Period or enter a Date Range before exporting. Unscoped data exports are not permitted.');
+  }
+  if (period === 'Custom' && (!from || !to)) {
+    return showMsg('report-msg', 'error', '⚠ Please select From Date and To Date for Custom report.');
+  }
+  if (from && to && new Date(to) < new Date(from)) {
+    return showMsg('report-msg', 'error', '⚠ To Date cannot be earlier than From Date.');
+  }
+  const cat = document.getElementById('rpt-category').value;
+  const periodInfo = getReportMultiplier();
+  updateReportValues(false);
+  showMsg('report-msg', 'success', '✓ Report exported successfully (demo action). Period: ' + (periodInfo.label || period || 'Custom') + ' | Category: ' + cat + ' | This is a demo export — no file is generated.');
+}
+
+function applyFilters() {
+  updateReportValues(true);
+}
+
+// ========================
+// INIT
+// ========================
+// Set today's date as default for date inputs on load
+window.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  const dateInputs = ['m-joindate','f-date','pt-date','eq-date'];
+  dateInputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = today;
+  });
+  updateReportValues(false);
+  openDirectModuleFromHash();
+});
+
+window.addEventListener('hashchange', () => {
+  const target = (window.location.hash || '').replace('#','').trim();
+  if (target && roleAccess[currentRole] && roleAccess[currentRole].includes(target)) {
+    showPage(target, false);
+  }
+});
+</script>
+</body>
+</html>

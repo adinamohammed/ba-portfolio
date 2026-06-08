@@ -1,0 +1,2887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CareFlow Smart OPD &amp; Digital Patient Records System — BA Portfolio Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&amp;family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --teal: #0D5C63;
+  --teal-dark: #094148;
+  --teal-mid: #1a7a83;
+  --teal-light: #e8f4f5;
+  --teal-pale: #f0f8f9;
+  --amber: #E8A838;
+  --amber-dark: #c48a1e;
+  --amber-light: #fdf3de;
+  --white: #ffffff;
+  --surface: #F7F9FA;
+  --card: #ffffff;
+  --text: #1A1A2E;
+  --text-sec: #4A5568;
+  --text-muted: #718096;
+  --border: #E2E8F0;
+  --success: #2D6A4F;
+  --warn: #C9742B;
+  --danger: #C0392B;
+  --danger-light: #fdf2f2;
+  --sidebar-w: 240px;
+  --content-max: 860px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  color: var(--text);
+  background: var(--surface);
+  line-height: 1.7;
+}
+
+/* ── SIDEBAR ── */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: var(--teal-dark);
+  overflow-y: auto;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 2rem 0;
+}
+#sidebar-brand {
+  padding: 1.4rem 1.2rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+#sidebar-brand .brand-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--white);
+  line-height: 1.2;
+}
+#sidebar-brand .brand-sub {
+  font-size: 0.68rem;
+  color: var(--amber);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.25rem;
+}
+#sidebar nav { flex: 1; padding: 0.75rem 0; }
+#sidebar nav a {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.42rem 1.2rem;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  line-height: 1.35;
+  border-left: 3px solid transparent;
+  transition: all 0.18s;
+}
+#sidebar nav a:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+#sidebar nav a.active { color: var(--amber); border-left-color: var(--amber); background: rgba(232,168,56,0.08); }
+#sidebar nav a .nav-num { font-size: 0.68rem; color: var(--amber); min-width: 1.2rem; padding-top: 0.05rem; font-weight: 600; }
+
+/* ── MAIN ── */
+#main {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+}
+
+/* ── HERO ── */
+#hero {
+  background: var(--teal-dark);
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 3rem 3.5rem;
+}
+#hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 380px; height: 380px;
+  border-radius: 50%;
+  background: rgba(232,168,56,0.07);
+  pointer-events: none;
+}
+#hero::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: 30%;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+  pointer-events: none;
+}
+.hero-inner { max-width: var(--content-max); position: relative; z-index: 1; }
+.hero-byline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(232,168,56,0.15);
+  border: 1px solid rgba(232,168,56,0.35);
+  border-radius: 100px;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.78rem;
+  color: var(--amber);
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.hero-icon {
+  width: 52px; height: 52px;
+  background: rgba(232,168,56,0.15);
+  border: 2px solid var(--amber);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1rem;
+}
+.hero-icon svg { width: 28px; height: 28px; color: var(--amber); }
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.9rem;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 0.5rem;
+  font-weight: 300;
+}
+.hero-descriptor {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 1.8rem;
+  font-style: italic;
+}
+.hero-badges {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 1.4rem;
+}
+.badge-scope {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--white);
+  border-radius: 100px;
+  padding: 0.28rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.hero-exclusion {
+  background: rgba(192,57,43,0.15);
+  border: 1px solid rgba(192,57,43,0.3);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.65);
+}
+.hero-exclusion strong { color: #e88; font-weight: 600; }
+
+/* ── SECTION WRAPPER ── */
+.section {
+  max-width: calc(var(--content-max) + 6rem);
+  margin: 0 auto;
+  padding: 3.5rem 3rem;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-of-type { border-bottom: none; }
+
+.section-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--amber);
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.85rem;
+  color: var(--teal-dark);
+  margin-bottom: 0.3rem;
+  line-height: 1.2;
+}
+.section-lead {
+  color: var(--text-sec);
+  font-size: 0.95rem;
+  margin-bottom: 1.8rem;
+  max-width: 640px;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.4rem;
+}
+.card-amber {
+  border-left: 4px solid var(--amber);
+  background: var(--amber-light);
+}
+.card-teal {
+  border-left: 4px solid var(--teal);
+  background: var(--teal-pale);
+}
+.card-danger {
+  border-left: 4px solid var(--danger);
+  background: var(--danger-light);
+}
+.card-success {
+  border-left: 4px solid var(--success);
+  background: #f0f9f4;
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+
+/* ── BADGES / PILLS ── */
+.pill {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.pill-teal { background: var(--teal); color: white; }
+.pill-amber { background: var(--amber); color: var(--teal-dark); }
+.pill-grey { background: #e2e8f0; color: #4a5568; }
+.pill-danger { background: var(--danger); color: white; }
+.pill-outline-teal { border: 1.5px solid var(--teal); color: var(--teal); background: transparent; }
+.pill-outline-amber { border: 1.5px solid var(--amber-dark); color: var(--amber-dark); background: transparent; }
+.pill-success { background: var(--success); color: white; }
+
+/* ── TABLES ── */
+.tbl-wrap { overflow-x: auto; }
+table.styled {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+table.styled th {
+  background: var(--teal);
+  color: white;
+  padding: 0.65rem 0.9rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+}
+table.styled td {
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+table.styled tr:nth-child(even) td { background: var(--surface); }
+
+/* RBAC colour cells */
+.access-full { background: var(--teal); color: white; font-weight: 600; font-size: 0.72rem; text-align: center; }
+.access-read { background: var(--teal-light); color: var(--teal-dark); font-weight: 600; font-size: 0.72rem; text-align: center; }
+.access-own { background: var(--amber-light); color: var(--amber-dark); font-weight: 600; font-size: 0.72rem; text-align: center; }
+.access-none { background: #f1f5f9; color: #94a3b8; font-size: 0.72rem; text-align: center; }
+.access-reg { background: #ede9fe; color: #5b21b6; font-size: 0.72rem; text-align: center; font-weight: 600; }
+
+/* ── PROCESS FLOWS ── */
+.flow-tabs {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.flow-tab {
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--teal);
+  background: white;
+  color: var(--teal);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: inherit;
+}
+.flow-tab:hover, .flow-tab.active {
+  background: var(--teal);
+  color: white;
+}
+.flow-diagram { display: none; }
+.flow-diagram.active { display: block; }
+
+.swimlane-container {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+.swimlane {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  min-height: 56px;
+  align-items: stretch;
+}
+.swimlane:last-child { border-bottom: none; }
+.lane-label {
+  width: 130px;
+  min-width: 130px;
+  background: var(--teal-dark);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.8rem 0.75rem;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+.lane-content {
+  flex: 1;
+  padding: 0.7rem 0.9rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-height: 56px;
+}
+.step-box {
+  background: var(--teal-light);
+  border: 1.5px solid var(--teal);
+  border-radius: 8px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.78rem;
+  color: var(--teal-dark);
+  font-weight: 600;
+  line-height: 1.3;
+  max-width: 200px;
+}
+.step-decision {
+  background: var(--amber-light);
+  border: 1.5px solid var(--amber);
+  border-radius: 8px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.78rem;
+  color: #7a4a0a;
+  font-weight: 600;
+  line-height: 1.3;
+  position: relative;
+}
+.step-decision::before { content: '◆ '; font-size: 0.65rem; }
+.step-action {
+  background: #f0faf4;
+  border: 1.5px solid var(--success);
+  border-radius: 8px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.78rem;
+  color: var(--success);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.step-urgent {
+  background: #fff8f0;
+  border: 1.5px dashed var(--warn);
+  border-radius: 8px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.78rem;
+  color: var(--warn);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.arrow { color: var(--teal-mid); font-size: 1.1rem; font-weight: 700; align-self: center; }
+.arrow-down { display: block; text-align: center; color: var(--teal-mid); font-size: 1.1rem; margin: 0.1rem 0; }
+
+.flow-note {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  background: var(--amber-light);
+  border-left: 3px solid var(--amber);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.8rem;
+  color: #7a4a0a;
+}
+
+/* ── SQL BLOCKS ── */
+.sql-block {
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.sql-header {
+  background: var(--teal);
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.sql-id { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--amber); font-weight: 600; }
+.sql-question { color: white; font-size: 0.85rem; font-weight: 600; }
+.sql-code {
+  background: #1e2332;
+  padding: 1rem 1.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: #cdd6f4;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+.sql-kw { color: #89b4fa; font-weight: 600; }
+.sql-fn { color: #cba6f7; }
+.sql-str { color: #a6e3a1; }
+.sql-comment { color: #6c7086; font-style: italic; }
+.sql-output {
+  padding: 0.65rem 1rem;
+  font-size: 0.8rem;
+  color: var(--text-sec);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+/* ── MODULES ── */
+.module-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  background: white;
+}
+.module-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.2rem;
+  cursor: pointer;
+  user-select: none;
+  background: white;
+}
+.module-header:hover { background: var(--surface); }
+.module-num {
+  background: var(--teal);
+  color: white;
+  border-radius: 8px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 42px;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+}
+.module-name {
+  font-weight: 700;
+  color: var(--teal-dark);
+  flex: 1;
+  font-size: 0.95rem;
+}
+.module-roles { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.module-toggle { color: var(--teal); font-size: 1.1rem; transition: transform 0.2s; }
+.module-body {
+  padding: 1rem 1.2rem 1.2rem;
+  border-top: 1px solid var(--border);
+}
+.module-purpose {
+  color: var(--text-sec);
+  font-size: 0.88rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--teal-pale);
+  border-radius: 6px;
+}
+.module-capabilities { margin-bottom: 0.75rem; }
+.module-capabilities li {
+  font-size: 0.85rem;
+  color: var(--text);
+  padding: 0.2rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+.module-capabilities li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--teal);
+  font-weight: 700;
+}
+.module-scope {
+  background: var(--amber-light);
+  border-left: 3px solid var(--amber);
+  border-radius: 0 8px 8px 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.78rem;
+  color: #7a4a0a;
+}
+.module-scope strong { font-weight: 700; }
+
+/* ── FR TABLE ── */
+.fr-group { margin-bottom: 1.5rem; }
+.fr-group-title {
+  font-weight: 700;
+  color: var(--teal-dark);
+  font-size: 0.88rem;
+  padding: 0.4rem 0.75rem;
+  background: var(--teal-light);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+.fr-row {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+.fr-main {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  align-items: flex-start;
+}
+.fr-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  background: var(--teal);
+  color: white;
+  border-radius: 5px;
+  padding: 0.15rem 0.45rem;
+  min-width: 90px;
+  text-align: center;
+  margin-top: 0.1rem;
+}
+.fr-text { flex: 1; font-size: 0.85rem; color: var(--text); }
+.fr-ac {
+  padding: 0.5rem 0.9rem 0.7rem;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--text-sec);
+}
+.fr-ac strong { color: var(--teal-dark); }
+
+/* ── BR CARDS ── */
+.br-card {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--amber);
+  border-radius: 0 10px 10px 0;
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.6rem;
+  background: white;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+.br-card.safety { border-left-color: var(--danger); }
+.br-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  background: var(--amber);
+  color: var(--teal-dark);
+  border-radius: 5px;
+  padding: 0.15rem 0.45rem;
+  min-width: 58px;
+  text-align: center;
+  margin-top: 0.1rem;
+  font-weight: 700;
+}
+.br-card.safety .br-id { background: var(--danger); color: white; }
+.br-content { flex: 1; }
+.br-rule { font-size: 0.86rem; color: var(--text); font-weight: 600; margin-bottom: 0.25rem; }
+.br-rationale { font-size: 0.78rem; color: var(--text-muted); }
+.br-module {
+  font-size: 0.68rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  display: inline-block;
+}
+
+/* ── DATA MODEL ── */
+.entity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+.entity-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+}
+.entity-header {
+  background: var(--teal);
+  color: white;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.entity-body {
+  padding: 0.7rem 0.9rem;
+}
+.entity-field {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  padding: 0.15rem 0;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.5;
+}
+.entity-field:last-child { border-bottom: none; }
+.field-pk { color: var(--teal-dark); font-weight: 700; }
+.field-fk { color: var(--warn); font-style: italic; }
+.field-special { color: var(--danger); font-weight: 600; }
+
+/* ── UAT ── */
+.uat-filter { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+.uat-btn {
+  padding: 0.3rem 0.8rem;
+  border-radius: 100px;
+  border: 1.5px solid var(--border);
+  background: white;
+  color: var(--text-sec);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.uat-btn:hover, .uat-btn.active {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: white;
+}
+.uat-row {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 0.6rem;
+  overflow: hidden;
+  background: white;
+}
+.uat-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+}
+.uat-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  background: var(--teal);
+  color: white;
+  border-radius: 5px;
+  padding: 0.15rem 0.4rem;
+  min-width: 68px;
+  text-align: center;
+}
+.uat-title { flex: 1; font-size: 0.86rem; font-weight: 600; color: var(--text); }
+.uat-body {
+  border-top: 1px solid var(--border);
+  padding: 0.75rem 0.9rem;
+  background: var(--surface);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.75rem;
+  font-size: 0.79rem;
+}
+.uat-body-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--teal);
+  margin-bottom: 0.25rem;
+}
+.uat-body-text { color: var(--text-sec); line-height: 1.5; }
+
+/* ── DASHBOARD MOCKUP ── */
+.dash-mock {
+  background: #f0f4f8;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.dash-topbar {
+  background: var(--teal-dark);
+  padding: 0.65rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dash-topbar-title { color: white; font-size: 0.85rem; font-weight: 700; }
+.dash-topbar-right { font-size: 0.72rem; color: rgba(255,255,255,0.6); }
+.dash-body { padding: 1rem; }
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 0.75rem; }
+.kpi-tile {
+  background: white;
+  border-radius: 10px;
+  padding: 0.8rem;
+  border: 1px solid var(--border);
+}
+.kpi-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 0.2rem; font-weight: 600; }
+.kpi-value { font-size: 1.6rem; font-weight: 800; color: var(--teal-dark); line-height: 1; font-family: 'Playfair Display', serif; }
+.kpi-sub { font-size: 0.65rem; color: var(--text-muted); margin-top: 0.2rem; }
+.kpi-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 0.5rem; overflow: hidden; }
+.kpi-bar-fill { height: 100%; border-radius: 2px; }
+.dash-mid-row { display: grid; grid-template-columns: 3fr 2fr; gap: 0.75rem; margin-bottom: 0.75rem; }
+.dash-panel {
+  background: white;
+  border-radius: 10px;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+}
+.dash-panel-title { font-size: 0.72rem; font-weight: 700; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.6rem; }
+.sparkline { display: flex; align-items: flex-end; gap: 3px; height: 48px; }
+.spark-bar { flex: 1; border-radius: 3px 3px 0 0; background: var(--teal-light); border: 1px solid var(--teal); transition: background 0.2s; }
+.spark-bar:hover { background: var(--teal); }
+.dept-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; }
+.dept-name { font-size: 0.72rem; color: var(--text); width: 90px; }
+.dept-bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.dept-bar-fill { height: 100%; background: var(--teal); border-radius: 4px; }
+.dept-count { font-size: 0.68rem; color: var(--text-muted); width: 24px; text-align: right; }
+.dash-bot-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+.stat-mini { display: flex; justify-content: space-between; align-items: center; padding: 0.3rem 0; border-bottom: 1px solid var(--border); font-size: 0.75rem; }
+.stat-mini:last-child { border-bottom: none; }
+.stat-mini-key { color: var(--text-sec); }
+.stat-mini-val { font-weight: 700; color: var(--teal-dark); }
+.dash-disclaimer {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--amber-light);
+  border-left: 3px solid var(--amber);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.72rem;
+  color: #7a4a0a;
+}
+
+/* ── JOURNEY COMPARISON ── */
+.journey-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+.journey-col-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+}
+.asis-title { background: #fee2e2; color: var(--danger); }
+.tobe-title { background: var(--teal-light); color: var(--teal-dark); }
+.journey-step {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--border);
+}
+.journey-step:last-child { border-bottom: none; }
+.step-num {
+  min-width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.num-asis { background: #fee2e2; color: var(--danger); }
+.num-tobe { background: var(--teal-light); color: var(--teal-dark); }
+.step-text { font-size: 0.82rem; color: var(--text); line-height: 1.45; }
+.step-pain { font-size: 0.72rem; color: var(--danger); margin-top: 0.15rem; font-style: italic; }
+.step-win { font-size: 0.72rem; color: var(--success); margin-top: 0.15rem; font-style: italic; }
+
+/* ── IMPACT CARDS ── */
+.impact-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--teal);
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+.impact-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.impact-title { font-weight: 700; color: var(--teal-dark); font-size: 0.9rem; margin-bottom: 0.4rem; }
+.impact-text { font-size: 0.82rem; color: var(--text-sec); }
+
+/* ── REFLECTION ── */
+.refl-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+.refl-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+.refl-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.6rem; }
+.refl-list li { font-size: 0.82rem; color: var(--text-sec); padding: 0.22rem 0; padding-left: 1rem; position: relative; }
+.refl-list li::before { content: '•'; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
+.lesson-card {
+  background: var(--teal-pale);
+  border: 1px solid var(--teal-light);
+  border-left: 4px solid var(--teal);
+  border-radius: 0 10px 10px 0;
+  padding: 0.85rem 1rem;
+}
+.lesson-title { font-weight: 700; font-size: 0.86rem; color: var(--teal-dark); margin-bottom: 0.25rem; }
+.lesson-text { font-size: 0.81rem; color: var(--text-sec); }
+
+/* ── ARTEFACTS ── */
+.art-type { display: inline-block; }
+
+/* ── CALLOUT ── */
+.callout-portal {
+  background: var(--teal-pale);
+  border: 1.5px solid var(--teal-light);
+  border-left: 5px solid var(--teal);
+  border-radius: 0 12px 12px 0;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+.callout-icon { font-size: 1.4rem; }
+.callout-content strong { display: block; color: var(--teal-dark); font-size: 0.9rem; margin-bottom: 0.2rem; }
+.callout-content p { font-size: 0.82rem; color: var(--text-sec); }
+
+/* ── MIGRATION CARD ── */
+.migration-card {
+  background: var(--amber-light);
+  border: 1px solid #f5c87a;
+  border-left: 5px solid var(--amber);
+  border-radius: 0 12px 12px 0;
+  padding: 1.1rem 1.2rem;
+  margin: 1rem 0;
+}
+.migration-title {
+  font-weight: 700;
+  color: var(--amber-dark);
+  font-size: 0.9rem;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.migration-list li { font-size: 0.83rem; color: #7a4a0a; padding: 0.18rem 0 0.18rem 1rem; position: relative; }
+.migration-list li::before { content: '→'; position: absolute; left: 0; color: var(--amber-dark); font-weight: 700; }
+
+/* ── AI FUTURE ── */
+.ai-callout {
+  background: var(--amber-light);
+  border: 1px solid #f5c87a;
+  border-left: 4px solid var(--amber);
+  border-radius: 0 10px 10px 0;
+  padding: 0.7rem 1rem;
+  font-size: 0.8rem;
+  color: #7a4a0a;
+  margin-top: 0.75rem;
+}
+.ai-callout strong { font-weight: 700; color: var(--amber-dark); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--teal-dark);
+  color: rgba(255,255,255,0.75);
+  padding: 2.5rem 3rem;
+  margin-left: 0;
+}
+.footer-inner { max-width: var(--content-max); margin: 0 auto; }
+.footer-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+.footer-sub { font-size: 0.82rem; color: var(--amber); margin-bottom: 1.2rem; }
+.footer-scope { font-size: 0.78rem; margin-bottom: 0.5rem; }
+.footer-exclusion {
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(192,57,43,0.15);
+  border-left: 3px solid rgba(192,57,43,0.5);
+  border-radius: 0 6px 6px 0;
+  color: rgba(255,255,255,0.55);
+  margin-top: 0.5rem;
+}
+.footer-credit { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+
+/* ── ROLE BA CARDS ── */
+.role-phase-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 1rem; }
+.role-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--teal);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.role-card-icon { font-size: 1.3rem; margin-bottom: 0.4rem; }
+.role-card-title { font-weight: 700; font-size: 0.85rem; color: var(--teal-dark); margin-bottom: 0.5rem; }
+.role-card ul li { font-size: 0.78rem; color: var(--text-sec); padding: 0.18rem 0 0.18rem 1rem; position: relative; line-height: 1.4; }
+.role-card ul li::before { content: '·'; position: absolute; left: 0.2rem; color: var(--teal); font-size: 1.1rem; font-weight: 700; }
+.method-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+
+/* ── PRINT ── */
+@media print {
+  #sidebar { display: none !important; }
+  #main { margin-left: 0 !important; }
+  .module-body { display: block !important; }
+  .flow-diagram { display: block !important; }
+  .uat-body { display: grid !important; }
+  .flow-tab { display: none; }
+  .flow-tabs { display: none; }
+  .section { page-break-inside: avoid; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* ── MOBILE ── */
+#mob-nav-toggle {
+  display: none;
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 200;
+  background: var(--teal-dark);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  cursor: pointer;
+}
+#mob-nav-toggle svg { display: block; color: white; width: 20px; height: 20px; }
+
+@media (max-width: 860px) {
+  #sidebar { transform: translateX(-100%); transition: transform 0.25s; }
+  #sidebar.open { transform: translateX(0); }
+  #main { margin-left: 0; }
+  #mob-nav-toggle { display: flex; align-items: center; justify-content: center; }
+  .section { padding: 2.5rem 1.2rem; }
+  #hero { padding: 2.5rem 1.2rem 2rem; }
+  .hero-title { font-size: 2rem; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .kpi-row { grid-template-columns: repeat(2,1fr); }
+  .dash-mid-row, .dash-bot-row { grid-template-columns: 1fr; }
+  .journey-compare { grid-template-columns: 1fr; }
+  .role-phase-cards { grid-template-columns: 1fr; }
+  .entity-grid { grid-template-columns: 1fr 1fr; }
+  .uat-body { grid-template-columns: 1fr; }
+  footer { padding: 2rem 1.2rem; }
+}
+@media (max-width: 480px) {
+  .entity-grid { grid-template-columns: 1fr; }
+  .kpi-row { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── MISC UTILITIES ── */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+ul.clean { list-style: none; padding: 0; }
+.text-muted { color: var(--text-muted); font-size: 0.8rem; }
+.text-teal { color: var(--teal); }
+.bold { font-weight: 700; }
+hr.divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+blockquote.highlight {
+  border-left: 4px solid var(--teal);
+  padding: 0.75rem 1rem;
+  background: var(--teal-pale);
+  border-radius: 0 10px 10px 0;
+  font-size: 0.9rem;
+  color: var(--teal-dark);
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+/* ── CONTEXTUAL SCREEN MOCKUPS (BA artefact samples) ── */
+.context-mockup {
+  margin-top: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #f8fbfc;
+  overflow: hidden;
+}
+.context-mockup-title {
+  padding: 0.85rem 1rem;
+  background: linear-gradient(90deg, var(--teal-dark), var(--teal));
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+}
+.context-mockup-title span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+}
+.context-mockup-body { padding: 0.9rem; }
+.cfm-browser { border: 1px solid #ccd8dc; border-radius: 12px; background: #fff; overflow: hidden; }
+.cfm-topbar { min-height: 46px; background: linear-gradient(90deg, var(--teal-dark), var(--teal)); display: flex; align-items: center; gap: 0.75rem; padding: 0.55rem 0.75rem; color: #fff; }
+.cfm-brand { font-weight: 800; font-size: 1rem; }
+.cfm-search { background: #fff; border-radius: 7px; color: #6b7280; padding: 0.35rem 0.65rem; font-size: 0.72rem; min-width: 240px; }
+.cfm-user { margin-left: auto; text-align: right; font-size: 0.68rem; color: rgba(255,255,255,0.86); line-height: 1.25; }
+.cfm-workspace { display: grid; grid-template-columns: 150px 1fr; min-height: 400px; }
+.cfm-sidebar { background: #102f3b; color: #dce7ea; padding: 0.65rem 0; }
+.cfm-navitem { padding: 0.5rem 0.85rem; font-size: 0.72rem; border-left: 3px solid transparent; color: #dce7ea; }
+.cfm-navitem.active { background: rgba(232,168,56,.12); border-left-color: var(--amber); color: #fff; }
+.cfm-content { padding: 0.85rem; }
+.cfm-patient-band { display: grid; grid-template-columns: 1.25fr repeat(4,1fr); gap: 0.45rem; margin-bottom: 0.65rem; }
+.cfm-info-box { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem; min-height: 54px; }
+.cfm-label { font-size: 0.6rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.cfm-value { font-size: 0.76rem; font-weight: 700; color: var(--text); margin-top: 0.15rem; }
+.cfm-doctor-grid { display: grid; grid-template-columns: 1.1fr 1fr 1.2fr .9fr; gap: 0.55rem; }
+.cfm-panel { border: 1px solid var(--border); border-radius: 10px; background: #fff; overflow: hidden; }
+.cfm-panel h3 { font-size: 0.72rem; color: var(--teal-dark); padding: 0.55rem 0.65rem; background: #f3fafb; border-bottom: 1px solid var(--border); }
+.cfm-panel-body { padding: 0.65rem; }
+.cfm-field { border: 1px solid #d7e0e4; border-radius: 7px; padding: 0.45rem 0.5rem; min-height: 34px; background: #fff; margin-bottom: 0.5rem; font-size: 0.72rem; line-height: 1.35; }
+.cfm-field.tall { min-height: 68px; }
+.cfm-tabs { display: flex; gap: 0.3rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+.cfm-tab { font-size: 0.65rem; padding: 0.28rem 0.5rem; border-radius: 6px; background: #eef5f6; color: var(--teal-dark); font-weight: 700; }
+.cfm-tab.active { background: var(--teal); color: #fff; }
+.cfm-check { display: flex; align-items: center; gap: 0.35rem; margin: 0.4rem 0; font-size: 0.72rem; }
+.cfm-square { width: 12px; height: 12px; border: 1.5px solid #9aa9af; border-radius: 3px; display: inline-block; }
+.cfm-btns { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.75rem; }
+.cfm-btn { border: none; border-radius: 7px; padding: 0.55rem 0.8rem; font-weight: 800; font-size: 0.72rem; }
+.cfm-btn.primary { background: var(--teal); color: #fff; }
+.cfm-btn.green { background: var(--success); color: #fff; }
+.cfm-btn.light { background: #eef3f5; color: #344054; border: 1px solid #d6e0e3; }
+.cfm-rx-list { font-size: 0.72rem; line-height: 1.55; padding-left: 1rem; }
+.cfm-rule-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.5rem; margin-top: 0.75rem; }
+.cfm-rule { background: var(--amber-light); border: 1px solid #f0cf86; border-radius: 8px; padding: 0.55rem; font-size: 0.68rem; color: #65410b; line-height: 1.4; }
+.cfm-reg-workspace { padding: 0.85rem; }
+.cfm-reg-grid { display: grid; grid-template-columns: 1.05fr 1.1fr .9fr; gap: 0.65rem; }
+.cfm-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+.cfm-input { border: 1px solid #d7e0e4; border-radius: 7px; padding: 0.48rem; background: #fff; font-size: 0.72rem; min-height: 34px; }
+.cfm-card-preview { background: linear-gradient(135deg,#e8f4f5,#fff); border: 1px solid #c8dadf; border-radius: 12px; padding: 0.85rem; margin-top: 0.55rem; min-height: 132px; }
+.cfm-qr { width: 58px; height: 58px; background: repeating-linear-gradient(45deg,#111 0 4px,#fff 4px 8px); border: 5px solid #fff; box-shadow: 0 0 0 1px #ccd8dc; }
+.cfm-card-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 0.65rem; }
+.cfm-status { font-size: 0.65rem; background: #ebf7ef; color: var(--success); padding: 0.26rem 0.5rem; border-radius: 999px; font-weight: 800; display: inline-block; }
+.cfm-warn { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; border-radius: 8px; padding: 0.5rem; font-size: 0.68rem; margin-top: 0.5rem; line-height: 1.35; }
+@media(max-width:900px){
+  .cfm-workspace{grid-template-columns:1fr}.cfm-sidebar{display:none}.cfm-patient-band,.cfm-doctor-grid,.cfm-reg-grid,.cfm-rule-strip{grid-template-columns:1fr}.cfm-search{min-width:0;flex:1}
+}
+
+</style>
+</head>
+<body>
+<!-- Mobile Nav Toggle -->
+<button aria-label="Menu" id="mob-nav-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
+<svg fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg>
+</button>
+<!-- SIDEBAR -->
+<aside id="sidebar">
+<a href="../index.html" style="display:block;margin:0 1rem 0.75rem;padding:0.65rem 0.8rem;border-radius:10px;background:#ffffff18;color:#fff;text-decoration:none;font-size:0.82rem;font-weight:700;">← Portfolio Home</a>
+<div id="sidebar-brand">
+<div class="brand-title">CareFlow</div>
+<div class="brand-sub">BA Portfolio Case Study</div>
+</div>
+<nav id="sidenav">
+<a href="#s1"><span class="nav-num">01</span>Executive Summary</a>
+<a href="#s2"><span class="nav-num">02</span>Problem Statement</a>
+<a href="#s3"><span class="nav-num">03</span>My Role &amp; BA Approach</a>
+<a href="#s4"><span class="nav-num">04</span>Stakeholders</a>
+<a href="#s5"><span class="nav-num">05</span>AS-IS vs TO-BE</a>
+<a href="#s6"><span class="nav-num">06</span>MVP Scope</a>
+<a href="#s7"><span class="nav-num">07</span>Core Modules</a>
+<a href="#s8"><span class="nav-num">08</span>Process Flows</a>
+<a href="#s9"><span class="nav-num">09</span>Functional Requirements</a>
+<a href="#s10"><span class="nav-num">10</span>Business Rules</a>
+<a href="#s11"><span class="nav-num">11</span>Data Model</a>
+<a href="#s12"><span class="nav-num">12</span>SQL Preview</a>
+<a href="#s13"><span class="nav-num">13</span>Privacy &amp; Access</a>
+<a href="#s14"><span class="nav-num">14</span>UAT Scenarios</a>
+<a href="#s15"><span class="nav-num">15</span>Dashboard</a><a href="#s16"><span class="nav-num">16</span>Live Prototype</a>
+<a href="#s17"><span class="nav-num">17</span>Business Impact</a>
+<a href="#s18"><span class="nav-num">18</span>BA Reflection</a>
+<a href="#s19"><span class="nav-num">19</span>Artefacts</a>
+</nav>
+</aside>
+<!-- MAIN -->
+<div id="main">
+<!-- HERO -->
+<section id="hero">
+<div class="hero-inner">
+<div class="hero-byline">✦ Prepared by Adina Mohammed · Business Analyst Portfolio Case Study</div>
+<div class="hero-icon">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+</div>
+<h1 class="hero-title">CareFlow</h1>
+<p class="hero-subtitle">Smart OPD &amp; Digital Patient Records System</p>
+<p class="hero-descriptor">A Healthcare Business Analyst Portfolio Case Study — OPD Coordination &amp; Digital Records</p>
+<div class="hero-badges">
+<span class="badge-scope">✓ Hybrid Registration</span>
+<span class="badge-scope">✓ OPD Token Routing</span>
+<span class="badge-scope">✓ E-Prescription &amp; Pharmacy</span>
+<span class="badge-scope">✓ Lab Order &amp; Reports</span>
+<span class="badge-scope">✓ Patient Portal</span>
+<span class="badge-scope">✓ Admin Dashboard</span>
+</div>
+<div class="hero-exclusion">
+<strong>Not in scope:</strong> AI diagnosis · AI prescription · ICU workflows · OT scheduling · Surgery management · Nursing charting · Full inpatient billing
+    </div>
+<div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1.2rem;">
+<a href="careflow-opd-workflow-prototype.html" style="display:inline-flex;align-items:center;gap:0.45rem;background:var(--amber);color:var(--teal-dark);border-radius:999px;padding:0.65rem 1rem;font-size:0.82rem;font-weight:800;text-decoration:none;" target="_blank">Open Live OPD Prototype →</a>
+<a href="#s16" style="display:inline-flex;align-items:center;gap:0.45rem;background:rgba(255,255,255,0.10);color:white;border:1px solid rgba(255,255,255,0.22);border-radius:999px;padding:0.65rem 1rem;font-size:0.82rem;font-weight:700;text-decoration:none;">View prototype notes</a>
+</div>
+
+</div>
+</section>
+<!-- S1 EXECUTIVE SUMMARY -->
+<section class="section" id="s1">
+<div class="section-label">Section 01</div>
+<h2 class="section-title">Executive Summary</h2>
+<p class="section-lead">What CareFlow is, what it solves, and what it deliberately does not attempt.</p><div class="card-amber card" style="margin-bottom:1rem;"><strong>Portfolio boundary:</strong> This is a self-initiated Business Analyst portfolio case study using fictional data for learning and demonstration purposes. It is not a live client project, production HMIS/EMR, or real hospital implementation.</div>
+<div class="grid-2" style="margin-bottom:1.2rem;">
+<div>
+<p style="font-size:0.9rem;color:var(--text-sec);margin-bottom:1rem;">CareFlow is a Smart OPD and Digital Patient Records System designed for a hypothetical multispeciality hospital scenario moving from manual outpatient workflows to a modern, structured digital coordination system.</p>
+<p style="font-size:0.9rem;color:var(--text-sec);margin-bottom:1rem;">In this hypothetical hospital scenario, the solution need was to register patients once and recognise them on every return visit, coordinate OPD flows without paper tokens, give doctors a clean workspace for consultation notes and orders, connect lab and pharmacy workflows, and give administrators real-time operational visibility.</p>
+<p style="font-size:0.9rem;color:var(--text-sec);">CareFlow presents that target state through a self-initiated BA portfolio case study using an assumed solution-design model. The focus is requirements thinking, workflow design, validation, and stakeholder communication — not a live hospital deployment.</p>
+</div>
+<div>
+<div class="card" style="margin-bottom:0.75rem;">
+<div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.6rem;">
+<span><span class="pill pill-teal">Project Type</span> <span style="font-size:0.82rem;color:var(--text-sec);">Self-initiated BA Portfolio Case Study</span></span>
+</div>
+<div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+<span><span class="pill pill-amber">Model</span> <span style="font-size:0.82rem;color:var(--text-sec);">Hypothetical scenario · assumed solution-design model</span></span>
+</div>
+</div>
+<div class="card-teal card" style="margin-bottom:0.75rem;">
+<div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.5rem;">PRIMARY OUTCOMES TARGETED</div>
+<ul class="clean" style="font-size:0.82rem;color:var(--text-sec);">
+<li style="padding:0.18rem 0 0.18rem 1rem;position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">→</span>Permanent Patient ID &amp; faster returning patient registration</li>
+<li style="padding:0.18rem 0 0.18rem 1rem;position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">→</span>End-to-end digital OPD visit coordination</li>
+<li style="padding:0.18rem 0 0.18rem 1rem;position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">→</span>E-prescriptions with pharmacy validation</li>
+<li style="padding:0.18rem 0 0.18rem 1rem;position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">→</span>All lab reports linked to the visit that ordered them</li>
+<li style="padding:0.18rem 0 0.18rem 1rem;position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">→</span>Patient portal for self-service record access</li>
+<li style="padding:0.18rem 0 0.18rem 1rem;position:relative;"><span style="position:absolute;left:0;color:var(--teal);font-weight:700;">→</span>Real-time admin dashboard for OPD operations</li>
+</ul>
+</div>
+<div class="card-danger card">
+<div style="font-size:0.78rem;font-weight:700;color:var(--danger);margin-bottom:0.4rem;">EXPLICITLY OUT OF SCOPE</div>
+<p style="font-size:0.78rem;color:var(--text-sec);">AI diagnosis · AI prescription · ICU · OT scheduling · Surgery · Nursing charting · Full inpatient billing · Hospital ERP</p>
+</div>
+</div>
+</div>
+</section>
+<!-- S2 PROBLEM STATEMENT -->
+<section class="section" id="s2" style="background:var(--surface);">
+<div class="section-label">Section 02</div>
+<h2 class="section-title">Problem Statement</h2>
+<p class="section-lead">The hospital had no unified patient identity, no connected OPD workflow, and no real-time operational visibility.</p>
+<div class="grid-2" style="margin-bottom:1.2rem;">
+<div class="card" style="border-left:4px solid var(--danger);">
+<div style="font-size:0.8rem;font-weight:700;color:var(--danger);margin-bottom:0.5rem;">🪪 REGISTRATION &amp; IDENTITY</div>
+<ul class="clean module-capabilities" style="margin:0;">
+<li>No permanent Patient ID — patients re-registered on every visit</li>
+<li>No duplicate check — multiple files created for the same patient</li>
+<li>Fragmented visit histories across paper files</li>
+</ul>
+</div>
+<div class="card" style="border-left:4px solid var(--danger);">
+<div style="font-size:0.8rem;font-weight:700;color:var(--danger);margin-bottom:0.5rem;">🎟 OPD COORDINATION &amp; TOKENS</div>
+<ul class="clean module-capabilities" style="margin:0;">
+<li>Manual handwritten tokens with no queue visibility</li>
+<li>No department-level queue data or wait time tracking</li>
+<li>Urgent patients queued alongside routine visitors</li>
+</ul>
+</div>
+<div class="card" style="border-left:4px solid var(--danger);">
+<div style="font-size:0.8rem;font-weight:700;color:var(--danger);margin-bottom:0.5rem;">📋 RECORDS &amp; REPORTS</div>
+<ul class="clean module-capabilities" style="margin:0;">
+<li>Patients carried their own paper files — frequently lost or incomplete</li>
+<li>No process for tracking external lab reports</li>
+<li>No distinction between hospital records and patient-provided documents</li>
+</ul>
+</div>
+<div class="card" style="border-left:4px solid var(--danger);">
+<div style="font-size:0.8rem;font-weight:700;color:var(--danger);margin-bottom:0.5rem;">💊 PRESCRIPTIONS &amp; PHARMACY</div>
+<ul class="clean module-capabilities" style="margin:0;">
+<li>Handwritten prescriptions — misread drug names and incorrect quantities</li>
+<li>No dispensing validation or partial dispense tracking</li>
+<li>No confirmation that patients collected their medication</li>
+</ul>
+</div>
+</div>
+<div class="card" style="border-left:4px solid var(--danger);margin-bottom:1rem;">
+<div style="font-size:0.8rem;font-weight:700;color:var(--danger);margin-bottom:0.5rem;">📊 ADMINISTRATIVE VISIBILITY</div>
+<ul class="clean module-capabilities" style="margin:0;">
+<li>No real-time view of OPD footfall, queue depth, or resource utilisation</li>
+<li>End-of-day manual counts from multiple paper sources</li>
+<li>Reactive decision-making with no operational data</li>
+</ul>
+</div>
+<blockquote class="highlight">The hospital's outpatient department lacked a unified patient identity, structured visit coordination, connected clinical-to-pharmacy-to-lab workflows, and real-time administrative visibility — resulting in inefficiencies, data gaps, and a fragmented patient experience.</blockquote>
+</section>
+<!-- S3 ROLE & APPROACH -->
+<section class="section" id="s3">
+<div class="section-label">Section 03</div>
+<h2 class="section-title">My Role &amp; BA Approach</h2>
+<div style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--teal-pale);border:1px solid var(--teal-light);border-radius:8px;padding:0.4rem 0.9rem;margin-bottom:1.2rem;">
+<span style="font-size:0.8rem;font-weight:700;color:var(--teal-dark);">Business Analyst</span>
+<span style="color:var(--border);">|</span>
+<span style="font-size:0.78rem;color:var(--text-sec);">Self-initiated case study · Assumed stakeholder/vendor model</span>
+</div>
+<div class="role-phase-cards mb-2">
+<div class="role-card">
+<div class="role-card-icon">🔍</div>
+<div class="role-card-title">Discovery</div>
+<ul class="clean">
+<li>Facilitated stakeholder interviews across all departments</li>
+<li>Shadowed reception and OPD staff during peak hours</li>
+<li>Documented AS-IS processes and pain points</li>
+<li>Surfaced conflicting stakeholder assumptions early</li>
+</ul>
+</div>
+<div class="role-card">
+<div class="role-card-icon">📐</div>
+<div class="role-card-title">Design &amp; Requirements</div>
+<ul class="clean">
+<li>Designed TO-BE process flows and gap analysis</li>
+<li>Wrote functional requirements with acceptance criteria</li>
+<li>Defined business rules and data field mapping</li>
+<li>Led MoSCoW prioritisation workshops</li>
+</ul>
+</div>
+<div class="role-card">
+<div class="role-card-icon">🤝</div>
+<div class="role-card-title">Vendor &amp; Validation</div>
+<ul class="clean">
+<li>Reviewed assumed screen concepts and documented change requests</li>
+<li>Served as single requirements point of contact</li>
+<li>Designed UAT scenario pack and acceptance criteria</li>
+<li>Coordinated UAT execution across departments</li>
+</ul>
+</div>
+</div>
+<div class="grid-2">
+<div class="card">
+<div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.6rem;">BA METHODOLOGY</div>
+<div class="method-pills">
+<span class="pill pill-teal">Agile-influenced Phased Delivery</span>
+<span class="pill pill-outline-teal">MoSCoW Prioritisation</span>
+<span class="pill pill-outline-teal">Swim-lane Process Mapping</span>
+<span class="pill pill-outline-teal">Stakeholder Interviews</span>
+<span class="pill pill-outline-teal">Requirements Traceability</span>
+<span class="pill pill-outline-amber">Workshop Facilitation</span>
+</div>
+</div>
+<div class="card">
+<div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.5rem;">ARTEFACTS PRODUCED</div>
+<ul class="clean" style="font-size:0.78rem;color:var(--text-sec);">
+<li style="padding:0.12rem 0;">· Scope Statement &amp; Stakeholder Register / RACI</li>
+<li style="padding:0.12rem 0;">· AS-IS &amp; TO-BE Process Maps (4 flows)</li>
+<li style="padding:0.12rem 0;">· MVP Scope &amp; MoSCoW Priority Table</li>
+<li style="padding:0.12rem 0;">· Functional Requirements Document &amp; Business Rules Register</li>
+<li style="padding:0.12rem 0;">· Logical Data Model &amp; SQL Query Library</li>
+<li style="padding:0.12rem 0;">· RBAC Matrix &amp; Consent Management Framework</li>
+<li style="padding:0.12rem 0;">· UAT Scenario Pack (18 scenarios)</li>
+<li style="padding:0.12rem 0;">· Dashboard Requirements Specification</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- S4 STAKEHOLDERS -->
+<section class="section" id="s4" style="background:var(--surface);">
+<div class="section-label">Section 04</div>
+<h2 class="section-title">Stakeholders</h2>
+<p class="section-lead">Stakeholder register, RACI summary, and key engagement considerations.</p>
+<div class="tbl-wrap mb-2">
+<table class="styled">
+<thead><tr><th>Stakeholder</th><th>Role</th><th>Interest</th><th>Influence</th><th>Engagement</th></tr></thead>
+<tbody>
+<tr><td><strong>Hospital Medical Director</strong></td><td>Executive Sponsor</td><td>Quality, safety, and reputation of OPD</td><td><span class="pill pill-teal">High</span></td><td>Monthly steering updates; scope sign-off</td></tr>
+<tr><td><strong>OPD Head / Senior Consultants</strong></td><td>Clinical Lead</td><td>Consultation workflow, prescription process</td><td><span class="pill pill-teal">High</span></td><td>Workshop participation; prototype review</td></tr>
+<tr><td><strong>Reception &amp; Registration Staff</strong></td><td>Primary System Users</td><td>Registration speed, token management ease</td><td><span class="pill pill-outline-amber">Medium</span></td><td>Process walkthroughs; UAT; training input</td></tr>
+<tr><td><strong>Pharmacy Team</strong></td><td>Dispensing Workflow</td><td>E-prescription clarity, partial dispense process</td><td><span class="pill pill-outline-amber">Medium</span></td><td>Workflow interviews; UAT participation</td></tr>
+<tr><td><strong>Laboratory Team</strong></td><td>Lab Order &amp; Report Workflow</td><td>Order receipt, payment flags, report upload</td><td><span class="pill pill-outline-amber">Medium</span></td><td>Workflow interviews; UAT participation</td></tr>
+<tr><td><strong>Internal IT Department</strong></td><td>Technical Governance</td><td>Security, infrastructure, integration</td><td><span class="pill pill-teal">High</span></td><td>Technical review; access control sign-off</td></tr>
+<tr><td><strong>Assumed Technology Vendor</strong></td><td>Development Team</td><td>Clear requirements, approved scope</td><td><span class="pill pill-teal">High</span></td><td>Assumed BA-vendor review notes; change requests</td></tr>
+<tr><td><strong>Finance / Billing Team</strong></td><td>Payment Workflow</td><td>Lab payment collection, exception handling</td><td><span class="pill pill-outline-amber">Medium</span></td><td>Business rules review; payment flow sign-off</td></tr>
+<tr><td><strong>Patients</strong></td><td>End Users (Portal)</td><td>Record access, ease of use, data privacy</td><td><span class="pill pill-outline-amber">Medium</span></td><td>Represented via staff feedback; UAT personas</td></tr>
+<tr><td><strong>Hospital Administration</strong></td><td>Operational Oversight</td><td>Dashboard, reporting, compliance</td><td><span class="pill pill-teal">High</span></td><td>Dashboard requirements workshop</td></tr>
+</tbody>
+</table>
+</div>
+<h3 style="font-size:1rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.75rem;">RACI Summary — Key Decisions</h3>
+<div class="tbl-wrap mb-2">
+<table class="styled">
+<thead><tr><th>Decision</th><th>Responsible</th><th>Accountable</th><th>Consulted</th><th>Informed</th></tr></thead>
+<tbody>
+<tr><td>Requirements sign-off</td><td>Business Analyst</td><td>OPD Head + IT Lead</td><td>Medical Director</td><td>Assumed implementation partner</td></tr>
+<tr><td>Scope change approval</td><td>Business Analyst</td><td>Medical Director</td><td>IT Lead, OPD Head</td><td>All stakeholders</td></tr>
+<tr><td>UAT sign-off</td><td>BA + Dept. Reps</td><td>OPD Head</td><td>IT Lead</td><td>Medical Director</td></tr>
+<tr><td>Data privacy framework</td><td>IT Lead + BA</td><td>Medical Director</td><td>Finance, Legal</td><td>All</td></tr>
+<tr><td>Portfolio validation review</td><td>IT Lead</td><td>Medical Director</td><td>OPD Head, Admin</td><td>All stakeholders</td></tr>
+</tbody>
+</table>
+</div>
+<div class="grid-2">
+<div class="card-amber card">
+<div style="font-size:0.78rem;font-weight:700;color:var(--amber-dark);margin-bottom:0.4rem;">Doctor Adoption Concerns</div>
+<p style="font-size:0.82rem;color:var(--text-sec);">Senior consultants were cautious about workflow disruption during busy OPD sessions. Addressed by keeping the consultation note simple (four sections), retaining a documented handwritten override, and framing the system as a structured record tool — not a gate on clinical judgment.</p>
+</div>
+<div class="card-amber card">
+<div style="font-size:0.78rem;font-weight:700;color:var(--amber-dark);margin-bottom:0.4rem;">Reception Staff Concerns</div>
+<p style="font-size:0.82rem;color:var(--text-sec);">Staff were concerned about accountability for data entry errors. Addressed by defining a clear amendment workflow with audit trail — errors are correctable with a reason recorded, not locked into a rigid system.</p>
+</div>
+</div>
+</section>
+<!-- S5 AS-IS VS TO-BE -->
+<section class="section" id="s5">
+<div class="section-label">Section 05</div>
+<h2 class="section-title">AS-IS vs TO-BE Patient Journey</h2>
+<p class="section-lead">From a paper-dependent manual OPD to a connected digital outpatient experience.</p>
+<div class="journey-compare">
+<div>
+<div class="journey-col-title asis-title">AS-IS — Current Journey</div>
+<div class="card" style="border-radius:0 0 12px 12px;">
+<div class="journey-step">
+<div class="step-num num-asis">1</div>
+<div><div class="step-text">Patient arrives. Reception searches by name in register or basic system.</div><div class="step-pain">Risk of duplicate records — no reliable check</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-asis">2</div>
+<div><div class="step-text">Handwritten or basic printed token issued. No queue visibility.</div><div class="step-pain">Patients crowd reception asking for updates</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-asis">3</div>
+<div><div class="step-text">Patient waits — urgency handled informally by staff discretion.</div><div class="step-pain">No formal mechanism for urgent cases</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-asis">4</div>
+<div><div class="step-text">Doctor reviews physical file. Patient recalls history verbally. Handwritten consultation note.</div><div class="step-pain">No access to previous reports if patient forgot them</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-asis">5</div>
+<div><div class="step-text">Handwritten prescription given to patient. Handwritten lab request slip issued.</div><div class="step-pain">Misread drug names; lab slips lost</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-asis">6</div>
+<div><div class="step-text">Patient pays at lab counter. Report printed and handed to patient.</div><div class="step-pain">Report lost before next visit</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-asis">7</div>
+<div><div class="step-text">Pharmacist reads handwritten prescription manually. Dispenses by judgement.</div><div class="step-pain">No dispensing validation; partial dispense unrecorded</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-asis">8</div>
+<div><div class="step-text">Admin compiles end-of-day counts manually from multiple paper sources.</div><div class="step-pain">Reactive decisions; no intraday visibility</div></div>
+</div>
+</div>
+</div>
+<div>
+<div class="journey-col-title tobe-title">TO-BE — CareFlow Journey</div>
+<div class="card" style="border-radius:0 0 12px 12px;">
+<div class="journey-step">
+<div class="step-num num-tobe">1</div>
+<div><div class="step-text">Patient arrives. QR scan or mobile lookup retrieves Patient ID in seconds. New patients registered with duplicate check.</div><div class="step-win">Under 2 minutes for returning patients</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-tobe">2</div>
+<div><div class="step-text">Visit ID created. Digital token issued. Real-time queue display shows position.</div><div class="step-win">Full transparency for patients and staff</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-tobe">3</div>
+<div><div class="step-text">Urgent patients flagged — moved to priority queue, payment block suspended automatically.</div><div class="step-win">Clinical urgency always prioritised</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-tobe">4</div>
+<div><div class="step-text">Doctor sees structured visit record and all previous consultation summaries, prescriptions, and reports under the Patient ID.</div><div class="step-win">Complete history at a glance</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-tobe">5</div>
+<div><div class="step-text">Doctor generates e-prescription and digital lab order. Referral initiated if needed — tracked in system.</div><div class="step-win">Validated orders; referrals never silently abandoned</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-tobe">6</div>
+<div><div class="step-text">Lab report uploaded and linked to Visit ID. Available immediately in patient portal.</div><div class="step-win">Reports never lost; clearly labelled by source</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-tobe">7</div>
+<div><div class="step-text">Pharmacist dispenses against system-validated e-prescription. Partial dispense recorded with reason.</div><div class="step-win">Full dispensing audit trail</div></div>
+</div>
+<div class="journey-step">
+<div class="step-num num-tobe">8</div>
+<div><div class="step-text">Admin views real-time OPD dashboard throughout the day.</div><div class="step-win">Proactive decisions based on live data</div></div>
+</div>
+</div>
+</div>
+</div>
+<h3 style="font-size:1rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.75rem;">Stage-by-Stage Comparison</h3>
+<div class="tbl-wrap">
+<table class="styled">
+<thead><tr><th>Journey Stage</th><th>AS-IS</th><th>TO-BE</th></tr></thead>
+<tbody>
+<tr><td><strong>Registration</strong></td><td>Manual entry, no duplicate check, paper file number</td><td>Digital registration, duplicate check, permanent Patient ID, QR card</td></tr>
+<tr><td><strong>Returning Patient</strong></td><td>Manual search, risk of duplicate records</td><td>Instant QR scan or mobile number lookup</td></tr>
+<tr><td><strong>Token &amp; Routing</strong></td><td>Paper token, no queue visibility, no urgency mechanism</td><td>Digital token, live display, urgency flag with priority routing</td></tr>
+<tr><td><strong>Consultation</strong></td><td>Paper file, handwritten note, verbal history</td><td>Structured digital note, previous visit summaries visible</td></tr>
+<tr><td><strong>Lab Order</strong></td><td>Handwritten slip, no payment tracking</td><td>Digital order, payment choice, urgent override, linked to Visit ID</td></tr>
+<tr><td><strong>Lab Report</strong></td><td>Paper report handed to patient — easily lost</td><td>Uploaded to system, linked to visit, available in portal</td></tr>
+<tr><td><strong>Prescription</strong></td><td>Handwritten, no dispensing validation</td><td>E-prescription, pharmacist validation, partial dispense tracking</td></tr>
+<tr><td><strong>Admin Visibility</strong></td><td>End-of-day manual tally</td><td>Real-time OPD dashboard</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- S6 MVP SCOPE -->
+<section class="section" id="s6" style="background:var(--surface);">
+<div class="section-label">Section 06</div>
+<h2 class="section-title">MVP Scope</h2>
+<p class="section-lead">CareFlow Phase 1 delivers the complete end-to-end OPD flow. Features are phased across three releases.</p>
+<div class="ai-callout mb-2">
+<strong>AI Features:</strong> Strictly future enhancement only. AI diagnosis, AI prescription suggestions, and automated clinical decision support are not in scope for any current phase of CareFlow.
+  </div>
+<div class="tbl-wrap mb-2">
+<table class="styled">
+<thead><tr><th>Feature</th><th>Priority</th><th>Phase</th></tr></thead>
+<tbody>
+<tr><td>Hybrid registration with duplicate check</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Permanent Patient ID and QR card generation</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Visit ID creation and token issuance</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Department routing per visit (visit-specific)</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Urgency flag with payment and queue override</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Live token queue display</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Doctor consultation note (structured, 4 sections)</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>E-prescription generation</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Lab order with in-house and external option</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Lab payment with urgency override</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Lab report upload and visit linkage</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>External report upload with immutable source label</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Pharmacy dispensing against e-prescription</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Partial dispense recording</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Patient digital record (visit history view)</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Patient portal with OTP login</td><td><span class="pill pill-teal">Must Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>Internal referral creation and tracking</td><td><span class="pill pill-outline-amber">Should Have</span></td><td><span class="pill pill-success">Phase 1</span></td></tr>
+<tr><td>External referral letter generation</td><td><span class="pill pill-outline-amber">Should Have</span></td><td><span class="pill pill-grey">Phase 2</span></td></tr>
+<tr><td>Admin OPD dashboard (real-time)</td><td><span class="pill pill-outline-amber">Should Have</span></td><td><span class="pill pill-grey">Phase 2</span></td></tr>
+<tr><td>Patient portal appointment booking</td><td><span class="pill pill-grey">Could Have</span></td><td><span class="pill pill-grey">Phase 3</span></td></tr>
+<tr><td>Dashboard advanced analytics</td><td><span class="pill pill-grey">Could Have</span></td><td><span class="pill pill-grey">Phase 3</span></td></tr>
+<tr><td><s>AI-assisted features of any kind</s></td><td><span class="pill pill-danger">Won't Have</span></td><td><span class="pill pill-grey">Future Only</span></td></tr>
+<tr><td><s>ICU, OT, surgery, nursing charting</s></td><td><span class="pill pill-danger">Won't Have</span></td><td><span class="pill pill-danger">Out of Scope</span></td></tr>
+<tr><td><s>Full inpatient billing</s></td><td><span class="pill pill-danger">Won't Have</span></td><td><span class="pill pill-danger">Out of Scope</span></td></tr>
+</tbody>
+</table>
+</div>
+<div class="grid-3">
+<div class="card" style="border-top:4px solid var(--success);">
+<div style="font-size:0.75rem;font-weight:700;color:var(--success);margin-bottom:0.5rem;">PHASE 1 — CORE OPD FLOW (MVP)</div>
+<ul class="clean module-capabilities" style="margin:0;font-size:0.8rem;">
+<li>Registration &amp; Patient ID</li><li>Visit Token &amp; Routing</li><li>Consultation Note</li><li>E-Prescription</li><li>Lab Order &amp; Report</li><li>Pharmacy Dispensing</li><li>Patient Portal (read-only)</li><li>Internal Referral Tracking</li>
+</ul>
+</div>
+<div class="card" style="border-top:4px solid var(--amber);">
+<div style="font-size:0.75rem;font-weight:700;color:var(--amber-dark);margin-bottom:0.5rem;">PHASE 2 — OPERATIONAL VISIBILITY</div>
+<ul class="clean module-capabilities" style="margin:0;font-size:0.8rem;">
+<li>Admin Dashboard</li><li>External Referral Letters</li><li>Referral Clearance Workflow</li><li>Enhanced Consent Management</li><li>Dashboard Exports</li>
+</ul>
+</div>
+<div class="card" style="border-top:4px solid var(--text-muted);">
+<div style="font-size:0.75rem;font-weight:700;color:var(--text-muted);margin-bottom:0.5rem;">PHASE 3 — SELF-SERVICE &amp; ANALYTICS</div>
+<ul class="clean module-capabilities" style="margin:0;font-size:0.8rem;">
+<li>Portal Appointment Booking</li><li>Dashboard Trend Analytics</li><li>External System Integration Hooks</li><li>Patient Feedback Module</li>
+</ul>
+</div>
+</div>
+<div class="card-teal card mt-2">
+<div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.75rem;">PROJECT ENGAGEMENT TIMELINE — ILLUSTRATIVE</div>
+<div class="grid-4">
+<div class="card" style="padding:0.85rem;"><div class="pill pill-teal">Weeks 1–2</div><div style="font-size:0.82rem;margin-top:0.45rem;color:var(--text-sec);"><strong>Discovery:</strong> stakeholder interviews, OPD observation, AS-IS mapping.</div></div>
+<div class="card" style="padding:0.85rem;"><div class="pill pill-amber">Weeks 3–5</div><div style="font-size:0.82rem;margin-top:0.45rem;color:var(--text-sec);"><strong>Analysis:</strong> TO-BE design, scope boundary, MoSCoW prioritisation.</div></div>
+<div class="card" style="padding:0.85rem;"><div class="pill pill-grey">Weeks 6–8</div><div style="font-size:0.82rem;margin-top:0.45rem;color:var(--text-sec);"><strong>Requirements:</strong> FRs, business rules, RBAC, data model, SQL reporting logic.</div></div>
+<div class="card" style="padding:0.85rem;"><div class="pill pill-success">Weeks 9–10</div><div style="font-size:0.82rem;margin-top:0.45rem;color:var(--text-sec);"><strong>Validation:</strong> UAT scenarios, assumed implementation clarifications, prototype review.</div></div>
+</div>
+<p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.75rem;font-style:italic;">Timeline is an illustrative engagement view for portfolio context; actual implementation duration would depend on hospital size, integrations, data migration, and rollout approach.</p>
+</div>
+</section>
+<!-- S7 CORE MODULES -->
+<section class="section" id="s7">
+<div class="section-label">Section 07</div>
+<h2 class="section-title">Core Modules</h2>
+<p class="section-lead">Eleven functional modules cover the full scope of CareFlow. Click any module to expand details.</p>
+<!-- M1 -->
+<div class="module-card">
+<div class="module-header" onclick="toggleModule(this)">
+<span class="module-num">M1</span>
+<span class="module-name">Hybrid Registration &amp; Patient Lookup</span>
+<div class="module-roles"><span class="pill pill-grey">Reception</span><span class="pill pill-grey">Admin IT</span></div>
+<span class="module-toggle">▼</span>
+</div>
+<div class="module-body">
+<div class="module-purpose">Create a single, reliable patient identity record that persists for life — eliminating duplicate registrations.</div>
+<ul class="module-capabilities">
+<li>Walk-in and pre-registration with demographic data capture</li>
+<li>Duplicate check using mobile number + date of birth before new ID created</li>
+<li>Unique permanent Patient ID assigned on confirmed registration</li>
+<li>QR code generated and linked to Patient ID</li>
+<li>Returning patient lookup by QR scan, mobile number, or name+DOB</li>
+<li>Data amendment with mandatory reason field and audit trail</li>
+<li>Mobile number changes require identity verification; previous mobile number is retained in mobile change history for audit and lookup support</li>
+</ul>
+<div class="module-scope"><strong>Scope boundary:</strong> Registration captures identity and contact information only. No clinical data collected at registration. Duplicate checks use matching combinations such as mobile number, name, and date of birth to flag possible existing records for staff review. The patient card contains Patient ID, name, DOB, and QR code — nothing clinical.</div>
+</div>
+</div>
+<!-- LEGACY MIGRATION CARD -->
+<div class="migration-card">
+<div class="migration-title">📦 Legacy Data Migration Approach</div>
+<ul class="migration-list clean">
+<li>Existing hospital file numbers and card numbers mapped to new permanent Patient IDs</li>
+<li>Basic patient master data (name, DOB, mobile, address) migrated first as the foundation layer</li>
+<li>Important historical records scanned and attached in priority order (high-frequency patients first)</li>
+<li>Patient-submitted old records labelled as <strong>Patient-Uploaded / Legacy Record</strong> — permanently labelled, never relabelled as hospital-generated</li>
+<li>Duplicate records from old system flagged for staff review and manual resolution before migration is marked complete</li>
+</ul>
+</div>
+<!-- M2 -->
+<div class="module-card">
+<div class="module-header" onclick="toggleModule(this)">
+<span class="module-num">M2</span>
+<span class="module-name">Digital &amp; Physical Patient Card</span>
+<div class="module-roles"><span class="pill pill-grey">Reception</span><span class="pill pill-grey">Patients</span><span class="pill pill-grey">All Staff (scan)</span></div>
+<span class="module-toggle">▼</span>
+</div>
+<div class="module-body">
+<div class="module-purpose">A portable, scannable identity token connecting every patient to their permanent Patient ID across all future visits.</div>
+<ul class="module-capabilities">
+<li>Physical card printed at first registration — name, Patient ID, QR code only</li>
+<li>Replacement card printable on request (same Patient ID retained)</li>
+<li>Digital card accessible through patient portal from day one</li>
+<li>QR code scannable at any counter to retrieve Patient ID instantly</li>
+</ul>
+<div class="module-scope"><strong>Card explicitly does NOT contain:</strong> Diagnosis, current complaint, department, blood group, medicines, test results, or any clinical data. A lost card carries zero clinical data risk. Blood group may be stored in the patient record for clinical use, but it is not displayed on the card. Patients can always be found by mobile number + name.</div>
+
+<div class="card-teal card mt-1" style="padding:0.9rem;"><div style="font-size:0.78rem;font-weight:800;color:var(--teal-dark);margin-bottom:0.35rem;">Final UI reference</div><p style="font-size:0.82rem;color:var(--text-sec);margin:0;">The old static registration/visit form mockup has been removed. Use the <a href="careflow-opd-workflow-prototype.html" style="color:var(--teal);font-weight:800;text-decoration:none;" target="_blank">Live OPD Prototype</a> for the final OP Registration, patient lookup, visit creation, doctor selection, consultation fee status, and token generation flow.</p></div></div>
+</div>
+<!-- M3 -->
+<div class="module-card">
+<div class="module-header" onclick="toggleModule(this)">
+<span class="module-num">M3</span>
+<span class="module-name">Visit Routing &amp; Token Management</span>
+<div class="module-roles"><span class="pill pill-grey">Reception</span><span class="pill pill-grey">Patients</span><span class="pill pill-grey">Dept. Staff</span><span class="pill pill-grey">Admin</span></div>
+<span class="module-toggle">▼</span>
+</div>
+<div class="module-body">
+<div class="module-purpose">Structured, visible, and fair queue management — with urgency prioritisation and real-time status for all parties.</div>
+<div class="card-teal card" style="padding:0.65rem 0.8rem;margin-bottom:0.75rem;font-size:0.82rem;color:var(--teal-dark);"><strong>Patient ID vs Visit ID:</strong> Patient ID <code>P-10041</code> is permanent. Visit IDs <code>V-20241101-001</code>, <code>V-20241115-002</code>, and <code>V-20241203-003</code> are created separately for each hospital visit.</div>
+<ul class="module-capabilities">
+<li>New Visit ID created for every visit, linked to the permanent Patient ID</li>
+<li>Department selected at token issuance — visit-specific, not based on prior visits</li>
+<li>Token number displayed on waiting area screens with live queue position</li>
+<li>Urgency flag by defined authorised roles — doctor, triage nurse, senior receptionist, or OPD supervisor — moves patient to priority queue and suspends payment block</li>
+<li>Visit type recorded: New Visit or Follow-up</li>
+<li>Token status: Waiting → Called → In Consultation → Completed</li>
+</ul>
+<div class="module-scope"><strong>Scope boundary:</strong> OPD token routing only. Does not manage inpatient bed allocation, OT scheduling, or ED triage scoring.</div>
+</div>
+</div>
+<!-- M4 -->
+<div class="module-card">
+<div class="module-header" onclick="toggleModule(this)">
+<span class="module-num">M4</span>
+<span class="module-name">Doctor Consultation Module</span>
+<div class="module-roles"><span class="pill pill-grey">OPD Doctors</span></div>
+<span class="module-toggle">▼</span>
+</div>
+<div class="module-body">
+<div class="module-purpose">A clean, structured digital workspace for recording consultations, generating orders, and initiating referrals — linked to the specific visit.</div>
+<ul class="module-capabilities">
+<li>Doctor views patient's previous consultation summaries, prescriptions, and lab reports (read-only panel)</li>
+<li>Structured note: Chief Complaint · Examination Findings · Assessment · Plan (as entered by the doctor)</li>
+<li>E-prescription generation with drug name, dosage, frequency, duration, instructions</li>
+<li>Lab order generation with test name and urgency flag; in-house/external choice is confirmed during the lab/payment step</li>
+<li>Referral initiation — internal department or external facility</li>
+<li>Follow-up date and instructions recordable in Plan section</li>
+<li>Note becomes read-only after doctor marks visit Consultation Complete (amendments require audit trail)</li>
+</ul>
+<div class="module-scope"><strong>Important:</strong> The system records the assessment and plan as entered by the doctor. CareFlow does not generate diagnoses, suggest prescriptions, or make clinical recommendations. No AI clinical features in scope.</div>
+
+<div class="card-teal card mt-1" style="padding:0.9rem;"><div style="font-size:0.78rem;font-weight:800;color:var(--teal-dark);margin-bottom:0.35rem;">Final UI reference</div><p style="font-size:0.82rem;color:var(--text-sec);margin:0;">The final Doctor Workspace is shown in the live prototype. It starts with doctor-side patient queue/search, then opens the selected patient record for vitals, complaint, assessment, lab order, e-prescription, and follow-up advice. Static older mockups were removed to keep one consistent UI story.</p></div></div>
+</div>
+<!-- M5 -->
+<div class="module-card">
+<div class="module-header" onclick="toggleModule(this)">
+<span class="module-num">M5</span>
+<span class="module-name">Referral &amp; Clearance Tracking</span>
+<div class="module-roles"><span class="pill pill-grey">Doctors</span><span class="pill pill-grey">Dept. Staff</span><span class="pill pill-grey">Admin</span></div>
+<span class="module-toggle">▼</span>
+</div>
+<div class="module-body">
+<div class="module-purpose">Track referrals from creation to clearance — ensuring none are silently abandoned.</div>
+<ul class="module-capabilities">
+<li>Internal referral: doctor selects target department, referral reason recorded, sent to target queue</li>
+<li>Receiving department issues a referral token against the same Visit ID and ReferralID, so the patient is physically routed without creating a new Patient ID</li>
+<li>External referral: receiving facility recorded, referral letter generated for print or portal</li>
+<li>Status values: Pending → Accepted → Completed / Cancelled</li>
+<li>Referrals open beyond 48 hours flagged on admin dashboard</li>
+<li>Visit closure prompts confirmation if open referrals remain</li>
+</ul>
+<div class="module-scope"><strong>Scope boundary:</strong> Coordination tracking only. No system-to-system integration with external hospitals in Phase 1.</div>
+</div>
+</div>
+<!-- M6 -->
+<div class="module-card">
+<div class="module-header" onclick="toggleModule(this)">
+<span class="module-num">M6</span>
+<span class="module-name">Lab Order, Payment Choice &amp; Report Upload</span>
+<div class="module-roles"><span class="pill pill-grey">Doctors</span><span class="pill pill-grey">Lab Staff</span><span class="pill pill-grey">Reception</span><span class="pill pill-grey">Patients</span></div>
+<span class="module-toggle">▼</span>
+</div>
+<div class="module-body">
+<div class="module-purpose">Connect lab orders to visit records, enforce payment integrity, and ensure every report — regardless of source — is permanently linked and labelled.</div>
+<ul class="module-capabilities">
+<li>Lab order created in consultation, received immediately in lab module</li>
+<li>Patient offered choice: in-house processing or external lab</li>
+<li>In-house: payment collected before processing (urgency flag suspends this — sample taken, payment resolved post-sample)</li>
+<li>In-house results uploaded by lab staff and auto-linked to Visit ID, labelled In-House</li>
+<li>External reports uploaded by staff or patient — permanently labelled External Report</li>
+<li>External lab status changes from <strong>External Pending</strong> to <strong>External Report Received</strong> after upload, so it no longer remains pending</li>
+<li>Patient-uploaded historical records labelled Patient-Uploaded — immutable label with review status: Pending Review / Reviewed / Rejected</li>
+</ul>
+<div class="module-scope"><strong>Scope boundary:</strong> Outpatient lab orders from visits only. Inpatient pathology, radiology scheduling, and report interpretation are out of scope.</div>
+</div>
+</div>
+<!-- Patient Access Callout -->
+<div class="callout-portal">
+<div class="callout-icon">📱</div>
+<div class="callout-content">
+<strong>Patient Access — Digital vs Printed Summaries</strong>
+<p><strong>Digital visit summary</strong> is available by default in the patient portal immediately after visit closure — no staff action required.<br/><strong>Printed summary</strong> is request-based only, to reduce routine staff printing workload. Patients request via portal or reception; collected at the counter.</p>
+</div>
+</div>
+<!-- M7 -->
+<div class="module-card">
+<div class="module-header" onclick="toggleModule(this)">
+<span class="module-num">M7</span>
+<span class="module-name">E-Prescription &amp; Pharmacy Dispensing</span>
+<div class="module-roles"><span class="pill pill-grey">Doctors</span><span class="pill pill-grey">Pharmacists</span></div>
+<span class="module-toggle">▼</span>
+</div>
+<div class="module-body">
+<div class="module-purpose">Replace handwritten prescriptions with a validated digital process that prevents dispensing errors and creates a complete dispensing record.</div>
+<ul class="module-capabilities">
+<li>E-prescription generated by doctor, immediately visible in pharmacy module</li>
+<li>Pharmacist verifies patient identity before dispensing</li>
+<li>System prevents dispensing without a valid e-prescription linked to an active Visit ID</li>
+<li>Partial dispensing supported — items not dispensed and reason recorded</li>
+<li>Handwritten override permitted only with senior pharmacist authorisation + reason logging</li>
+</ul>
+<div class="module-scope"><strong>Scope boundary:</strong> Outpatient dispensing of doctor-prescribed medications only. Inpatient IV pharmacy, controlled-substance specialised workflows, and full inpatient medication administration are out of scope for this project.</div>
+</div>
+</div>
+<!-- M8 -->
+<div class="module-card">
+<div class="module-header" onclick="toggleModule(this)">
+<span class="module-num">M8</span>
+<span class="module-name">Patient Digital Record</span>
+<div class="module-roles"><span class="pill pill-grey">Doctors</span><span class="pill pill-grey">Reception (identity)</span><span class="pill pill-grey">IT Admin (audit)</span><span class="pill pill-grey">Patients (portal)</span></div>
+<span class="module-toggle">▼</span>
+</div>
+<div class="module-body">
+<div class="module-purpose">A permanent, longitudinal record per Patient ID — growing with every visit, accessible to authorised users, never deleted.</div>
+<ul class="module-capabilities">
+<li>One permanent record per Patient ID, created at first registration</li>
+<li>Every visit creates a linked visit record with consultation summary, prescription, lab orders/reports, and referrals</li>
+<li>Basic IP discharge summary available only for OP follow-up continuity reference (not full inpatient record)</li>
+<li>IP discharge summary is attached by authorised clinical admin/medical records staff after discharge and is visible to OP doctors during follow-up</li>
+<li>Records are never deleted — archived through a defined, authorised process</li>
+<li>Every view and edit logged in the audit trail</li>
+</ul>
+<div class="module-scope"><strong>Scope boundary:</strong> A structured record of OPD visits and their outputs. Not a full EMR or EHR. Nursing notes, ICU charts, and inpatient administration records are not stored here.</div>
+</div>
+</div>
+<!-- M9 -->
+<div class="module-card">
+<div class="module-header" onclick="toggleModule(this)">
+<span class="module-num">M9</span>
+<span class="module-name">Patient Portal &amp; Record Access</span>
+<div class="module-roles"><span class="pill pill-grey">Patients</span></div>
+<span class="module-toggle">▼</span>
+</div>
+<div class="module-body">
+<div class="module-purpose">Self-service access to own health records — removing dependence on paper and enabling engagement with visit history at any time.</div>
+<ul class="module-capabilities">
+<li>Login via mobile OTP — no separate password required</li>
+<li>View full visit history: dates, departments, consultation summaries, prescriptions, reports</li>
+<li>Download individual reports and prescription records</li>
+<li>Upload external or old records — permanently labelled Patient-Uploaded</li>
+<li>Uploaded records show verification status: Pending Review / Reviewed / Rejected; they do not become verified hospital records automatically</li>
+<li>View referral status for active referrals</li>
+<li>Digital visit summary available immediately on visit closure (default)</li>
+<li>Request printed summary through portal — collected at reception</li>
+</ul>
+<div class="module-scope"><strong>Phase 1 portal is read-and-upload only.</strong> Appointment booking, doctor messaging, and teleconsultation are Phase 3. Patient can view but cannot edit hospital-generated clinical records.</div>
+</div>
+</div>
+<!-- M10 -->
+<div class="module-card">
+<div class="module-header" onclick="toggleModule(this)">
+<span class="module-num">M10</span>
+<span class="module-name">Admin Dashboard</span>
+<div class="module-roles"><span class="pill pill-grey">Hospital Admin</span><span class="pill pill-grey">OPD Head</span><span class="pill pill-grey">Dept. Heads</span></div>
+<span class="module-toggle">▼</span>
+</div>
+<div class="module-body">
+<div class="module-purpose">Real-time, role-appropriate view of OPD operations — without exposing patient-level clinical data.</div>
+<ul class="module-capabilities">
+<li>Real-time: registrations today, active tokens per dept., average wait time, pending lab payments, pharmacy status, open referrals</li>
+<li>Daily panels: 7-day footfall trend, top departments by volume, lab turnaround, pharmacy completion rate</li>
+<li>Filters: date range, department, doctor, visit type</li>
+<li>CSV and PDF export of any panel (export logged in audit trail)</li>
+<li>Role-specific views: Dept. Head sees own dept. only; OPD Head sees all; Admin sees full operational view</li>
+<li>Drill-down to operational visit detail — stops at Visit ID level, never exposes clinical note content</li>
+</ul>
+<div class="module-scope"><strong>Scope boundary:</strong> Aggregate operational data only. No patient-identifiable clinical records, consultation notes, or prescription details visible at dashboard level.</div>
+</div>
+</div>
+<!-- M11 -->
+<div class="module-card">
+<div class="module-header" onclick="toggleModule(this)">
+<span class="module-num">M11</span>
+<span class="module-name">Privacy, Consent &amp; Role-Based Access</span>
+<div class="module-roles"><span class="pill pill-grey">All Users</span><span class="pill pill-grey">IT Admin (manages)</span><span class="pill pill-grey">Patients (consent held by)</span></div>
+<span class="module-toggle">▼</span>
+</div>
+<div class="module-body">
+<div class="module-purpose">Every data interaction is authorised, audited, and aligned with the patient's expressed consent.</div>
+<ul class="module-capabilities">
+<li>Treatment record consent is mandatory for creating and maintaining consultation, prescription, lab, billing, and follow-up records</li>
+<li>Research / sharing consent is optional and opt-in only; patient can refuse it and still receive treatment</li>
+<li>Consent revocation restricts future non-treatment sharing, while existing treatment records are retained for clinical and legal continuity</li>
+<li>Role-based access is enforced at system level — users see only what their role needs</li>
+<li>Emergency access is a controlled exception: senior clinician only, reason required, time-limited, logged, and reviewable later</li>
+<li>Every record view, edit, download, and export is logged with User ID, timestamp, action type, and record reference</li>
+<li>Audit logs are write-once and read-only — they cannot be edited or deleted by any role</li>
+</ul>
+<div class="module-scope"><strong>Data retention:</strong> Records never deleted automatically. Archival is a managed, authorised process. Active records retained per hospital policy.</div>
+</div>
+</div>
+</section>
+<!-- S8 PROCESS FLOWS -->
+<section class="section" id="s8" style="background:var(--surface);">
+<div class="section-label">Section 08</div>
+<h2 class="section-title">Key Process Flows</h2>
+<p class="section-lead">Four core OPD swim-lane flows. Each actor's steps are shown in their lane with clear directional progression.</p>
+<div class="flow-tabs">
+<button class="flow-tab active" onclick="showFlow(0,this)">Flow 1: First-Time Registration</button>
+<button class="flow-tab" onclick="showFlow(1,this)">Flow 2: Returning Patient</button>
+<button class="flow-tab" onclick="showFlow(2,this)">Flow 3: Consultation &amp; Referral</button>
+<button class="flow-tab" onclick="showFlow(3,this)">Flow 4: Lab Order &amp; Report</button>
+</div>
+<!-- FLOW 1 -->
+<div class="flow-diagram active" id="flow0">
+<div style="font-size:0.8rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.75rem;">FLOW 1 — First-Time Patient Registration &amp; OPD Routing</div>
+<div class="swimlane-container">
+<div class="swimlane">
+<div class="lane-label">Patient</div>
+<div class="lane-content">
+<span class="step-box">1. Arrives at OPD Reception</span>
+<span class="arrow">→</span>
+<span class="step-box">Provides name, mobile &amp; DOB</span>
+<span class="arrow">→</span>
+<span class="step-box">Receives Patient Card &amp; Token</span>
+<span class="arrow">→</span>
+<span class="step-box">Waits — watches queue display</span>
+<span class="arrow">→</span>
+<span class="step-box">Enters consultation room when called</span>
+</div>
+</div>
+<div class="swimlane">
+<div class="lane-label">Reception Staff</div>
+<div class="lane-content">
+<span class="step-box">2. Runs duplicate check (mobile + DOB)</span>
+<span class="arrow">→</span>
+<span class="step-decision">Match found?</span>
+<span class="arrow">→</span>
+<span class="step-box">No match: captures full biographic data</span>
+<span class="arrow">→</span>
+<span class="step-box">Selects department, sets Visit Type: New</span>
+<span class="arrow">→</span>
+<span class="step-box">Prints physical card &amp; issues token</span>
+</div>
+</div>
+<div class="swimlane">
+<div class="lane-label">System</div>
+<div class="lane-content">
+<span class="step-box">3. Duplicate check returns result</span>
+<span class="arrow">→</span>
+<span class="step-action">Assigns permanent Patient ID</span>
+<span class="arrow">→</span>
+<span class="step-action">Generates QR code</span>
+<span class="arrow">→</span>
+<span class="step-action">Creates Visit ID + Token Number</span>
+<span class="arrow">→</span>
+<span class="step-action">Token appears on queue display (&lt;30s)</span>
+</div>
+</div>
+<div class="swimlane" style="border-bottom:none;">
+<div class="lane-label" style="background:#4a3728;">Urgency Branch</div>
+<div class="lane-content">
+<span class="step-urgent">⚡ Authorised staff raises urgency flag → enters reason → patient moves to priority queue</span>
+<span class="arrow">→</span>
+<span class="step-urgent">Payment block suspended. Urgency reason recorded.</span>
+</div>
+</div>
+</div>
+<div class="flow-note">If a duplicate record is found during the check, reception reviews the match and either confirms the existing record or proceeds with new registration only after dismissing the alert. A new Patient ID is never created for a confirmed existing patient.</div>
+</div>
+<!-- FLOW 2 -->
+<div class="flow-diagram" id="flow1">
+<div style="font-size:0.8rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.75rem;">FLOW 2 — Returning Patient Lookup &amp; OPD Routing</div>
+<div class="swimlane-container">
+<div class="swimlane">
+<div class="lane-label">Patient</div>
+<div class="lane-content">
+<span class="step-box">1. Arrives — presents patient card (or states mobile number)</span>
+<span class="arrow">→</span>
+<span class="step-box">Confirms identity verbally</span>
+<span class="arrow">→</span>
+<span class="step-box">Receives new token for today's visit</span>
+<span class="arrow">→</span>
+<span class="step-box">Waits — watches queue display</span>
+<span class="arrow">→</span>
+<span class="step-box">Enters consultation room when called</span>
+</div>
+</div>
+<div class="swimlane">
+<div class="lane-label">Reception Staff</div>
+<div class="lane-content">
+<span class="step-box">2. Scans QR code — or searches by mobile + name</span>
+<span class="arrow">→</span>
+<span class="step-box">Confirms patient identity</span>
+<span class="arrow">→</span>
+<span class="step-box">Selects department for THIS visit (any dept.)</span>
+<span class="arrow">→</span>
+<span class="step-box">Sets Visit Type: Follow-up or New Complaint</span>
+<span class="arrow">→</span>
+<span class="step-box">Token issued — under 2 minutes total</span>
+</div>
+</div>
+<div class="swimlane" style="border-bottom:none;">
+<div class="lane-label">System</div>
+<div class="lane-content">
+<span class="step-action">3. Retrieves Patient ID (&lt;3s)</span>
+<span class="arrow">→</span>
+<span class="step-action">No new Patient ID created — existing record used</span>
+<span class="arrow">→</span>
+<span class="step-action">Creates new Visit ID for today</span>
+<span class="arrow">→</span>
+<span class="step-action">New token linked to new Visit ID</span>
+<span class="arrow">→</span>
+<span class="step-action">Token on dept. queue display (&lt;30s)</span>
+</div>
+</div>
+</div>
+<div class="flow-note">Key design principle: the Patient ID is permanent and never changes. Each visit creates a fresh Visit ID. Department routing is always chosen for the current visit — a patient's previous department does not restrict or pre-select today's routing.</div>
+</div>
+<!-- FLOW 3 -->
+<div class="flow-diagram" id="flow2">
+<div style="font-size:0.8rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.75rem;">FLOW 3 — Doctor Consultation, E-Prescription &amp; Referral</div>
+<div class="swimlane-container">
+<div class="swimlane">
+<div class="lane-label">Doctor</div>
+<div class="lane-content">
+<span class="step-box">1. Opens active visit queue — selects patient's token</span>
+<span class="arrow">→</span>
+<span class="step-box">Reviews previous visit summaries (read-only panel)</span>
+<span class="arrow">→</span>
+<span class="step-box">Records consultation note (4 sections)</span>
+<span class="arrow">→</span>
+<span class="step-box">Generates e-prescription (if needed)</span>
+<span class="arrow">→</span>
+<span class="step-box">Raises lab order (if needed)</span>
+<span class="arrow">→</span>
+<span class="step-box">Initiates referral (if needed)</span>
+<span class="arrow">→</span>
+<span class="step-box">Marks visit: Consultation Complete</span>
+</div>
+</div>
+<div class="swimlane">
+<div class="lane-label">System</div>
+<div class="lane-content">
+<span class="step-action">2. Loads visit record + patient history</span>
+<span class="arrow">→</span>
+<span class="step-action">Note timestamped + linked to Visit ID on save</span>
+<span class="arrow">→</span>
+<span class="step-action">E-prescription visible in pharmacy (&lt;60s)</span>
+<span class="arrow">→</span>
+<span class="step-action">Lab order visible in lab module (&lt;60s)</span>
+<span class="arrow">→</span>
+<span class="step-action">Referral sent to target dept. queue</span>
+<span class="arrow">→</span>
+<span class="step-action">Note locked (read-only after completion)</span>
+</div>
+</div>
+<div class="swimlane">
+<div class="lane-label">Pharmacy</div>
+<div class="lane-content">
+<span class="step-box">3. Receives e-prescription in module</span>
+<span class="arrow">→</span>
+<span class="step-box">Verifies patient identity</span>
+<span class="arrow">→</span>
+<span class="step-box">Dispenses or records partial dispense</span>
+</div>
+</div>
+<div class="swimlane" style="border-bottom:none;">
+<div class="lane-label">Referral Dept.</div>
+<div class="lane-content">
+<span class="step-decision">Internal referral received → Status: Pending</span>
+<span class="arrow">→</span>
+<span class="step-box">Receiving dept. issues referral token using same Visit ID + ReferralID</span>
+<span class="arrow">→</span>
+<span class="step-box">Dept. marks: Accepted → sees patient → Completed</span>
+<span class="arrow">→</span>
+<span class="step-urgent">⚡ If open &gt;48h → flagged on admin dashboard</span>
+</div>
+</div>
+</div>
+<div class="flow-note">The consultation note records the Assessment and Plan exactly as entered by the doctor. CareFlow does not generate or suggest clinical content — it is a structured record tool, not a clinical decision support system.</div>
+</div>
+<!-- FLOW 4 -->
+<div class="flow-diagram" id="flow3">
+<div style="font-size:0.8rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.75rem;">FLOW 4 — Lab Order, Payment Choice &amp; Report Upload</div>
+<div class="swimlane-container">
+<div class="swimlane">
+<div class="lane-label">Doctor</div>
+<div class="lane-content">
+<span class="step-box">1. Raises lab order in consultation module</span>
+<span class="arrow">→</span>
+<span class="step-box">Specifies: test name and urgency flag (Y/N). Patient confirms in-house or external option at lab/payment step</span>
+</div>
+</div>
+<div class="swimlane">
+<div class="lane-label">System</div>
+<div class="lane-content">
+<span class="step-action">2. Lab order appears in lab module (&lt;60s)</span>
+<span class="arrow">→</span>
+<span class="step-action">Displays: patient name, Visit ID, test, urgency, lab type</span>
+</div>
+</div>
+<div class="swimlane">
+<div class="lane-label">Patient / Reception</div>
+<div class="lane-content">
+<span class="step-decision">3. In-house or External?</span>
+<span class="arrow">→</span>
+<span class="step-box">In-house: payment collected → Receipt linked to order</span>
+<span class="arrow">→</span>
+<span class="step-urgent">⚡ Urgent flag: sample taken first → payment resolved post-sample</span>
+</div>
+</div>
+<div class="swimlane">
+<div class="lane-label">Lab Staff</div>
+<div class="lane-content">
+<span class="step-box">4a. IN-HOUSE: Order moves to In Progress after payment</span>
+<span class="arrow">→</span>
+<span class="step-box">Sample processed</span>
+<span class="arrow">→</span>
+<span class="step-action">Result uploaded → auto-linked to Visit ID → labelled: In-House</span>
+</div>
+</div>
+<div class="swimlane" style="border-bottom:none;">
+<div class="lane-label">External / Patient Upload</div>
+<div class="lane-content">
+<span class="step-box">4b. EXTERNAL: Patient goes to external lab</span>
+<span class="arrow">→</span>
+<span class="step-box">Staff uploads report on patient's behalf — OR patient uploads via portal</span>
+<span class="arrow">→</span>
+<span class="step-urgent">Label: External Report (immutable — cannot be relabelled)</span>
+<span class="arrow">→</span>
+<span class="step-urgent">Historical uploads: Patient-Uploaded / Legacy Record (immutable)</span>
+</div>
+</div>
+</div>
+<div class="flow-note">Source labels are immutable. An External Report or Patient-Uploaded record can never be relabelled as a hospital-generated record. Doctors can always assess the provenance of any report they review.</div>
+</div>
+</section>
+<!-- S9 FUNCTIONAL REQUIREMENTS -->
+<section class="section" id="s9">
+<div class="section-label">Section 09</div>
+<h2 class="section-title">Functional Requirements</h2>
+<p class="section-lead">Requirements in FR-ID format with acceptance criteria. Grouped by module. NFRs at the end.</p>
+<div class="callout-portal mb-2">
+<div class="callout-icon">📱</div>
+<div class="callout-content">
+<strong>FR-M9 Portal Access Rule</strong>
+<p><strong>Digital visit summary</strong> is available by default in the patient portal immediately after visit closure — no staff action required. <strong>Printed summary</strong> is request-based only, reducing routine staff printing workload.</p>
+</div>
+</div>
+<!-- M1 Requirements -->
+<div class="fr-group">
+<div class="fr-group-title">M1 — Hybrid Registration &amp; Patient Lookup</div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M1-01</span><div class="fr-text"><strong>Duplicate check:</strong> The system shall perform a duplicate check using mobile number and date of birth before creating a new patient record. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Warning and existing match displayed if duplicate detected; new record cannot be created until check is reviewed and dismissed by authorised user.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M1-02</span><div class="fr-text"><strong>Patient ID assignment:</strong> The system shall assign a unique, permanent Patient ID to every new patient at confirmed registration. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Patient ID generated within 3 seconds of record save; no two patients share an ID; ID never changes or is reassigned.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M1-03</span><div class="fr-text"><strong>Returning patient lookup:</strong> The system shall support lookup by QR scan, mobile number, or name + date of birth. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Match returned within 3 seconds; multiple partial matches shown as a list for staff selection.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M1-04</span><div class="fr-text"><strong>Data amendment:</strong> The system shall support amendments to existing patient records with a mandatory reason field and full audit trail. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Every amendment logs user ID, timestamp, original value, new value, and reason. Amended records remain fully functional.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M1-05</span><div class="fr-text"><strong>Pre-registration:</strong> The system shall support optional pre-registration that is finalised at the reception counter on first physical arrival. <span class="pill pill-outline-amber">Should Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Pre-registration data held in pending state; Patient ID not assigned until counter confirmation.</div></div>
+</div>
+<!-- M3 Requirements -->
+<div class="fr-group">
+<div class="fr-group-title">M3 — Visit Routing &amp; Token Management</div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M3-01</span><div class="fr-text"><strong>Visit ID:</strong> The system shall create a unique Visit ID for every visit, linked to the patient's permanent Patient ID. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Visit ID format distinct from Patient ID; one per visit; never reused.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M3-02</span><div class="fr-text"><strong>Department selection:</strong> The system shall allow any registered department to be selected at token issuance, independent of previous visit routing. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> No restriction based on prior department history.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M3-03</span><div class="fr-text"><strong>Queue display:</strong> The system shall display real-time token queue status on waiting area screens. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Queue display refreshes within 30 seconds of any token status change.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M3-04</span><div class="fr-text"><strong>Urgency flag:</strong> The system shall support an urgency flag that moves the patient to priority queue and overrides any payment prerequisite. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Requires authorised user role and mandatory reason; flagged patient placed at top of relevant department queue immediately.</div></div>
+</div>
+<!-- M4 Requirements -->
+<div class="fr-group">
+<div class="fr-group-title">M4 — Doctor Consultation Module</div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M4-01</span><div class="fr-text"><strong>Consultation note structure:</strong> The system shall present a structured note form with four sections: Chief Complaint, Examination Findings, Assessment, and Plan. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> All four sections presented; Chief Complaint mandatory; note timestamped and linked to Visit ID on save. System does not generate or pre-fill clinical content.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M4-02</span><div class="fr-text"><strong>Previous visit history:</strong> The system shall display the patient's previous visit summaries, prescriptions, and lab reports in a read-only panel during consultation. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> All visits under same Patient ID visible; read-only; no edit capability from this panel.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M4-03</span><div class="fr-text"><strong>E-prescription:</strong> The system shall allow the doctor to generate an e-prescription linked to the Visit ID, with drug name, dosage, frequency, duration, and instructions. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Prescription visible in pharmacy module within 60 seconds of generation.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M4-04</span><div class="fr-text"><strong>Lab order:</strong> The system shall allow the doctor to raise a lab order with test name and urgency flag; in-house or external lab choice is confirmed during the lab/payment step. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Lab order visible in lab module within 60 seconds.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M4-05</span><div class="fr-text"><strong>Note lock:</strong> The system shall mark the consultation note read-only after the doctor marks Consultation Complete, except for authorised amendments with audit trail. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Post-completion edits require senior authorisation and mandatory amendment reason; original note retained and amendment appended.</div></div>
+</div>
+<!-- M5 Requirements -->
+<div class="fr-group">
+<div class="fr-group-title">M5 — Referral &amp; Clearance Tracking</div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M5-01</span><div class="fr-text"><strong>Internal referral creation:</strong> The system shall allow a doctor to create an internal referral to a registered department with referral reason and priority, linked to the current Visit ID. <span class="pill pill-outline-amber">Should Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Referral appears in receiving department queue within 60 seconds with status Pending and a mandatory reason.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M5-02</span><div class="fr-text"><strong>Referral token routing:</strong> The receiving department shall issue a referral token against the same Visit ID and ReferralID when the patient is physically routed to that department. <span class="pill pill-outline-amber">Should Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> No new Patient ID is created; referral token is traceable back to the original Visit ID and ReferralID.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M5-03</span><div class="fr-text"><strong>Referral status tracking:</strong> The system shall track referral status as Pending, Accepted, Completed, or Cancelled. <span class="pill pill-outline-amber">Should Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Status changes are timestamped and logged; referrals open beyond 48 hours are flagged on the admin dashboard.</div></div>
+</div>
+<!-- M6 Requirements -->
+<div class="fr-group">
+<div class="fr-group-title">M6 — Lab Order, Payment Choice &amp; Report Upload</div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M6-01</span><div class="fr-text"><strong>Lab order receipt:</strong> The system shall display lab orders in the lab module with patient name, Visit ID, test name, urgency flag, and lab type. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Visible within 60 seconds of doctor submission.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M6-02</span><div class="fr-text"><strong>Payment enforcement:</strong> The system shall require payment confirmation before an in-house lab order moves to In Progress, except when the urgency flag is active. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Payment status mandatory for non-urgent in-house orders; urgent orders move to In Progress without payment hold.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M6-03</span><div class="fr-text"><strong>Immutable source labels:</strong> Lab reports and patient-uploaded records shall be permanently labelled with their source at upload. Labels cannot be changed after upload. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Label field is write-once; no UI or API path allows label modification post-upload.</div></div>
+</div>
+<!-- M7 Requirements -->
+<div class="fr-group">
+<div class="fr-group-title">M7 — E-Prescription &amp; Pharmacy Dispensing</div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M7-01</span><div class="fr-text"><strong>Prescription display:</strong> The pharmacy module shall display the e-prescription with patient name, Visit ID, drug name, dosage, frequency, duration, and prescribing doctor. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Visible within 60 seconds of doctor generation.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M7-02</span><div class="fr-text"><strong>Dispense block:</strong> The system shall prevent dispensing without a valid e-prescription linked to an active Visit ID. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Dispense action disabled if no valid prescription exists; manual override requires senior pharmacist authorisation and reason logging.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M7-03</span><div class="fr-text"><strong>Partial dispensing:</strong> The system shall support partial dispensing with mandatory reason recording for each undispensed item. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Partial dispense record shows prescribed vs dispensed quantity per item; reason field mandatory for any undispensed item.</div></div>
+</div>
+<!-- M8 Requirements -->
+<div class="fr-group">
+<div class="fr-group-title">M8 — Patient Digital Record</div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M8-01</span><div class="fr-text"><strong>Longitudinal patient record:</strong> The system shall maintain one permanent digital record per Patient ID, with every Visit ID linked under that patient record. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Previous visits remain visible under the same Patient ID and are never overwritten by new visits.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M8-02</span><div class="fr-text"><strong>Visit-level record storage:</strong> Consultation summaries, e-prescriptions, lab orders, lab reports, referrals, and pharmacy actions shall be stored against the relevant Visit ID. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Each clinical/output item links to exactly one Visit ID and can be traced back to the permanent Patient ID.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M8-03</span><div class="fr-text"><strong>IP discharge summary reference:</strong> The system shall allow authorised clinical admin or discharge desk staff to attach a basic IP discharge summary for OP follow-up reference only. <span class="pill pill-outline-amber">Should Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> The attachment is labelled “OP Follow-up Reference”; full inpatient charting, nursing notes, and inpatient billing remain inaccessible from the OPD module.</div></div>
+</div>
+<!-- M9 Requirements -->
+<div class="fr-group">
+<div class="fr-group-title">M9 — Patient Portal &amp; Record Access</div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M9-01</span><div class="fr-text"><strong>OTP login:</strong> The system shall authenticate patients via one-time password sent to their registered mobile number. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> OTP delivered within 30 seconds; expires after 10 minutes; max 3 attempts before temporary lock.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M9-02</span><div class="fr-text"><strong>Digital summary default:</strong> The system shall make the digital visit summary available in the portal by default as soon as the visit is marked complete. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Visit summary appears in portal within 5 minutes of visit closure; no staff action required.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M9-03</span><div class="fr-text"><strong>Patient upload:</strong> The system shall allow patients to upload external or historical records, permanently labelled as Patient-Uploaded. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Supported file types: PDF, JPG, PNG; label immutable after upload; default review status is Pending Review; doctor/staff can mark Reviewed or Rejected; record visible under patient's own portal only.</div></div>
+</div>
+<!-- M10 Requirements -->
+<div class="fr-group">
+<div class="fr-group-title">M10 — Admin Dashboard</div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M10-01</span><div class="fr-text"><strong>Operational metrics:</strong> The dashboard shall display registrations today, active tokens by department, average wait time, pending lab payments, pharmacy dispensing status, and open referrals. <span class="pill pill-outline-amber">Should Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Metrics refresh within 60 seconds and display aggregate operational data only.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M10-02</span><div class="fr-text"><strong>Role-based dashboard views:</strong> The dashboard shall apply role-specific visibility for Department Head, OPD Head, and Hospital Admin. <span class="pill pill-outline-amber">Should Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Department Head sees only own department; OPD Head sees all OPD departments; Admin sees full operational view.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M10-03</span><div class="fr-text"><strong>Export logging:</strong> The system shall allow CSV/PDF export of dashboard panels and log every export action. <span class="pill pill-outline-amber">Should Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Export log captures user ID, timestamp, dashboard panel, and filter criteria used.</div></div>
+</div>
+<!-- M11 Requirements -->
+<div class="fr-group">
+<div class="fr-group-title">M11 — Privacy, Consent &amp; Role-Based Access</div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M11-01</span><div class="fr-text"><strong>Role-based access enforcement:</strong> The system shall enforce data access based on user role for reception, doctor, pharmacist, lab staff, admin, patient portal, and IT admin. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Users cannot view or edit data categories outside their role permissions; denied attempts are logged.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M11-02</span><div class="fr-text"><strong>Consent records:</strong> The system shall maintain separate consent records for treatment data storage, research use, and third-party sharing. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> ConsentRecord is the authoritative source; consent revocation restricts future non-treatment sharing but does not delete treatment records.</div></div>
+<div class="fr-row"><div class="fr-main"><span class="fr-id">FR-M11-03</span><div class="fr-text"><strong>Emergency access audit:</strong> The system shall allow emergency access only to authorised senior clinical roles with mandatory reason and time-limited access. <span class="pill pill-teal">Must Have</span></div></div><div class="fr-ac"><strong>Acceptance:</strong> Emergency access is logged, flagged to IT Admin/Hospital Management, and expires automatically after the defined time window.</div></div>
+</div>
+<!-- NFR -->
+<div class="fr-group">
+<div class="fr-group-title">Non-Functional Requirements</div>
+<div class="tbl-wrap">
+<table class="styled">
+<thead><tr><th>NFR-ID</th><th>Category</th><th>Requirement</th></tr></thead>
+<tbody>
+<tr><td><span class="fr-id" style="display:inline-block;">NFR-01</span></td><td>Performance</td><td>Patient lookup must return results within 3 seconds for 95% of searches under normal load</td></tr>
+<tr><td><span class="fr-id" style="display:inline-block;">NFR-02</span></td><td>Performance</td><td>Token queue display must refresh within 30 seconds of any status change</td></tr>
+<tr><td><span class="fr-id" style="display:inline-block;">NFR-03</span></td><td>Performance</td><td>E-prescription visible in pharmacy module within 60 seconds of generation</td></tr>
+<tr><td><span class="fr-id" style="display:inline-block;">NFR-04</span></td><td>Security</td><td>All patient data encrypted at rest and in transit using industry-standard protocols</td></tr>
+<tr><td><span class="fr-id" style="display:inline-block;">NFR-05</span></td><td>Security</td><td>Sessions must time out after 15 minutes of inactivity for all clinical and admin roles</td></tr>
+<tr><td><span class="fr-id" style="display:inline-block;">NFR-06</span></td><td>Security</td><td>All data access, edits, and exports logged in an immutable audit trail</td></tr>
+<tr><td><span class="fr-id" style="display:inline-block;">NFR-07</span></td><td>Availability</td><td>System uptime target of 99.5% during OPD operational hours (7am–9pm)</td></tr>
+<tr><td><span class="fr-id" style="display:inline-block;">NFR-08</span></td><td>Usability</td><td>Trained receptionist must complete returning patient registration + token in under 2 minutes</td></tr>
+<tr><td><span class="fr-id" style="display:inline-block;">NFR-09</span></td><td>Usability</td><td>System must be accessible on standard hospital desktop browsers without additional plugins</td></tr>
+<tr><td><span class="fr-id" style="display:inline-block;">NFR-10</span></td><td>Scalability</td><td>System must support 50 concurrent active users during peak OPD hours without performance degradation</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- S10 BUSINESS RULES -->
+<section class="section" id="s10" style="background:var(--surface);">
+<div class="section-label">Section 10</div>
+<h2 class="section-title">Business Rules</h2>
+<p class="section-lead">Rules governing system behaviour. Rules marked with a shield icon are patient-safety-critical.</p>
+<div class="br-card"><div class="br-id">BR-01</div><div class="br-content"><div class="br-rule">One permanent Patient ID is assigned per patient. A new Patient ID may not be created for a patient who already has a record in the system.</div><div class="br-rationale">Prevents duplicate records and ensures all visit history is consolidated under a single identity.</div><span class="br-module">Registration</span></div></div>
+<div class="br-card"><div class="br-id">BR-02</div><div class="br-content"><div class="br-rule">Before creating a new patient record, the system must check for an existing record using mobile number and date of birth. A new record may only be created if no confirmed match is found, or the match is reviewed and dismissed by an authorised user.</div><div class="br-rationale">Duplicate check is the primary control against fragmented patient histories.</div><span class="br-module">Registration</span></div></div>
+<div class="br-card"><div class="br-id">BR-03</div><div class="br-content"><div class="br-rule">Every visit must have its own unique Visit ID. A Patient ID must never be used as a Visit ID. Visit IDs are not recycled or reused.</div><div class="br-rationale">Separates permanent patient identity from episodic visit activity, enabling clean longitudinal records.</div><span class="br-module">Visit Management</span></div></div>
+<div class="br-card"><div class="br-id">BR-04</div><div class="br-content"><div class="br-rule">Department assignment is per visit. A patient's department for one visit does not restrict or pre-select the department for any future visit.</div><div class="br-rationale">Patients at a multispeciality hospital visit different departments across different visits; routing must always reflect the current need.</div><span class="br-module">Visit Management</span></div></div>
+<div class="br-card safety"><div class="br-id">BR-05 🛡</div><div class="br-content"><div class="br-rule">In-house lab payment must be confirmed before the lab order moves to In Progress. This rule may only be overridden when an authorised user has raised an urgency flag. The override reason must be recorded.</div><div class="br-rationale">Ensures payment integrity while guaranteeing that clinical urgency is never blocked by administrative processes.</div><span class="br-module">Lab</span></div></div>
+<div class="br-card safety"><div class="br-id">BR-06 🛡</div><div class="br-content"><div class="br-rule">Emergency and urgent visits must not be blocked at any stage — registration, token queue, lab, or pharmacy — due to pending payment or incomplete administrative steps. Urgency override is available at each stage and requires a reason to be recorded.</div><div class="br-rationale">Patient safety is the overriding priority. Financial resolution always follows clinical resolution.</div><span class="br-module">All Modules</span></div></div>
+<div class="br-card safety"><div class="br-id">BR-07 🛡</div><div class="br-content"><div class="br-rule">No pharmacy dispensing may occur without a valid e-prescription linked to an active Visit ID. The system must prevent dispensing if this condition is not met. A handwritten prescription exception is permitted only with senior pharmacist authorisation and mandatory reason logging.</div><div class="br-rationale">Eliminates unvalidated dispensing, reduces medication errors, and creates a complete dispensing audit trail.</div><span class="br-module">Pharmacy</span></div></div>
+<div class="br-card"><div class="br-id">BR-08</div><div class="br-content"><div class="br-rule">External lab reports and patient-uploaded records must be permanently labelled with their source at the time of upload. Source labels cannot be changed after upload. External reports cannot appear as hospital-generated records under any circumstances.</div><div class="br-rationale">Maintains clinical record integrity. Doctors must know whether a report was generated under hospital quality controls or obtained externally.</div><span class="br-module">Lab / Patient Record</span></div></div>
+<div class="br-card"><div class="br-id">BR-08A</div><div class="br-content"><div class="br-rule">Patient-uploaded records are treated as supporting documents only until reviewed by authorised clinical staff. They may be marked Pending Review, Reviewed, or Rejected, but their Patient-Uploaded source label remains unchanged.</div><div class="br-rationale">Prevents forged, duplicate, unclear, or outdated documents from being mistaken as verified hospital-created records.</div><span class="br-module">Patient Portal / Record Governance</span></div></div>
+<div class="br-card"><div class="br-id">BR-09</div><div class="br-content"><div class="br-rule">The patient card — physical or digital — must contain only: Patient ID, name, date of birth, and QR code. Clinical data including assessment and plan, medicines, test results, complaint, or department must never appear on the patient card.</div><div class="br-rationale">Data minimisation principle. The card is an identity token, not a clinical summary. Loss of the card must carry zero clinical data risk.</div><span class="br-module">Patient Card</span></div></div>
+<div class="br-card"><div class="br-id">BR-10</div><div class="br-content"><div class="br-rule">A printed visit summary is generated only on explicit patient or staff request. A digital visit summary is made available in the patient portal by default when the visit is closed.</div><div class="br-rationale">Reduces unnecessary paper output while ensuring every patient has guaranteed digital access to their visit record without staff intervention.</div><span class="br-module">Patient Record / Portal</span></div></div>
+<div class="br-card"><div class="br-id">BR-11</div><div class="br-content"><div class="br-rule">Referrals remain open until explicitly marked as Completed or Cancelled by an authorised user. A visit may be closed with open referrals only if the doctor explicitly acknowledges them at the time of closure.</div><div class="br-rationale">Prevents referrals from being silently abandoned. Acknowledgement creates a documented record that the doctor was aware of the open referral.</div><span class="br-module">Referral</span></div></div>
+<div class="br-card"><div class="br-id">BR-12</div><div class="br-content"><div class="br-rule">Role-based access is enforced at the system level. No user may access data categories outside their assigned role. Emergency access beyond role boundaries requires mandatory reason logging, senior-level authorisation, and time-limited access.</div><div class="br-rationale">Protects patient data and limits the risk of accidental or deliberate unauthorised access.</div><span class="br-module">Access Control</span></div></div>
+<div class="br-card"><div class="br-id">BR-13</div><div class="br-content"><div class="br-rule">A consent record must exist before any data sharing for non-treatment purposes. Research, analytics beyond operational reporting, or third-party sharing each require a specific, separately recorded consent.</div><div class="br-rationale">Separates treatment consent from secondary use consent. Patients have a clear right to restrict non-treatment use of their data.</div><span class="br-module">Consent</span></div></div>
+<div class="br-card"><div class="br-id">BR-14</div><div class="br-content"><div class="br-rule">Patient records are never deleted. Records no longer in active use are archived through a defined and authorised archival process. Archived records remain retrievable by IT Admin.</div><div class="br-rationale">Healthcare records carry long-term clinical and legal significance. Deletion must not occur through routine system operation.</div><span class="br-module">Patient Record</span></div></div>
+<div class="br-card"><div class="br-id">BR-15</div><div class="br-content"><div class="br-rule">All audit log entries are written once and are read-only. Audit logs cannot be edited, amended, or deleted by any user role — including IT Admin.</div><div class="br-rationale">An editable audit log provides no assurance. Immutability is the minimum standard for a trustworthy audit trail.</div><span class="br-module">Audit</span></div></div>
+<div class="br-card"><div class="br-id">BR-16</div><div class="br-content"><div class="br-rule">If a returning patient changes their registered mobile number, staff must verify identity using Patient ID/card, old mobile number if available, date of birth, or alternate contact before updating it. Previous mobile number is retained in mobile change history and the action is audit logged.</div><div class="br-rationale">Prevents account takeover and preserves lookup continuity when mobile numbers change.</div><span class="br-module">Registration / Audit</span></div></div>
+<div class="br-card"><div class="br-id">BR-17</div><div class="br-content"><div class="br-rule">Internal referrals use the same Visit ID and create a ReferralID-linked token for the receiving department. A referral must not create a new Patient ID or fragment the current visit history.</div><div class="br-rationale">Keeps the patient physically routable between departments while preserving one connected visit trail.</div><span class="br-module">Referral / Token</span></div></div>
+<div class="br-card safety"><div class="br-id">BR-18 🛡</div><div class="br-content"><div class="br-rule">The urgency flag may be set only by authorised roles: OPD Doctor, Triage Nurse, Senior Receptionist, or OPD Supervisor. The flag must include a mandatory reason before it can be saved.</div><div class="br-rationale">Prevents casual queue/payment bypass while allowing urgent patient care to move faster when clinically or operationally justified.</div><span class="br-module">Urgency / Token / Lab</span></div></div>
+</section>
+<!-- S11 DATA MODEL -->
+<section class="section" id="s11">
+<div class="section-label">Section 11</div>
+<h2 class="section-title">Data Fields &amp; Logical Data Model</h2>
+<p class="section-lead">Logical-level entities with key attributes. This is not a physical database schema — it defines the business entities and their relationships.</p>
+<div class="entity-grid mb-2">
+<div class="entity-card">
+<div class="entity-header">Patient</div>
+<div class="entity-body">
+<div class="entity-field field-pk">PatientID (PK)</div>
+<div class="entity-field">FirstName, LastName</div>
+<div class="entity-field">DateOfBirth, Gender</div>
+<div class="entity-field">MobileNumber, AlternateContact</div>
+<div class="entity-field">MobileChangeHistory</div>
+<div class="entity-field">Address, BloodGroup</div>
+<div class="entity-field">EmergencyContactName, Mobile</div>
+<div class="entity-field">ConsentProfileStatus (summary only)</div>
+<div class="entity-field">RegistrationDate</div>
+<div class="entity-field">RecordStatus (Active/Archived)</div>
+</div>
+</div>
+<div class="entity-card">
+<div class="entity-header">Visit</div>
+<div class="entity-body">
+<div class="entity-field field-pk">VisitID (PK)</div>
+<div class="entity-field field-fk">PatientID (FK → Patient)</div>
+<div class="entity-field">VisitDate</div>
+<div class="entity-field">DepartmentCode</div>
+<div class="entity-field">AssignedDoctorID</div>
+<div class="entity-field">TokenNumber</div>
+<div class="entity-field">VisitType (New/Follow-up)</div>
+<div class="entity-field">UrgencyFlag (Y/N), UrgencyReason</div>
+<div class="entity-field">VisitStatus</div>
+</div>
+</div>
+<div class="entity-card">
+<div class="entity-header">ConsultationNote</div>
+<div class="entity-body">
+<div class="entity-field field-pk">NoteID (PK)</div>
+<div class="entity-field field-fk">VisitID (FK → Visit)</div>
+<div class="entity-field">ChiefComplaint</div>
+<div class="entity-field">ExaminationFindings</div>
+<div class="entity-field">Assessment</div>
+<div class="entity-field">Plan</div>
+<div class="entity-field">FollowUpDate, Instructions</div>
+<div class="entity-field">CreatedByDoctorID</div>
+<div class="entity-field">NoteTimestamp</div>
+<div class="entity-field">NoteStatus (Draft/Final)</div>
+<div class="entity-field">AmendmentLog</div>
+</div>
+</div>
+<div class="entity-card">
+<div class="entity-header">ePrescription</div>
+<div class="entity-body">
+<div class="entity-field field-pk">PrescriptionID (PK)</div>
+<div class="entity-field field-fk">VisitID (FK → Visit)</div>
+<div class="entity-field">PrescribedByDoctorID</div>
+<div class="entity-field">PrescriptionTimestamp</div>
+<div class="entity-field">PrescriptionStatus</div>
+</div>
+</div>
+<div class="entity-card">
+<div class="entity-header">PrescriptionLineItem</div>
+<div class="entity-body">
+<div class="entity-field field-pk">LineItemID (PK)</div>
+<div class="entity-field field-fk">PrescriptionID (FK → ePrescription)</div>
+<div class="entity-field">DrugName</div>
+<div class="entity-field">Dosage, Frequency</div>
+<div class="entity-field">Duration</div>
+<div class="entity-field">SpecialInstructions</div>
+</div>
+</div>
+<div class="entity-card">
+<div class="entity-header">LabOrder</div>
+<div class="entity-body">
+<div class="entity-field field-pk">LabOrderID (PK)</div>
+<div class="entity-field field-fk">VisitID (FK → Visit)</div>
+<div class="entity-field">TestName</div>
+<div class="entity-field">OrderedByDoctorID</div>
+<div class="entity-field">LabType (InHouse/External)</div>
+<div class="entity-field">UrgencyFlag (Y/N), UrgencyReason</div>
+<div class="entity-field">PaymentStatus</div>
+<div class="entity-field">OrderStatus</div>
+<div class="entity-field">OrderTimestamp</div>
+</div>
+</div>
+<div class="entity-card">
+<div class="entity-header">LabReport</div>
+<div class="entity-body">
+<div class="entity-field field-pk">ReportID (PK)</div>
+<div class="entity-field field-fk">LabOrderID (FK → LabOrder, optional)</div>
+<div class="entity-field field-fk">VisitID (FK → Visit)</div>
+<div class="entity-field field-special">ReportSource (immutable)*</div>
+<div class="entity-field">UploadedByUserID</div>
+<div class="entity-field">UploadTimestamp</div>
+<div class="entity-field">ReportFile (file reference)</div>
+<div class="entity-field">ReportDate</div>
+</div>
+</div>
+<div class="entity-card">
+<div class="entity-header">PharmacyDispensing</div>
+<div class="entity-body">
+<div class="entity-field field-pk">DispenseID (PK)</div>
+<div class="entity-field field-fk">PrescriptionID (FK → ePrescription)</div>
+<div class="entity-field">DispensedByPharmacistID</div>
+<div class="entity-field">DispenseTimestamp</div>
+<div class="entity-field">DispenseStatus (Full/Partial)</div>
+</div>
+</div>
+<div class="entity-card">
+<div class="entity-header">PharmacyDispenseLineItem</div>
+<div class="entity-body">
+<div class="entity-field field-pk">DispenseLineID (PK)</div>
+<div class="entity-field field-fk">DispenseID (FK → PharmacyDispensing)</div>
+<div class="entity-field field-fk">LineItemID (FK → PrescriptionLineItem)</div>
+<div class="entity-field">QuantityPrescribed</div>
+<div class="entity-field">QuantityDispensed</div>
+<div class="entity-field">PartialFlag (Y/N)</div>
+<div class="entity-field">PartialReason</div>
+</div>
+</div>
+<div class="entity-card">
+<div class="entity-header">Referral</div>
+<div class="entity-body">
+<div class="entity-field field-pk">ReferralID (PK)</div>
+<div class="entity-field field-fk">VisitID (FK → Visit)</div>
+<div class="entity-field">InitiatedByDoctorID</div>
+<div class="entity-field">ReferralType (Internal/External)</div>
+<div class="entity-field">TargetDeptCode / FacilityName</div>
+<div class="entity-field">ReferralReason</div>
+<div class="entity-field">ReferralStatus</div>
+<div class="entity-field">CreatedTimestamp, StatusLastUpdated</div>
+</div>
+</div>
+<div class="entity-card">
+<div class="entity-header">ConsentRecord</div>
+<div class="entity-body">
+<div class="entity-field field-pk">ConsentID (PK)</div>
+<div class="entity-field field-fk">PatientID (FK → Patient)</div>
+<div class="entity-field">ConsentType</div>
+<div class="entity-field">ConsentGiven (Y/N)</div>
+<div class="entity-field">ConsentDate</div>
+<div class="entity-field">ConsentUpdatedDate</div>
+<div class="entity-field">UpdatedByUserID</div>
+</div>
+</div>
+<div class="entity-card">
+<div class="entity-header">AuditLog</div>
+<div class="entity-body">
+<div class="entity-field field-pk">LogID (PK)</div>
+<div class="entity-field">UserID, UserRole</div>
+<div class="entity-field">ActionType</div>
+<div class="entity-field">EntityType, EntityID</div>
+<div class="entity-field">ActionTimestamp</div>
+<div class="entity-field">IPAddress</div>
+<div class="entity-field">AdditionalNotes</div>
+</div>
+</div>
+</div>
+<div class="card-teal card mb-2">
+<div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.5rem;">ENTITY RELATIONSHIP SUMMARY</div>
+<ul class="clean module-capabilities" style="margin:0;font-size:0.83rem;">
+<li>One <strong>Patient</strong> → many <strong>Visits</strong></li>
+<li>One <strong>Visit</strong> → one <strong>ConsultationNote</strong>, one <strong>ePrescription</strong>, one or many <strong>LabOrders</strong>, one or many <strong>Referrals</strong></li>
+<li>One <strong>ePrescription</strong> → one or many <strong>PrescriptionLineItems</strong></li>
+<li>One <strong>LabOrder</strong> → one <strong>LabReport</strong> (or none if pending)</li>
+<li>One <strong>ePrescription</strong> → one <strong>PharmacyDispensing</strong> record</li>
+<li>One <strong>PharmacyDispensing</strong> → one or many <strong>PharmacyDispenseLineItems</strong> (one per prescribed drug line)</li>
+<li>One <strong>Patient</strong> → one or many <strong>ConsentRecords</strong> (one per consent type)</li>
+<li>Every user action against any entity → one <strong>AuditLog</strong> entry</li>
+</ul>
+</div>
+<div class="card-amber card">
+<strong style="font-size:0.82rem;color:var(--amber-dark);">* ReportSource is immutable:</strong>
+<p style="font-size:0.82rem;color:#7a4a0a;margin-top:0.25rem;">The ReportSource field on LabReport is set once at upload (InHouse / External / PatientUploaded) and can never be changed by any user or process. This is enforced at the data layer, not only the UI.</p>
+<p style="font-size:0.82rem;color:#7a4a0a;margin-top:0.5rem;"><strong>Standalone upload note:</strong> LabOrderID is optional for patient-uploaded historical records that do not have a corresponding in-system lab order. VisitID still links the report to the patient journey when a visit is selected.</p>
+</div>
+<div class="card-teal card mt-2">
+<strong style="font-size:0.82rem;color:var(--teal-dark);">Consent model note:</strong>
+<p style="font-size:0.82rem;color:var(--text-sec);margin-top:0.25rem;">ConsentRecord is the authoritative source for each consent type. Patient.ConsentProfileStatus is only a quick summary used for display and workflow checks.</p>
+</div>
+</section>
+<!-- S12 SQL -->
+<section class="section" id="s12" style="background:var(--surface);">
+<div class="section-label">Section 12</div>
+<h2 class="section-title">SQL Reporting Logic — Preview</h2>
+<p class="section-lead">A recruiter-friendly preview of the reporting questions CareFlow can answer. Full SQL code, MySQL function notes, clause-by-clause explanations, and example outputs are kept in the separate SQL Reporting Notes artefact.</p>
+
+<div class="card-amber card mb-2">
+  <p style="font-size:0.82rem;color:#7a4a0a;"><strong>BA framing:</strong> The main portfolio page shows the business value of the queries, while the downloadable SQL artefact contains the complete query logic. This keeps the case study readable and still demonstrates reporting/data understanding.</p>
+</div>
+
+<div class="tbl-wrap">
+<table class="styled">
+<thead>
+<tr>
+<th>Reporting Question</th>
+<th>SQL Logic Demonstrated</th>
+<th>BA / Operational Value</th>
+<th>Full Artefact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Daily OPD count by visit type</strong><br><span style="color:var(--text-muted);font-size:0.78rem;">How many New vs Follow-up visits happened today?</span></td>
+<td>COUNT, GROUP BY, date filter</td>
+<td>Helps admin understand daily OPD volume and visit mix.</td>
+<td><a download="CareFlow_SQL_Reporting_Notes.pdf" href="artefacts/CareFlow_SQL_Reporting_Notes.pdf" style="color:var(--teal);font-weight:700;text-decoration:none;">View SQL Notes →</a></td>
+</tr>
+<tr>
+<td><strong>Active token count by department</strong><br><span style="color:var(--text-muted);font-size:0.78rem;">Which department currently has the highest active queue?</span></td>
+<td>WHERE status filter, GROUP BY, ORDER BY</td>
+<td>Shows department load and helps identify crowding or queue pressure.</td>
+<td><a download="CareFlow_SQL_Reporting_Notes.pdf" href="artefacts/CareFlow_SQL_Reporting_Notes.pdf" style="color:var(--teal);font-weight:700;text-decoration:none;">View SQL Notes →</a></td>
+</tr>
+<tr>
+<td><strong>Pending lab payments</strong><br><span style="color:var(--text-muted);font-size:0.78rem;">Which non-urgent in-house lab orders are waiting for payment?</span></td>
+<td>TIMESTAMPDIFF, payment status filter, urgency filter</td>
+<td>Identifies operational bottlenecks without blocking urgent care.</td>
+<td><a download="CareFlow_SQL_Reporting_Notes.pdf" href="artefacts/CareFlow_SQL_Reporting_Notes.pdf" style="color:var(--teal);font-weight:700;text-decoration:none;">View SQL Notes →</a></td>
+</tr>
+<tr>
+<td><strong>External reports pending upload</strong><br><span style="color:var(--text-muted);font-size:0.78rem;">Which external lab orders still have no report attached?</span></td>
+<td>LEFT JOIN, NULL check, external source filter</td>
+<td>Supports follow-up on missing external reports before doctor review.</td>
+<td><a download="CareFlow_SQL_Reporting_Notes.pdf" href="artefacts/CareFlow_SQL_Reporting_Notes.pdf" style="color:var(--teal);font-weight:700;text-decoration:none;">View SQL Notes →</a></td>
+</tr>
+<tr>
+<td><strong>Pharmacy dispensing gap</strong><br><span style="color:var(--text-muted);font-size:0.78rem;">Which medicines are not dispensed or only partially dispensed?</span></td>
+<td>LEFT JOIN, CASE, IFNULL, partial flag</td>
+<td>Separates Not Dispensed and Partially Dispensed cases for better pharmacy follow-up.</td>
+<td><a download="CareFlow_SQL_Reporting_Notes.pdf" href="artefacts/CareFlow_SQL_Reporting_Notes.pdf" style="color:var(--teal);font-weight:700;text-decoration:none;">View SQL Notes →</a></td>
+</tr>
+<tr>
+<td><strong>Patient visit history lookup</strong><br><span style="color:var(--text-muted);font-size:0.78rem;">What previous visits, notes, and reports belong to one patient?</span></td>
+<td>LEFT JOIN across visits, consultation notes, lab orders, reports</td>
+<td>Shows how the logical data model supports doctor-side patient history review.</td>
+<td><a download="CareFlow_SQL_Reporting_Notes.pdf" href="artefacts/CareFlow_SQL_Reporting_Notes.pdf" style="color:var(--teal);font-weight:700;text-decoration:none;">View SQL Notes →</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="grid-3 mt-2">
+  <div class="card card-teal"><h3 style="font-size:0.9rem;color:var(--teal-dark);margin-bottom:.35rem;">What this proves</h3><p style="font-size:.82rem;color:var(--text-sec);">Ability to convert OPD operational questions into report-ready data logic.</p></div>
+  <div class="card card-amber"><h3 style="font-size:0.9rem;color:var(--teal-dark);margin-bottom:.35rem;">What is not claimed</h3><p style="font-size:.82rem;color:#7a4a0a;">These are not production-optimised SQL scripts or a live database implementation.</p></div>
+  <div class="card card-success"><h3 style="font-size:0.9rem;color:var(--success);margin-bottom:.35rem;">Full download</h3><p style="font-size:.82rem;color:var(--text-sec);margin-bottom:.5rem;">Full query code is available as a separate supporting artefact.</p><a download="CareFlow_SQL_Reporting_Notes.pdf" href="artefacts/CareFlow_SQL_Reporting_Notes.pdf" style="font-size:0.8rem;font-weight:700;color:var(--teal);text-decoration:none;">Download PDF →</a> <span style="color:var(--text-muted);">·</span> <a download="CareFlow_SQL_Reporting_Notes.docx" href="artefacts/CareFlow_SQL_Reporting_Notes.docx" style="font-size:0.8rem;font-weight:700;color:var(--teal);text-decoration:none;">DOCX</a></div>
+</div>
+</section>
+
+<!-- S13 PRIVACY & ACCESS -->
+<section class="section" id="s13">
+<div class="section-label">Section 13</div>
+<h2 class="section-title">Privacy, Consent &amp; Access Control</h2>
+<p class="section-lead">Every data interaction in CareFlow is authorised, audited, and aligned with the patient's expressed consent.</p>
+<div class="grid-3 mb-2">
+<div class="card-teal card">
+<div style="font-size:1.2rem;margin-bottom:0.4rem;">🗜</div>
+<div style="font-weight:700;color:var(--teal-dark);font-size:0.85rem;margin-bottom:0.25rem;">Data Minimisation</div>
+<p style="font-size:0.8rem;color:var(--text-sec);">Only data necessary for the defined purpose is collected. The patient card contains only identity data. Aggregate dashboards contain no identifiable clinical content.</p>
+</div>
+<div class="card-teal card">
+<div style="font-size:1.2rem;margin-bottom:0.4rem;">🎯</div>
+<div style="font-weight:700;color:var(--teal-dark);font-size:0.85rem;margin-bottom:0.25rem;">Purpose Limitation</div>
+<p style="font-size:0.8rem;color:var(--text-sec);">Treatment data is used for treatment and direct hospital operations only. Research, marketing, advanced analytics beyond routine operations, and third-party sharing require separate, explicit, independently revocable consent.</p>
+</div>
+<div class="card-teal card">
+<div style="font-size:1.2rem;margin-bottom:0.4rem;">✅</div>
+<div style="font-weight:700;color:var(--teal-dark);font-size:0.85rem;margin-bottom:0.25rem;">Consent-First</div>
+<p style="font-size:0.8rem;color:var(--text-sec);">No patient data is shared for any non-treatment purpose without a recorded consent. Consent is revocable at any time. Revocation restricts future use — it does not erase past treatment records.</p>
+</div>
+</div>
+<div class="card-amber card mb-2">
+<div style="font-size:0.78rem;font-weight:700;color:var(--amber-dark);margin-bottom:0.4rem;">CONSENT EXAMPLE — TREATMENT VS OPTIONAL SHARING</div>
+<p style="font-size:0.82rem;color:#7a4a0a;margin-bottom:0.35rem;"><strong>Mandatory treatment consent:</strong> patient allows the hospital to create and maintain digital records for consultation, prescriptions, lab reports, billing, and follow-up care.</p>
+<p style="font-size:0.82rem;color:#7a4a0a;"><strong>Optional research/sharing consent:</strong> patient may allow anonymised data to be used for research or allow records to be shared with an external specialist/partner hospital. Patient can refuse optional consent and still receive treatment.</p>
+</div>
+<h3 style="font-size:1rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.75rem;">Role-Based Access Control Matrix</h3>
+<div class="tbl-wrap mb-2">
+<table class="styled">
+<thead>
+<tr>
+<th>Data Category</th>
+<th>Reception</th>
+<th>Doctor</th>
+<th>Pharmacist</th>
+<th>Lab Staff</th>
+<th>Admin</th>
+<th>Patient (Portal)</th>
+<th>IT Admin</th>
+</tr>
+</thead>
+<tbody>
+<tr><td><strong>Patient Demographics</strong></td><td class="access-full">Full</td><td class="access-read">Read</td><td class="access-read">Name Only</td><td class="access-read">Name Only</td><td class="access-read">Read</td><td class="access-own">Own Only</td><td class="access-read">Read</td></tr>
+<tr><td><strong>Consultation Notes</strong></td><td class="access-none">—</td><td class="access-full">Full</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-own">Own (Read)</td><td class="access-none">—</td></tr>
+<tr><td><strong>E-Prescriptions</strong></td><td class="access-none">—</td><td class="access-full">Full</td><td class="access-read">Read</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-own">Own (Read)</td><td class="access-none">—</td></tr>
+<tr><td><strong>Lab Orders &amp; Reports</strong></td><td class="access-none">—</td><td class="access-read">Read</td><td class="access-none">—</td><td class="access-full">Full</td><td class="access-none">—</td><td class="access-own">Own (Read)</td><td class="access-none">—</td></tr>
+<tr><td><strong>Pharmacy Dispensing Records</strong></td><td class="access-none">—</td><td class="access-read">Read</td><td class="access-full">Full</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-own">Own (Read)</td><td class="access-none">—</td></tr>
+<tr><td><strong>Referral Records</strong></td><td class="access-none">—</td><td class="access-full">Full</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-read">Aggregate</td><td class="access-own">Own (Read)</td><td class="access-none">—</td></tr>
+<tr><td><strong>Admin Dashboard</strong></td><td class="access-none">—</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-full">Full</td><td class="access-none">—</td><td class="access-none">—</td></tr>
+<tr><td><strong>Audit Logs</strong></td><td class="access-none">—</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-read">Read Only</td></tr>
+<tr><td><strong>Consent Records</strong></td><td class="access-reg">Reg. Only</td><td class="access-read">Read</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-none">—</td><td class="access-own">Own Only</td><td class="access-read">Read</td></tr>
+</tbody>
+</table>
+</div>
+<div class="grid-2">
+<div class="card">
+<div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.5rem;">AUDIT TRAIL — WHAT IS LOGGED</div>
+<ul class="clean module-capabilities" style="margin:0;font-size:0.82rem;">
+<li>Every record view, edit, upload, and download</li>
+<li>Every login, logout, and session timeout</li>
+<li>Every report export — user ID, timestamp, panel</li>
+<li>Every emergency access invocation — reason mandatory</li>
+<li>Every consent update — before and after values</li>
+<li>Every role change — authorising user logged</li>
+</ul>
+<div class="module-scope mt-1" style="font-size:0.78rem;"><strong>Immutability:</strong> Audit logs are write-once. No user — including IT Admin — can edit or delete them.</div>
+</div>
+<div class="card">
+<div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.5rem;">EMERGENCY ACCESS RULE — REASON + LIMITED TIME + LOG + REVIEW</div>
+<ul class="clean module-capabilities" style="margin:0;font-size:0.82rem;">
+<li>Senior clinician may access records beyond normal role in a documented emergency</li>
+<li>Mandatory reason required before access is granted</li>
+<li>Access is time-limited — expires automatically</li>
+<li>Event immediately flagged in audit log</li>
+<li>Notification sent to IT Admin and Hospital Management</li>
+<li>Use reviewed as part of regular audit activities</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- S14 UAT -->
+<section class="section" id="s14" style="background:var(--surface);">
+<div class="section-label">Section 14</div>
+<h2 class="section-title">UAT Scenarios</h2>
+<p class="section-lead">18 test scenarios covering all core modules. Filter by module below.</p>
+<div class="uat-filter">
+<button class="uat-btn active" onclick="filterUAT('all',this)">All</button>
+<button class="uat-btn" onclick="filterUAT('reg',this)">Registration</button>
+<button class="uat-btn" onclick="filterUAT('token',this)">Token</button>
+<button class="uat-btn" onclick="filterUAT('consult',this)">Consultation</button>
+<button class="uat-btn" onclick="filterUAT('lab',this)">Lab</button>
+<button class="uat-btn" onclick="filterUAT('pharma',this)">Pharmacy</button>
+<button class="uat-btn" onclick="filterUAT('portal',this)">Portal</button>
+<button class="uat-btn" onclick="filterUAT('access',this)">Access Control</button>
+</div>
+<div id="uat-list">
+<div class="uat-row" data-cat="reg"><div class="uat-head"><span class="uat-id">UAT-01</span><span class="pill pill-grey" style="font-size:0.68rem;">Registration</span><span class="uat-title">New patient registration with successful duplicate check</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">No existing record for the patient in the system.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Enter mobile + DOB → system returns no match → complete registration form → save.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Patient ID generated, QR card generated, no duplicate created, visit creation option presented.</div></div></div></div>
+<div class="uat-row" data-cat="reg"><div class="uat-head"><span class="uat-id">UAT-02</span><span class="pill pill-grey" style="font-size:0.68rem;">Registration</span><span class="uat-title">Duplicate patient detection and resolution</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">A patient record already exists for the mobile number and DOB entered.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Enter mobile + DOB → system returns match → review match → confirm existing record.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">No new Patient ID created. Existing Patient ID confirmed. Visit creation proceeds from existing record.</div></div></div></div>
+<div class="uat-row" data-cat="reg"><div class="uat-head"><span class="uat-id">UAT-03</span><span class="pill pill-grey" style="font-size:0.68rem;">Registration</span><span class="uat-title">Returning patient lookup by QR scan</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Patient has a physical card with QR code. Record exists in system.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Reception scans QR code from patient card.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Patient name and Patient ID displayed within 3 seconds. No data entry required.</div></div></div></div>
+<div class="uat-row" data-cat="token"><div class="uat-head"><span class="uat-id">UAT-04</span><span class="pill pill-grey" style="font-size:0.68rem;">Token</span><span class="uat-title">Token issuance and queue display</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Patient record retrieved. Department selected.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Reception selects department → system issues Visit ID and token.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Token visible on waiting area display within 30 seconds. Visit ID created and linked to Patient ID.</div></div></div></div>
+<div class="uat-row" data-cat="token"><div class="uat-head"><span class="uat-id">UAT-05</span><span class="pill pill-grey" style="font-size:0.68rem;">Token</span><span class="uat-title">Urgency flag and priority routing without payment block</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Patient in queue for in-house lab. Lab order has pending payment.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Authorised staff raises urgency flag → enters urgency reason → saves.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Token moves to priority queue. Lab order moves to In Progress without payment confirmation. Reason recorded.</div></div></div></div>
+<div class="uat-row" data-cat="consult"><div class="uat-head"><span class="uat-id">UAT-06</span><span class="pill pill-grey" style="font-size:0.68rem;">Consultation</span><span class="uat-title">Doctor opens visit and views previous history</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Returning patient with two previous visits on record.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Doctor selects patient's active visit → views consultation note form → opens previous visit history panel.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Previous consultation summaries, prescriptions, and lab reports visible in read-only side panel.</div></div></div></div>
+<div class="uat-row" data-cat="consult"><div class="uat-head"><span class="uat-id">UAT-07</span><span class="pill pill-grey" style="font-size:0.68rem;">Consultation</span><span class="uat-title">E-prescription generated and visible in pharmacy</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Doctor has consultation note open. Active Visit ID exists.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Doctor adds drug, dosage, frequency, duration, instructions → saves e-prescription.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">E-prescription visible in pharmacy module within 60 seconds. Prescription linked to Visit ID.</div></div></div></div>
+<div class="uat-row" data-cat="consult"><div class="uat-head"><span class="uat-id">UAT-08</span><span class="pill pill-grey" style="font-size:0.68rem;">Consultation</span><span class="uat-title">Lab order raised with in-house designation</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Doctor has consultation note open.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Doctor raises lab order → selects test name → marks as In-House → saves.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Lab order visible in lab module within 60 seconds. Payment status shows Pending. Linked to Visit ID.</div></div></div></div>
+<div class="uat-row" data-cat="lab"><div class="uat-head"><span class="uat-id">UAT-09</span><span class="pill pill-grey" style="font-size:0.68rem;">Lab</span><span class="uat-title">In-house lab payment collected and report uploaded</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Lab order received in lab module. Payment status is Pending.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Payment confirmed → status updates to Collected → sample processed → lab staff uploads result.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Order status: Completed. Report labelled In-House. Linked to Visit ID. Visible in patient portal.</div></div></div></div>
+<div class="uat-row" data-cat="lab"><div class="uat-head"><span class="uat-id">UAT-10</span><span class="pill pill-grey" style="font-size:0.68rem;">Lab</span><span class="uat-title">External lab report uploaded by staff — source label verified</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Patient brings external lab report to counter. Corresponding visit exists.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Staff selects upload external report → selects Visit ID → uploads file → saves.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Report stored with label "External Report". Label cannot be changed. Visible in portal under the correct visit.</div></div></div></div>
+<div class="uat-row" data-cat="lab"><div class="uat-head"><span class="uat-id">UAT-11</span><span class="pill pill-grey" style="font-size:0.68rem;">Lab</span><span class="uat-title">Patient uploads historical record via portal — source label verified</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Patient logged into portal.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Patient selects upload record → uploads file → confirms.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Record stored with label "Patient-Uploaded" and review status "Pending Review". Label cannot be changed. Visible only under the patient's own portal record. Duplicate/forged/unclear records can later be marked Rejected by authorised clinical staff.</div></div></div></div>
+<div class="uat-row" data-cat="pharma"><div class="uat-head"><span class="uat-id">UAT-12</span><span class="pill pill-grey" style="font-size:0.68rem;">Pharmacy</span><span class="uat-title">Pharmacist dispenses against valid e-prescription</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">E-prescription linked to active Visit ID visible in pharmacy module.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Pharmacist opens prescription → verifies identity → confirms stock → marks all items dispensed → saves.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Dispense record created with Full status. Timestamp recorded. Prescription status: Dispensed.</div></div></div></div>
+<div class="uat-row" data-cat="pharma"><div class="uat-head"><span class="uat-id">UAT-13</span><span class="pill pill-grey" style="font-size:0.68rem;">Pharmacy</span><span class="uat-title">Attempt to dispense without e-prescription — system blocks</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">No e-prescription exists for the patient's Visit ID.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Pharmacist searches patient → attempts to initiate dispensing without e-prescription.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">System prevents dispense action. Error message: "Valid e-prescription required." Dispense action disabled.</div></div></div></div>
+<div class="uat-row" data-cat="pharma"><div class="uat-head"><span class="uat-id">UAT-14</span><span class="pill pill-grey" style="font-size:0.68rem;">Pharmacy</span><span class="uat-title">Partial dispense recorded with reason</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">E-prescription with three drug items. One item out of stock.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Pharmacist dispenses two items → marks third as not dispensed → enters reason (out of stock).</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Dispense record: Partial. Two items dispensed. Third item not dispensed with reason recorded.</div></div></div></div>
+<div class="uat-row" data-cat="portal"><div class="uat-head"><span class="uat-id">UAT-15</span><span class="pill pill-grey" style="font-size:0.68rem;">Portal</span><span class="uat-title">Patient logs in via OTP and views visit history</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Patient has registered mobile number. At least one completed visit on record.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Enter mobile number → OTP sent → patient enters OTP → portal home loads.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">OTP delivered within 30 seconds. Patient's own visit history displayed. No other patient's records visible.</div></div></div></div>
+<div class="uat-row" data-cat="portal"><div class="uat-head"><span class="uat-id">UAT-16</span><span class="pill pill-grey" style="font-size:0.68rem;">Portal</span><span class="uat-title">Printed summary request submitted through portal</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Patient logged into portal. Completed visit on record.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Patient selects visit → requests printed summary → confirms request.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Request appears in reception task queue within 5 minutes. Printed summary collected at counter.</div></div></div></div>
+<div class="uat-row" data-cat="access"><div class="uat-head"><span class="uat-id">UAT-17</span><span class="pill pill-grey" style="font-size:0.68rem;">Access Control</span><span class="uat-title">Receptionist attempts to access clinical consultation notes — system blocks</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Receptionist logged in with Reception role.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Receptionist navigates to patient visit → attempts to open consultation note.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">Clinical note content not displayed. Access restricted message shown. Action logged in audit trail.</div></div></div></div>
+<div class="uat-row" data-cat="access"><div class="uat-head"><span class="uat-id">UAT-18</span><span class="pill pill-grey" style="font-size:0.68rem;">Access Control</span><span class="uat-title">Admin views OPD dashboard — patient clinical data not visible</span></div><div class="uat-body"><div><div class="uat-body-label">Pre-conditions</div><div class="uat-body-text">Admin user logged in with Admin role.</div></div><div><div class="uat-body-label">Test Steps</div><div class="uat-body-text">Admin opens OPD dashboard → views active tokens, registrations, lab payment status.</div></div><div><div class="uat-body-label">Expected Result</div><div class="uat-body-text">All metrics display aggregate operational data only. No patient names, clinical notes, or prescription details visible at any point.</div></div></div></div>
+</div>
+</section>
+<!-- S15 DASHBOARD -->
+<section class="section" id="s15">
+<div class="section-label">Section 15</div>
+<h2 class="section-title">Dashboard Requirements</h2>
+<p class="section-lead">The admin dashboard provides operational visibility without exposing patient-level clinical data. This preview is aligned with the final Live OPD Prototype dashboard so the case study and demo tell the same story.</p>
+<div class="dash-mock mb-2">
+<div class="dash-topbar">
+<div class="dash-topbar-title">CareFlow OPD Operations Dashboard</div>
+<div class="dash-topbar-right">Demo Day · 20 May 2026 · All Departments</div>
+</div>
+<div class="dash-body">
+<div class="kpi-row">
+<div class="kpi-tile">
+<div class="kpi-label">OPD Visits Today</div>
+<div class="kpi-value">147</div>
+<div class="kpi-sub">New: 35 · Follow-up: 112</div>
+<div class="kpi-bar"><div class="kpi-bar-fill" style="width:76%;background:var(--teal);"></div></div>
+</div>
+<div class="kpi-tile">
+<div class="kpi-label">Active Queue</div>
+<div class="kpi-value">26</div>
+<div class="kpi-sub">Across all departments</div>
+<div class="kpi-bar"><div class="kpi-bar-fill" style="width:55%;background:var(--amber);"></div></div>
+</div>
+<div class="kpi-tile">
+<div class="kpi-label">Pending Lab Payments</div>
+<div class="kpi-value">5</div>
+<div class="kpi-sub">Orders pending clearance</div>
+<div class="kpi-bar"><div class="kpi-bar-fill" style="width:22%;background:var(--warn);"></div></div>
+</div>
+<div class="kpi-tile">
+<div class="kpi-label">Pharmacy Gaps</div>
+<div class="kpi-value">6</div>
+<div class="kpi-sub">Not or partially dispensed</div>
+<div class="kpi-bar"><div class="kpi-bar-fill" style="width:14%;background:var(--danger);"></div></div>
+</div>
+</div>
+<div class="dash-mid-row">
+<div class="dash-panel">
+<div class="dash-panel-title">7-Day OPD Visit Trend</div>
+<div class="sparkline">
+<div class="spark-bar" style="height:55%;"></div>
+<div class="spark-bar" style="height:70%;"></div>
+<div class="spark-bar" style="height:45%;"></div>
+<div class="spark-bar" style="height:80%;"></div>
+<div class="spark-bar" style="height:60%;"></div>
+<div class="spark-bar" style="height:90%;"></div>
+<div class="spark-bar" style="height:100%;background:var(--teal);"></div>
+</div>
+<div style="display:flex;justify-content:space-between;margin-top:0.4rem;font-size:0.65rem;color:var(--text-muted);">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Today</span>
+</div>
+</div>
+<div class="dash-panel">
+<div class="dash-panel-title">Active Queue by Department</div>
+<div class="dept-row"><div class="dept-name">Cardiology</div><div class="dept-bar-wrap"><div class="dept-bar-fill" style="width:85%;"></div></div><div class="dept-count">11</div></div>
+<div class="dept-row"><div class="dept-name">Orthopaedics</div><div class="dept-bar-wrap"><div class="dept-bar-fill" style="width:65%;"></div></div><div class="dept-count">8</div></div>
+<div class="dept-row"><div class="dept-name">General Medicine</div><div class="dept-bar-wrap"><div class="dept-bar-fill" style="width:55%;"></div></div><div class="dept-count">7</div></div>
+<div class="dept-row"><div class="dept-name">Pediatrics</div><div class="dept-bar-wrap"><div class="dept-bar-fill" style="width:30%;"></div></div><div class="dept-count">3</div></div>
+</div>
+</div>
+<div class="dash-bot-row">
+<div class="dash-panel">
+<div class="dash-panel-title">Queue Monitoring</div>
+<div class="stat-mini"><span class="stat-mini-key">Average wait time</span><span class="stat-mini-val">34 min</span></div>
+<div class="stat-mini"><span class="stat-mini-key">Longest waiting token</span><span class="stat-mini-val">68 min</span></div>
+<div class="stat-mini" style="color:var(--warn);"><span class="stat-mini-key">No shows</span><span class="stat-mini-val" style="color:var(--warn);">6</span></div>
+</div>
+<div class="dash-panel">
+<div class="dash-panel-title">Lab Exceptions</div>
+<div class="stat-mini"><span class="stat-mini-key">Pending lab payments</span><span class="stat-mini-val">5</span></div>
+<div class="stat-mini"><span class="stat-mini-key">External reports pending</span><span class="stat-mini-val">3</span></div>
+<div class="stat-mini"><span class="stat-mini-key">Urgent orders</span><span class="stat-mini-val">2</span></div>
+</div>
+<div class="dash-panel">
+<div class="dash-panel-title">Pharmacy Dispensing</div>
+<div class="stat-mini"><span class="stat-mini-key">Fully dispensed</span><span class="stat-mini-val">36</span></div>
+<div class="stat-mini"><span class="stat-mini-key">Partially dispensed</span><span class="stat-mini-val">2</span></div>
+<div class="stat-mini"><span class="stat-mini-key">Not dispensed</span><span class="stat-mini-val">4</span></div>
+</div>
+</div>
+<div class="dash-disclaimer">This dashboard preview uses the same sample values as the Live OPD Prototype. All figures are fictional aggregate operational data. No patient-identifiable clinical information is visible at dashboard level.</div>
+</div>
+</div>
+<div class="grid-2">
+<div class="card">
+<div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.5rem;">DASHBOARD FOCUS &amp; EXPORT</div>
+<ul class="clean module-capabilities" style="margin:0;font-size:0.82rem;">
+<li>Dashboard focus can highlight Visits, Queue, Lab, Pharmacy, or Patient History</li>
+<li>Focus changes sample KPI cards and reporting insight cards in the live prototype</li>
+<li>Export is a demo action only; production exports would be role-controlled and audit-logged</li>
+<li>Admin sees aggregate metrics only, not unrestricted clinical notes</li>
+</ul>
+</div>
+<div class="card">
+<div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.5rem;">FINAL UI REFERENCE</div>
+<ul class="clean module-capabilities" style="margin:0;font-size:0.82rem;">
+<li>The Live OPD Prototype is the final dashboard screen reference</li>
+<li>The preview above is a static portfolio summary of the same dashboard logic</li>
+<li>Open the live demo to test focus filters, insights, and export validation</li>
+<li><a href="careflow-opd-workflow-prototype.html" target="_blank" style="color:var(--teal);font-weight:800;text-decoration:none;">Open Live OPD Prototype →</a></li>
+</ul>
+</div>
+</div>
+</section><section class="section" id="s16">
+<div class="section-label">Section 16</div>
+<h2 class="section-title">Live OPD Workflow Prototype</h2>
+<p class="section-lead">Clickable front-end prototype used as a BA communication artefact. It visually demonstrates the same OPD scope documented in this case study using fictional sample data.</p>
+<div class="card-teal card" style="margin-bottom:1rem;">
+<div style="font-size:0.86rem;font-weight:800;color:var(--teal-dark);margin-bottom:0.45rem;">Why this prototype is included</div>
+<p style="font-size:0.86rem;color:var(--text-sec);margin-bottom:0.7rem;">The live prototype helps recruiters and interviewers see how the documented requirements could appear to front desk staff, OPD coordinators, doctors, lab/pharmacy staff, and admin users. It is not a production HMIS/EMR and does not connect to any real database or external system.</p>
+<a href="careflow-opd-workflow-prototype.html" style="display:inline-flex;align-items:center;gap:0.45rem;background:var(--teal);color:white;border-radius:8px;padding:0.65rem 1rem;font-size:0.82rem;font-weight:800;text-decoration:none;" target="_blank">Open CareFlow OPD Workflow Prototype →</a>
+</div>
+<div class="grid-3" style="margin:1.2rem 0;">
+<div class="card" style="border-top:4px solid var(--teal);"><div style="font-weight:800;color:var(--teal-dark);font-size:0.82rem;margin-bottom:0.3rem;">OP Registration</div><p style="font-size:0.8rem;color:var(--text-sec);">Patient search, duplicate suggestion, visit type, department, doctor selection, consultation fee status, and token generation.</p></div>
+<div class="card" style="border-top:4px solid var(--amber);"><div style="font-weight:800;color:var(--teal-dark);font-size:0.82rem;margin-bottom:0.3rem;">Token Queue</div><p style="font-size:0.8rem;color:var(--text-sec);">Department queue, waiting time, longest waiting flag, no-shows, and routing status updates.</p></div>
+<div class="card" style="border-top:4px solid var(--teal);"><div style="font-weight:800;color:var(--teal-dark);font-size:0.82rem;margin-bottom:0.3rem;">Doctor Workspace</div><p style="font-size:0.8rem;color:var(--text-sec);">Doctor patient queue/search, selected patient header, vitals, complaint, assessment, lab order, prescription, and follow-up advice.</p></div>
+<div class="card" style="border-top:4px solid var(--amber);"><div style="font-weight:800;color:var(--teal-dark);font-size:0.82rem;margin-bottom:0.3rem;">Lab &amp; Pharmacy</div><p style="font-size:0.8rem;color:var(--text-sec);">Lab status, external report source/upload, pharmacy dispense status, partial dispense, and exception tracking.</p></div>
+<div class="card" style="border-top:4px solid var(--teal);"><div style="font-weight:800;color:var(--teal-dark);font-size:0.82rem;margin-bottom:0.3rem;">Admin Dashboard</div><p style="font-size:0.8rem;color:var(--text-sec);">Dashboard focus filters, sample KPI values, queue/lab/pharmacy/patient-history insights, and role-controlled export note.</p></div>
+<div class="card" style="border-top:4px solid var(--text-muted);"><div style="font-weight:800;color:var(--teal-dark);font-size:0.82rem;margin-bottom:0.3rem;">Portfolio boundary</div><p style="font-size:0.8rem;color:var(--text-sec);">Fictional BA portfolio prototype, inspired by common OPD workflow patterns. No real patient data, hospital screenshots, URLs, ABHA/PHR API, payment gateway, SMS/WhatsApp API, lab machine, or database integration.</p></div>
+</div>
+</section>
+<!-- S16 IMPACT -->
+<section class="section" id="s17" style="background:var(--surface);">
+<div class="section-label">Section 17</div>
+<h2 class="section-title">Business Impact</h2>
+<div class="card-amber card mb-2" style="display:inline-flex;align-items:center;gap:0.5rem;">
+<span style="font-size:0.82rem;color:#7a4a0a;">⚠ All metrics below are <strong>illustrative assumptions for portfolio demonstration</strong>. They are not based on live implementation data.</span>
+</div>
+<div class="grid-3 mb-2" style="margin-top:0.5rem;">
+<div class="impact-card">
+<div class="impact-icon">👤</div>
+<div class="impact-title">Patient Experience</div>
+<div class="impact-text">Single Patient ID for life. Self-service portal access via OTP. Digital visit summary available at closure. No lost reports — all linked to Visit ID.</div>
+</div>
+<div class="impact-card">
+<div class="impact-icon">⚙️</div>
+<div class="impact-title">Operational Efficiency</div>
+<div class="impact-text">Returning patient registration under 2 minutes. Real-time OPD visibility eliminates end-of-day manual tallies. Connected clinical-lab-pharmacy chain removes handoff delays.</div>
+</div>
+<div class="impact-card">
+<div class="impact-icon">🛡</div>
+<div class="impact-title">Clinical Safety</div>
+<div class="impact-text">No dispensing without validated e-prescription. Urgent patients never blocked by payment. Referrals tracked to completion. Report source always visible to the reviewing doctor.</div>
+</div>
+<div class="impact-card">
+<div class="impact-icon">📊</div>
+<div class="impact-title">Data Quality</div>
+<div class="impact-text">Duplicate check at registration targets near-zero duplicate rate. Every record structured and queryable. Source labels on all external reports enforce record integrity.</div>
+</div>
+<div class="impact-card">
+<div class="impact-icon">🏛</div>
+<div class="impact-title">Administrative Governance</div>
+<div class="impact-text">Immutable audit trail for every data interaction. Consent management framework for data sharing. Role-based access reduces breach surface area.</div>
+</div>
+</div>
+<div class="tbl-wrap">
+<table class="styled">
+<thead><tr><th>Metric</th><th>Before CareFlow</th><th>After CareFlow (Target)</th><th>Basis</th></tr></thead>
+<tbody>
+<tr><td>Returning patient registration time</td><td>~7–8 minutes (manual search)</td><td>Under 2 minutes (QR scan)</td><td>Illustrative assumption</td></tr>
+<tr><td>Duplicate patient record rate</td><td>~12–15% (estimated)</td><td>Near zero (duplicate check at registration)</td><td>Illustrative assumption</td></tr>
+<tr><td>Lost or unavailable lab reports</td><td>Frequent (paper-dependent)</td><td>Eliminated (all linked to Visit ID)</td><td>Illustrative assumption</td></tr>
+<tr><td>Prescription dispensing validation</td><td>Manual pharmacist check only</td><td>System-enforced e-prescription validation</td><td>By design</td></tr>
+<tr><td>Admin OPD report availability</td><td>End of day, manual compilation</td><td>Real-time dashboard throughout the day</td><td>By design</td></tr>
+<tr><td>Patient access to visit summary</td><td>Paper copy on request, at counter</td><td>Digital, available at visit closure (default)</td><td>By design</td></tr>
+<tr><td>Urgent patient payment hold</td><td>Possible under manual system</td><td>Structurally prevented by urgency flag</td><td>By design</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- S17 REFLECTION -->
+<section class="section" id="s18">
+<div class="section-label">Section 18</div>
+<h2 class="section-title">BA Reflection</h2>
+<p class="section-lead">Professional reflections on what worked, what was difficult, and what this engagement taught me.</p>
+<div class="grid-3 mb-2">
+<div class="refl-card">
+<div class="refl-icon">✅</div>
+<div class="refl-title" style="color:var(--success);">What Went Well</div>
+<ul class="refl-list clean">
+<li>Early scope boundary statement (what CareFlow is NOT) was referenced repeatedly throughout — prevented scope creep in workshops and assumed implementation reviews</li>
+<li>MoSCoW phasing exercise helped manage doctor adoption concerns; showing what was NOT changing on day one built clinical staff confidence</li>
+<li>Immutable source label rule for external reports was agreed in a single lab module workshop — prevented a governance gap that would have been costly to fix post-build</li>
+<li>Requirements traceability from business need → FR → UAT scenario kept requirements traceable and reduced rework risk</li>
+</ul>
+</div>
+<div class="refl-card">
+<div class="refl-icon">⚡</div>
+<div class="refl-title" style="color:var(--warn);">What Was Challenging</div>
+<ul class="refl-list clean">
+<li>Holding the scope boundary as stakeholders began to see what was possible — especially around expanding the patient digital record toward a full EMR</li>
+<li>Doctor adoption concerns required more nuance than anticipated — the issue was professional autonomy, not technology resistance. Framing the note as a record tool (not a gate) was the key shift</li>
+<li>The terms "visit," "episode," and "encounter" were used interchangeably by different stakeholders — caused document inconsistencies before the glossary was introduced</li>
+<li>Defining the IP discharge summary continuity boundary without expanding into full inpatient management. Final rule: only the discharge summary is attached for OP follow-up reference; full IP records remain out of scope</li>
+</ul>
+</div>
+<div class="refl-card">
+<div class="refl-icon">🔄</div>
+<div class="refl-title" style="color:var(--teal);">What I'd Do Differently</div>
+<ul class="refl-list clean">
+<li>Involve pharmacy team one workshop earlier — by the time the e-prescription design was presented for review, they had formed assumptions that conflicted with what was designed</li>
+<li>Run a live pilot of the token queue display with reception staff before finalising UI requirements — the refresh speed feedback came during UAT when it should have come during requirements</li>
+<li>Build the project glossary on day one of stakeholder interviews, not mid-project after conflicting terminology had already entered draft documents</li>
+</ul>
+</div>
+</div>
+<h3 style="font-size:1rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.75rem;">Key BA Lessons</h3>
+<div class="grid-3">
+<div class="lesson-card">
+<div class="lesson-title">Scope boundaries are deliverables, not disclaimers</div>
+<div class="lesson-text">A clearly stated out-of-scope list is as important as the feature list. In healthcare settings, where every stakeholder has a legitimate reason to want more, it is the primary defence against gradual expansion.</div>
+</div>
+<div class="lesson-card">
+<div class="lesson-title">Data decisions made early become structural</div>
+<div class="lesson-text">The immutable source label rule was a half-sentence in a workshop. If it had not been agreed then, it would have become a post-build change request — or a governance gap discovered after simulated sign-off.</div>
+</div>
+<div class="lesson-card">
+<div class="lesson-title">Patient safety rules must be designed in, not bolted on</div>
+<div class="lesson-text">The rule that urgent patients are never blocked by payment sounds obvious in retrospect. Without it being explicit in the business rules register, a development team might have built a simpler payment gate and left the exception as a manual workaround.</div>
+</div>
+</div>
+</section>
+
+<!-- S19 ARTEFACTS -->
+<section class="section" id="s19" style="background:var(--surface);">
+<div class="section-label">Section 19</div>
+<h2 class="section-title">Supporting Artefacts</h2>
+<p class="section-lead">Complete list of supporting BA deliverables and the final clickable OPD workflow prototype.</p>
+<div class="grid-3" style="margin:1.2rem 0 1.6rem;">
+
+  <div class="card" style="border-top:4px solid var(--teal);">
+    <div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.35rem;">Data Dictionary</div>
+    <p style="font-size:0.8rem;color:var(--text-sec);margin-bottom:0.7rem;">Field-level documentation for all 12 CareFlow entities — data types, allowed values, usage context, and entity relationships.</p>
+    <a download="CareFlow_Data_Dictionary.xlsx" href="artefacts/CareFlow_Data_Dictionary.xlsx" style="font-size:0.78rem;font-weight:700;color:var(--teal);text-decoration:none;">Download XLSX →</a>
+  </div>
+
+  <div class="card" style="border-top:4px solid var(--amber);">
+    <div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.35rem;">UAT Summary</div>
+    <p style="font-size:0.8rem;color:var(--text-sec);margin-bottom:0.7rem;">18 scenario-based test cases with pre-conditions, steps, expected results, two realistic defects, and a pilot readiness sign-off checklist.</p>
+    <a download="CareFlow_UAT_Summary.xlsx" href="artefacts/CareFlow_UAT_Summary.xlsx" style="font-size:0.78rem;font-weight:700;color:var(--teal);text-decoration:none;">Download XLSX →</a>
+  </div>
+
+  <div class="card" style="border-top:4px solid var(--teal);">
+    <div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.35rem;">SQL Reporting Notes</div>
+    <p style="font-size:0.8rem;color:var(--text-sec);margin-bottom:0.7rem;">Six business-question-led SQL queries covering OPD queue, lab payment gaps, pharmacy dispensing, referral tracking, and patient visit history — with plain-English explanations.</p>
+    <a download="CareFlow_SQL_Reporting_Notes.pdf" href="artefacts/CareFlow_SQL_Reporting_Notes.pdf" style="font-size:0.78rem;font-weight:700;color:var(--teal);text-decoration:none;">Download PDF →</a>
+    <span style="font-size:0.72rem;color:var(--text-muted);"> · </span>
+    <a download="CareFlow_SQL_Reporting_Notes.docx" href="artefacts/CareFlow_SQL_Reporting_Notes.docx" style="font-size:0.78rem;font-weight:700;color:var(--teal);text-decoration:none;">DOCX</a>
+  </div>
+
+  <div class="card" style="border-top:4px solid var(--teal);">
+    <div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.35rem;">Live OPD Workflow Prototype</div>
+    <p style="font-size:0.8rem;color:var(--text-sec);margin-bottom:0.7rem;">Clickable HTML prototype demonstrating OP registration, token queue, doctor workspace, lab and pharmacy tracking, and admin dashboard — using fictional sample data only.</p>
+    <a href="careflow-opd-workflow-prototype.html" style="font-size:0.78rem;font-weight:700;color:var(--teal);text-decoration:none;" target="_blank">Open Prototype →</a>
+  </div>
+
+  <div class="card" style="border-top:4px solid var(--text-muted);">
+    <div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.35rem;">Supporting: RTM Sample</div>
+    <p style="font-size:0.8rem;color:var(--text-sec);margin-bottom:0.7rem;">A representative traceability sample prepared to validate that each business need maps to a functional requirement, business rule, and UAT scenario. Kept as a supporting artefact rather than a primary portfolio item.</p>
+    <a download="CareFlow_RTM_Sample.xlsx" href="artefacts/CareFlow_RTM_Sample.xlsx" style="font-size:0.78rem;font-weight:700;color:var(--text-muted);text-decoration:none;">Download XLSX →</a>
+  </div>
+
+  <div class="card" style="border-top:4px solid var(--text-muted);">
+    <div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:0.35rem;">About This Artefact Set</div>
+    <p style="font-size:0.8rem;color:var(--text-sec);">The case study documents the workflow thinking and decisions. The downloadable files provide supporting depth for data design, testing, and reporting logic. The prototype serves as the visual workflow reference in place of static screen mockups.</p>
+  </div>
+
+</div>
+<div class="tbl-wrap">
+<table class="styled">
+<thead><tr><th>Artefact</th><th>Type</th><th>Purpose</th><th>Status in Case Study</th></tr></thead>
+<tbody>
+<tr><td><strong>Project Scope Statement</strong></td><td><span class="pill pill-teal" style="font-size:0.68rem;">Governance</span></td><td>Defines what is in scope, out of scope, and boundary conditions</td><td>Summarised in Executive Summary &amp; MVP Scope</td></tr>
+<tr><td><strong>Stakeholder Register &amp; RACI Matrix</strong></td><td><span class="pill pill-outline-teal" style="font-size:0.68rem;">Stakeholder Mgmt</span></td><td>Identifies all stakeholders, interests, influence, and decision responsibilities</td><td>Section 4</td></tr>
+<tr><td><strong>AS-IS Process Maps (4 flows)</strong></td><td><span class="pill pill-outline-amber" style="font-size:0.68rem;">Process Analysis</span></td><td>Documents current state OPD workflow and pain points</td><td>Section 5 &amp; 8</td></tr>
+<tr><td><strong>TO-BE Process Maps (4 flows)</strong></td><td><span class="pill pill-outline-amber" style="font-size:0.68rem;">Process Design</span></td><td>Redesigned OPD flows with CareFlow</td><td>Section 5 &amp; 8</td></tr>
+<tr><td><strong>MVP Scope &amp; MoSCoW Priority Table</strong></td><td><span class="pill pill-teal" style="font-size:0.68rem;">Prioritisation</span></td><td>Feature list with Must/Should/Could/Won't classification and phasing</td><td>Section 6</td></tr>
+<tr><td><strong>Functional Requirements Document</strong></td><td><span class="pill pill-teal" style="font-size:0.68rem;">Requirements</span></td><td>FR-ID format requirements with acceptance criteria, grouped by module</td><td>Section 9</td></tr>
+<tr><td><strong>Live OPD Workflow Prototype</strong></td><td><span class="pill pill-outline-teal" style="font-size:0.68rem;">Screen Reference</span></td><td>Clickable prototype showing OP registration, token queue, doctor workspace, lab/pharmacy tracking, and admin dashboard</td><td>Section 16 + linked HTML file</td></tr>
+<tr><td><strong>Business Rules Register</strong></td><td><span class="pill pill-teal" style="font-size:0.68rem;">Logic Design</span></td><td>All system and process rules governing CareFlow behaviour</td><td>Section 10</td></tr>
+<tr><td><strong>Logical Data Model / Entity List</strong></td><td><span class="pill pill-outline-teal" style="font-size:0.68rem;">Data Design</span></td><td>Entities, attributes, and relationships at logical level</td><td>Section 11</td></tr>
+<tr><td><strong>SQL Query Library (6 queries)</strong></td><td><span class="pill pill-outline-teal" style="font-size:0.68rem;">Analytics</span></td><td>Illustrative reporting queries against the logical data model</td><td>Section 12</td></tr>
+<tr><td><strong>Role-Based Access Control Matrix</strong></td><td><span class="pill pill-teal" style="font-size:0.68rem;">Governance</span></td><td>Data access permissions per role across all data categories</td><td>Section 13</td></tr>
+<tr><td><strong>Consent Management Framework</strong></td><td><span class="pill pill-teal" style="font-size:0.68rem;">Privacy</span></td><td>Consent types, collection, revocation rules, and data use boundaries</td><td>Section 13</td></tr>
+<tr><td><strong>UAT Scenario Pack (18 scenarios)</strong></td><td><span class="pill pill-outline-amber" style="font-size:0.68rem;">Validation</span></td><td>Test scenarios with pre-conditions, steps, and expected results</td><td>Section 14</td></tr>
+<tr><td><strong>Dashboard Requirements Specification</strong></td><td><span class="pill pill-outline-teal" style="font-size:0.68rem;">Reporting Design</span></td><td>Real-time widget definitions, panels, filter and export requirements</td><td>Section 15</td></tr>
+<tr><td><strong>Project Glossary</strong></td><td><span class="pill pill-grey" style="font-size:0.68rem;">Communication</span></td><td>Agreed definitions for all key terms (visit, episode, encounter, etc.)</td><td>Referenced in BA Reflection</td></tr>
+<tr><td><strong>Legacy Data Migration Approach</strong></td><td><span class="pill pill-outline-amber" style="font-size:0.68rem;">Migration</span></td><td>Old file/card mapping, priority scanning, and duplicate resolution rules</td><td>Section 7 (after M1)</td></tr>
+<tr><td><strong>Change Request Log (sample)</strong></td><td><span class="pill pill-grey" style="font-size:0.68rem;">Change Mgmt</span></td><td>Records scope change requests, decisions, and impact assessments</td><td>Referenced; sample format available</td></tr>
+</tbody>
+</table>
+</div>
+<h3 style="font-size:1rem;font-weight:700;color:var(--teal-dark);margin:1.5rem 0 0.75rem;">Sample Change Request Log</h3>
+<div class="tbl-wrap">
+<table class="styled">
+<thead><tr><th>CR ID</th><th>Request</th><th>Impact Assessment</th><th>Decision</th></tr></thead>
+<tbody>
+<tr><td><strong>CR-001</strong></td><td>Add appointment booking to Phase 1 patient portal</td><td>Requires scheduling rules, doctor availability logic, additional UAT; increases MVP scope</td><td>Deferred to Phase 3</td></tr>
+<tr><td><strong>CR-002</strong></td><td>Allow external lab report upload from patient portal</td><td>Medium effort; improves continuity of care; requires immutable source label and file validation</td><td>Approved for Phase 1</td></tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:0.78rem;color:var(--text-muted);margin-top:1rem;font-style:italic;">In a full team engagement, the BA would also contribute to vendor wireframe review comments, a Requirements Traceability Matrix (RTM) linking each FR to its source business need and corresponding UAT scenario, stakeholder interview notes, workshop minutes, and formal sign-off records for each phase.</p>
+</section>
+<!-- FOOTER -->
+<footer>
+<div class="footer-inner">
+<div class="footer-title">CareFlow</div>
+<div class="footer-sub">Prepared by Adina Mohammed · Business Analyst Portfolio Case Study</div>
+<div class="footer-scope">
+<strong style="color:rgba(255,255,255,0.8);">In scope:</strong> OPD Coordination · Hybrid Registration · Digital Patient Records · E-Prescription &amp; Pharmacy Dispensing · Lab Order &amp; Report Upload · Patient Portal · Admin Dashboard · Privacy, Consent &amp; Role-Based Access
+    </div>
+<div class="footer-exclusion">
+<strong>Out of scope:</strong> AI diagnosis · AI prescription · ICU workflows · OT scheduling · Surgery management · Nursing charting · Full inpatient billing · Complete Hospital ERP. Inpatient discharge summaries are referenced only for outpatient follow-up continuity; full inpatient records remain out of scope.
+    </div>
+<div class="footer-credit">CareFlow is a self-initiated BA portfolio case study using fictional data for learning and demonstration purposes. It is not a live client project, production HMIS/EMR, or real hospital implementation.</div>
+</div>
+</footer>
+</div><!-- end #main -->
+<script>
+// ── MODULE TOGGLE ──
+function toggleModule(header) {
+  const body = header.nextElementSibling;
+  const toggle = header.querySelector('.module-toggle');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  toggle.textContent = isOpen ? '▼' : '▲';
+}
+
+// Keep modules collapsed by default for easier scanning
+document.querySelectorAll('.module-body').forEach(body => body.style.display = 'none');
+document.querySelectorAll('.module-toggle').forEach(t => t.textContent = '▼');
+
+// ── PROCESS FLOW TABS ──
+function showFlow(index, btn) {
+  document.querySelectorAll('.flow-diagram').forEach(d => d.classList.remove('active'));
+  document.querySelectorAll('.flow-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('flow' + index).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── UAT FILTER ──
+function filterUAT(cat, btn) {
+  document.querySelectorAll('.uat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.uat-row').forEach(row => {
+    row.style.display = (cat === 'all' || row.dataset.cat === cat) ? 'block' : 'none';
+  });
+}
+
+// ── SCROLLSPY ──
+const sections = document.querySelectorAll('section[id], .section[id]');
+const navLinks = document.querySelectorAll('#sidenav a');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-30% 0px -65% 0px' });
+
+sections.forEach(section => observer.observe(section));
+
+// Close mobile sidebar on nav link click
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+  });
+});
+
+// ── PRINT: ensure all content visible ──
+window.addEventListener('beforeprint', function() {
+  document.querySelectorAll('.module-body').forEach(b => b.style.display = 'block');
+  document.querySelectorAll('.flow-diagram').forEach(d => d.classList.add('active'));
+  document.querySelectorAll('.uat-row').forEach(r => r.style.display = 'block');
+});
+</script>
+</body>
+</html>
